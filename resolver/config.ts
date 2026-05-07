@@ -10,11 +10,8 @@ import { join } from 'node:path';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
-/** design-system project root */
+/** Project root (FormtriebTokenResolver/) */
 const projectRoot = join(__dirname, '..');
-
-/** Workspace root  */
-const workspaceRoot = join(projectRoot, '..');
 
 /** Root path for all generated CSS output */
 const cssRootPath = join(projectRoot, 'src', 'css');
@@ -24,7 +21,7 @@ export const config = {
 	prefix: 'ds-',
 
 	/** Path to the Figma-exported tokens directory*/
-	tokensPath: join(workspaceRoot, 'tokens'),
+	tokensPath: join(projectRoot, 'tokens'),
 
 	/** Path where the Figma↔CSS lookup map is written */
 	tokenMapPath: join(projectRoot, 'src', 'tokens', 'token-map.json'),

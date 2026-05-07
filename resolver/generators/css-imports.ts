@@ -6,8 +6,8 @@
  * the auto-generated blocks that import variables/* and utilities/*.
  */
 
-import { readdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { mkdirSync, readdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { dirname, join, relative } from 'node:path';
 import { config } from '../config.js';
 
 const { cssRootPath, buildPath, utilitiesPath, mainCssPath } = config;
@@ -63,6 +63,7 @@ export function generateCssImports(): void {
 		? `${trimmedManual}\n${generatedBlock}\n`
 		: `${generatedBlock}\n`;
 
+	mkdirSync(dirname(mainCssPath), { recursive: true });
 	writeFileSync(mainCssPath, output, 'utf-8');
 	console.log(`main.css updated with ${cssFiles.length} variable imports + utilities (manual imports preserved)`);
 }

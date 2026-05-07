@@ -9,8 +9,8 @@
  * for a Figma token path without re-parsing the token JSON.
  */
 
-import { readdir, readFile, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
 import { config } from '../config.js';
 
 const { buildPath, prefix, tokenMapPath } = config;
@@ -55,6 +55,7 @@ export async function generateTokenMap(): Promise<void> {
     cssToFigma,
   };
 
+  await mkdir(dirname(tokenMapPath), { recursive: true });
   await writeFile(tokenMapPath, JSON.stringify(tokenMap, null, 2), 'utf-8');
 
   console.log(
