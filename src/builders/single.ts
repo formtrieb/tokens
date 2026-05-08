@@ -6,16 +6,22 @@ interface SingleOptions {
   name: string;
   source: string;
   property: string;
-  /** Override the default leaf-extraction behavior */
-  stripPrefix?: string;
+}
+
+function globPrefixLength(source: string): number {
+  const segments = source.split('.');
+  const wildcardIdx = segments.indexOf('*');
+  // No wildcard → exact match: use everything except the last segment as the
+  // prefix so the leaf is the final path segment.
+  return wildcardIdx === -1 ? segments.length - 1 : wildcardIdx;
 }
 
 export function single(opts: SingleOptions): BuilderFn {
   return ({ tokens, config }) => {
     const matched = matchGlob(tokens, opts.source);
-    const prefixSegments = opts.source.split('.').slice(0, opts.source.split('.').indexOf('*'));
+    const prefixLen = globPrefixLength(opts.source);
     const rules = matched.map((t) => {
-      const leaf = toKebabCase(t.path.slice(prefixSegments.length));
+      const leaf = toKebabCase(t.path.slice(prefixLen));
       const fullVar = `--${config.prefix}${toKebabCase(t.path)}`;
       const className = `.${config.prefix}${opts.name}-${leaf}`;
       return `${className} { ${opts.property}: var(${fullVar}); }`;

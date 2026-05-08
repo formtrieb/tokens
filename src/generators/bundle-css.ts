@@ -56,7 +56,7 @@ export function bundleCss(config: Config): void {
 	const { urlImports, css } = resolveImports(mainCssPath);
 
 	const bundled = [
-		'/* Auto-generated — do not edit. Run: npx nx run design-system:bundle-css */',
+		'/* Auto-generated — do not edit. Run: npx formtrieb-tokens */',
 		...urlImports,
 		css,
 	].join('\n');

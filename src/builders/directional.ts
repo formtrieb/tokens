@@ -25,13 +25,19 @@ function cssPropertyFor(property: string, side: Side): string {
   return property + SIDE_TO_LOGICAL_AXIS[side];
 }
 
+function globPrefixLength(source: string): number {
+  const segments = source.split('.');
+  const wildcardIdx = segments.indexOf('*');
+  return wildcardIdx === -1 ? segments.length - 1 : wildcardIdx;
+}
+
 export function directional(opts: DirectionalOptions): BuilderFn {
   return ({ tokens, config }) => {
     const matched = matchGlob(tokens, opts.source);
-    const prefixSegments = opts.source.split('.').slice(0, opts.source.split('.').indexOf('*'));
+    const prefixLen = globPrefixLength(opts.source);
     const rules: string[] = [];
     for (const t of matched) {
-      const leaf = toKebabCase(t.path.slice(prefixSegments.length));
+      const leaf = toKebabCase(t.path.slice(prefixLen));
       const cssVar = `--${config.prefix}${toKebabCase(t.path)}`;
       for (const side of opts.sides) {
         const sideSuffix = side === 'all' ? '' : `-${side}`;

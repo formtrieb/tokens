@@ -41,7 +41,7 @@ export function generateCssImports(config: Config): void {
 		.sort();
 
 	const variableBlock = [
-		'/* Auto-generated — do not edit manually. Run: npm run generate:css */',
+		'/* Auto-generated — do not edit manually. Run: npx formtrieb-tokens */',
 		...cssFiles.map((file) => `@import './${relative(cssRootPath, join(buildPath, file))}';`),
 	].join('\n');
 
