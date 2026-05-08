@@ -23,9 +23,18 @@ export function walkTokens(
   return tokens;
 }
 
-// stubs for next tasks
-export function matchGlob(_tokens: Token[], _glob: string): Token[] {
-  throw new Error('not implemented');
+export function matchGlob(tokens: Token[], glob: string): Token[] {
+  const segments = glob.split('.');
+  const wildcardIdx = segments.indexOf('*');
+  if (wildcardIdx === -1) {
+    // exact match
+    return tokens.filter(t => t.path.join('.') === glob);
+  }
+  const prefix = segments.slice(0, wildcardIdx);
+  return tokens.filter(t => {
+    if (t.path.length <= prefix.length) return false;
+    return prefix.every((seg, i) => t.path[i] === seg);
+  });
 }
 export function findByType(_tokens: Token[], _type: string): Token[] {
   throw new Error('not implemented');

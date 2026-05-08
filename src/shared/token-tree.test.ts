@@ -33,3 +33,31 @@ describe('walkTokens', () => {
     expect(tokens[0].path).toEqual(['group', 'nested']);
   });
 });
+
+describe('matchGlob', () => {
+  const tokens: Token[] = [
+    { path: ['spacing', 'small'], value: '4px', raw: {} },
+    { path: ['spacing', 'medium'], value: '8px', raw: {} },
+    { path: ['spacing', 'large', 'nested'], value: '32px', raw: {} },
+    { path: ['colors', 'brand'], value: '#fff', raw: {} },
+  ];
+
+  it('matches a single-level wildcard', () => {
+    const result = matchGlob(tokens, 'spacing.*');
+    expect(result.map(t => t.path.join('.'))).toEqual([
+      'spacing.small',
+      'spacing.medium',
+      'spacing.large.nested',
+    ]);
+  });
+
+  it('matches the root prefix exactly', () => {
+    const result = matchGlob(tokens, 'colors.*');
+    expect(result).toHaveLength(1);
+    expect(result[0].path).toEqual(['colors', 'brand']);
+  });
+
+  it('returns empty for non-matching globs', () => {
+    expect(matchGlob(tokens, 'foo.*')).toEqual([]);
+  });
+});
