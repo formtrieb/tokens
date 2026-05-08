@@ -1,5 +1,5 @@
-import { defineConfig } from '@formtrieb/token-resolver';
-import { typography, directional, container } from '@formtrieb/token-resolver/builders';
+import { defineConfig } from './src/define-config.js';
+import { typography, directional, container } from './src/builders/index.js';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 
