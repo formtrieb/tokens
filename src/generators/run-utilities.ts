@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { loadAllTokens } from '../shared/load-tokens.js';
 import type { Config } from '../types.js';
@@ -9,6 +9,9 @@ export async function runUtilities(config: Config): Promise<void> {
 
   const tokens = await loadAllTokens(config.paths.tokens);
   const utilitiesDir = join(config.paths.output, 'utilities');
+  // Wipe stale files from previous configs (e.g. removed builder).
+  // Otherwise generateCssImports would pick them up via @import.
+  await rm(utilitiesDir, { recursive: true, force: true });
   await mkdir(utilitiesDir, { recursive: true });
 
   const seen = new Set<string>();

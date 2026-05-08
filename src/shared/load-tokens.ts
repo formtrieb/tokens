@@ -21,10 +21,16 @@ async function walkDir(dir: string): Promise<string[]> {
 
 export async function loadAllTokens(tokensDir: string): Promise<Token[]> {
   const files = await walkDir(tokensDir);
-  const all: Token[] = [];
+  const byPath = new Map<string, Token>();
   for (const file of files) {
     const content = JSON.parse(await readFile(file, 'utf-8'));
-    all.push(...walkTokens(content));
+    for (const token of walkTokens(content)) {
+      const key = token.path.join('.');
+      // First-seen wins. Themed token files (e.g. Device/Mobile.json,
+      // Device/Tablet.json) share paths but only the CSS-variable name —
+      // shared across themes — matters for utility builders.
+      if (!byPath.has(key)) byPath.set(key, token);
+    }
   }
-  return all;
+  return [...byPath.values()];
 }
