@@ -1,4 +1,5 @@
 import { processAllThemes } from './build/theme-processor.js';
+import { validateConfig } from './build/validate-config.js';
 import { runUtilities } from './generators/run-utilities.js';
 import { generateCssImports } from './generators/css-imports.js';
 import { generateTokenMap } from './generators/token-map.js';
@@ -19,6 +20,8 @@ export interface RunOptions {
 const ALL_STEPS: PipelineStep[] = ['themes', 'utilities', 'imports', 'token-map', 'bundle'];
 
 export async function runPipeline(config: Config, options: RunOptions = {}): Promise<void> {
+  await validateConfig(config);
+
   const steps = options.only ?? ALL_STEPS;
 
   if (steps.includes('themes')) await processAllThemes(config);
