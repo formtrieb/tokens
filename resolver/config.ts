@@ -14,7 +14,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const projectRoot = join(__dirname, '..');
 
 /** Root path for all generated CSS output */
-const cssRootPath = join(projectRoot, 'src', 'css');
+const cssRootPath = join(projectRoot, 'cssOutput', 'css');
 
 export const config = {
 	/** Prefix for all CSS custom properties */
@@ -24,7 +24,7 @@ export const config = {
 	tokensPath: join(projectRoot, 'tokens'),
 
 	/** Path where the Figma↔CSS lookup map is written */
-	tokenMapPath: join(projectRoot, 'src', 'tokens', 'token-map.json'),
+	tokenMapPath: join(projectRoot, 'cssOutput', 'tokens', 'token-map.json'),
 
 	cssRootPath,
 

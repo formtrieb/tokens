@@ -1,8 +1,7 @@
 node_modules/
 .DS_Store
-src/css/variables/
-src/css/utilities/
-src/css/main.css
-src/css/bundle.css
-src/tokens/token-map.json
+cssOutput/
+.claude/
+dist/
 *.log
+
