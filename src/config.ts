@@ -1,3 +1,4 @@
+import { join } from 'node:path';
 import baseConfig from '../formtrieb-tokens.config.js';
 
 const cssRootPath = baseConfig.paths.output;
@@ -12,8 +13,8 @@ export const config = {
   tokensPath: baseConfig.paths.tokens,
   tokenMapPath: baseConfig.paths.tokenMap,
   cssRootPath,
-  buildPath: `${cssRootPath}/variables`,
-  utilitiesPath: `${cssRootPath}/utilities`,
-  mainCssPath: `${cssRootPath}/main.css`,
-  bundleCssPath: `${cssRootPath}/bundle.css`,
+  buildPath: join(cssRootPath, 'variables'),
+  utilitiesPath: join(cssRootPath, 'utilities'),
+  mainCssPath: join(cssRootPath, 'main.css'),
+  bundleCssPath: join(cssRootPath, 'bundle.css'),
 } as const;
