@@ -16,28 +16,37 @@
     "css-variables",
     "design-system"
   ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "default": "./src/index.ts"
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     },
     "./builders": {
-      "types": "./src/builders/index.ts",
-      "default": "./src/builders/index.ts"
+      "types": "./dist/builders/index.d.ts",
+      "default": "./dist/builders/index.js"
     }
   },
   "engines": {
     "node": ">=20"
   },
   "bin": {
-    "formtrieb-tokens": "./src/cli.ts"
+    "formtrieb-tokens": "./dist/cli.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsx src/cli.ts",
     "build:tokens": "tsx src/cli/build-tokens.ts",
     "build:imports": "tsx src/cli/generate-css-imports.ts",
     "build:token-map": "tsx src/cli/generate-token-map.ts",
     "build:bundle": "tsx src/cli/bundle-css.ts",
+    "build:package": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "npm run build:package && npm test",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
