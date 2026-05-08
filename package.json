@@ -22,7 +22,6 @@
   "scripts": {
     "build": "tsx src/cli/build-all.ts",
     "build:tokens": "tsx src/cli/build-tokens.ts",
-    "build:utilities": "tsx src/cli/generate-utilities.ts",
     "build:imports": "tsx src/cli/generate-css-imports.ts",
     "build:token-map": "tsx src/cli/generate-token-map.ts",
     "build:bundle": "tsx src/cli/bundle-css.ts",

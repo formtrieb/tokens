@@ -1,4 +1,5 @@
 import { defineConfig } from './src/define-config.js';
+import { typography, directional, container } from './src/builders/index.js';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 
@@ -17,5 +18,28 @@ export default defineConfig({
     Foundation: { useReferences: false },
   },
   defaultGroupBehavior: { useReferences: true },
-  utilities: [], // populated in Phase 10 — for now we still use the hardcoded utility generators
+  utilities: [
+    typography(),
+    directional({
+      name: 'stack',
+      source: 'spacing.stack.*',
+      property: 'gap',
+      sides: ['all'],
+    }),
+    directional({
+      name: 'inset',
+      source: 'spacing.inset.*',
+      property: 'padding',
+      sides: ['all'],
+    }),
+    container({
+      name: 'content',
+      rules: {
+        'width': '100%',
+        'max-width': '{content.max-width}',
+        'margin-inline': 'auto',
+        'padding-inline': '{layout.grid.margin}',
+      },
+    }),
+  ],
 });
