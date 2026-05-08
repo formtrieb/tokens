@@ -1,42 +1,19 @@
+import baseConfig from '../formtrieb-tokens.config.js';
+
+const cssRootPath = baseConfig.paths.output;
+
 /**
- * Shared configuration for the token build pipeline.
- *
- * Paths are resolved relative to the design-system project root, not to this file,
- * so the pipeline keeps working if these tools are later extracted into a package.
+ * Legacy config shape used by existing build/generator code.
+ * Derives all paths from the dogfood config so there is a single source of truth.
+ * This shim is removed in Phase 4 once all pipeline functions take Config directly.
  */
-
-import { fileURLToPath } from 'node:url';
-import { join } from 'node:path';
-
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
-
-/** Project root (FormtriebTokenResolver/) */
-const projectRoot = join(__dirname, '..');
-
-/** Root path for all generated CSS output */
-const cssRootPath = join(projectRoot, 'cssOutput', 'css');
-
 export const config = {
-	/** Prefix for all CSS custom properties */
-	prefix: 'ds-',
-
-	/** Path to the Figma-exported tokens directory*/
-	tokensPath: join(projectRoot, 'tokens'),
-
-	/** Path where the Figma↔CSS lookup map is written */
-	tokenMapPath: join(projectRoot, 'cssOutput', 'tokens', 'token-map.json'),
-
-	cssRootPath,
-
-	/** Path where generated CSS variable files will be written */
-	buildPath: join(cssRootPath, 'variables'),
-
-	/** Path where utility CSS files will be written */
-	utilitiesPath: join(cssRootPath, 'utilities'),
-
-	/** Barrel import file that ties variables + utilities together */
-	mainCssPath: join(cssRootPath, 'main.css'),
-
-	/** Self-contained bundle (all @imports inlined) for external consumers */
-	bundleCssPath: join(cssRootPath, 'bundle.css'),
+  prefix: baseConfig.prefix,
+  tokensPath: baseConfig.paths.tokens,
+  tokenMapPath: baseConfig.paths.tokenMap,
+  cssRootPath,
+  buildPath: `${cssRootPath}/variables`,
+  utilitiesPath: `${cssRootPath}/utilities`,
+  mainCssPath: `${cssRootPath}/main.css`,
+  bundleCssPath: `${cssRootPath}/bundle.css`,
 } as const;
