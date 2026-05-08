@@ -1,0 +1,9 @@
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: {
+    include: ['src/**/*.test.ts', 'tests/**/*.test.ts', 'resolver/**/*.test.ts'],
+    pool: 'forks',
+    testTimeout: 30000,
+  },
+});

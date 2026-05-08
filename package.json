@@ -13,14 +13,17 @@
     "build:imports": "tsx resolver/cli/generate-css-imports.ts",
     "build:token-map": "tsx resolver/cli/generate-token-map.ts",
     "build:bundle": "tsx resolver/cli/bundle-css.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf src/css src/tokens"
+    "clean": "rm -rf cssOutput"
   },
   "devDependencies": {
     "@tokens-studio/sd-transforms": "^2.0.3",
     "@types/node": "^25.6.1",
     "style-dictionary": "^5.4.0",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
   }
 }
