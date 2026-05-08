@@ -57,8 +57,10 @@ export async function expandTypographyInFile(filePath: string, config: Config): 
 
 		const properties: Array<{ suffix: string; value: string | undefined }> = [
 			{ suffix: 'letter-spacing', value: token.value.letterSpacing },
-			{ suffix: 'text-case', value: token.value.textCase },
+			{ suffix: 'text-transform', value: token.value.textCase },
 			{ suffix: 'text-decoration', value: token.value.textDecoration },
+			{ suffix: 'text-indent', value: token.value.paragraphIndent },
+			{ suffix: 'margin-block-end', value: token.value.paragraphSpacing },
 		];
 
 		for (const { suffix, value } of properties) {
