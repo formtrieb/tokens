@@ -11,9 +11,7 @@
 
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { config } from '../config.js';
-
-const { buildPath, prefix, tokenMapPath } = config;
+import type { Config } from '../types.js';
 
 interface TokenMap {
   prefix: string;
@@ -22,7 +20,11 @@ interface TokenMap {
   cssToFigma: Record<string, string>;
 }
 
-export async function generateTokenMap(): Promise<void> {
+export async function generateTokenMap(config: Config): Promise<void> {
+  const buildPath = `${config.paths.output}/variables`;
+  const prefix = config.prefix;
+  const tokenMapPath = config.paths.tokenMap;
+
   const figmaToCSS: Record<string, string> = {};
   const cssToFigma: Record<string, string> = {};
 

@@ -61,7 +61,7 @@ async function processSingleThemeGroup(
 	await promises.unlink(`${buildPath}/${tempFile}`);
 
 	if (groupName === GROUP_NAMES.TYPOGRAPHY) {
-		await expandTypographyInFile(`${buildPath}/${outputFile}`);
+		await expandTypographyInFile(`${buildPath}/${outputFile}`, config);
 	}
 
 	const referenceNote = useReferences ? ' (with references)' : ' (raw values)';

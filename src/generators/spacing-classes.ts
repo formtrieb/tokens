@@ -9,13 +9,14 @@
  * spacing changes automatically with a `data-device` attribute on a parent.
  */
 
-import { config } from '../config.js';
-
-const { prefix } = config;
+import type { Config } from '../types.js';
 
 const SPACING_STEPS = ['1x', '2x', '3x', '4x', '5x', '6x', '7x', '8x', 'none'];
 
-const HEADER = `/**
+export function generateSpacingClasses(config: Config): string {
+	const prefix = config.prefix;
+
+	const header = `/**
  * Spacing utility classes — auto-generated.
  * Values are device-aware: they change automatically per data-device attribute.
  *
@@ -26,7 +27,6 @@ const HEADER = `/**
  *        <section class="${prefix}inset-4x">…</section>
  */\n\n`;
 
-export function generateSpacingClasses(): string {
 	const rules: string[] = [];
 
 	for (const step of SPACING_STEPS) {
@@ -43,5 +43,5 @@ export function generateSpacingClasses(): string {
 }`);
 	}
 
-	return HEADER + rules.join('\n\n') + '\n';
+	return header + rules.join('\n\n') + '\n';
 }

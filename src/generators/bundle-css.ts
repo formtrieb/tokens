@@ -12,9 +12,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { join } from 'node:path';
-import { config } from '../config.js';
-
-const { mainCssPath, bundleCssPath } = config;
+import type { Config } from '../types.js';
 
 function resolveImports(filePath: string): { urlImports: string[]; css: string } {
 	const content = readFileSync(filePath, 'utf-8');
@@ -51,7 +49,10 @@ function resolveImports(filePath: string): { urlImports: string[]; css: string }
 	return { urlImports, css };
 }
 
-export function bundleCss(): void {
+export function bundleCss(config: Config): void {
+	const mainCssPath = `${config.paths.output}/main.css`;
+	const bundleCssPath = `${config.paths.output}/bundle.css`;
+
 	const { urlImports, css } = resolveImports(mainCssPath);
 
 	const bundled = [

@@ -6,13 +6,15 @@
  * text-transform, text-decoration) via dedicated CSS variables.
  */
 
-import { config } from '../config.js';
+import type { Config } from '../types.js';
 import { toKebabCase } from '../shared/kebab.js';
 import { loadTypographyTokens } from '../shared/typography-tokens.js';
 
-const { prefix, tokensPath } = config;
+export async function generateTypographyClasses(config: Config): Promise<string> {
+	const prefix = config.prefix;
+	const tokensPath = config.paths.tokens;
 
-const HEADER = `/**
+	const header = `/**
  * Typography utility classes — auto-generated.
  * Apply full typography (font shorthand + letter-spacing + text-transform + text-decoration).
  *
@@ -21,7 +23,6 @@ const HEADER = `/**
  *        <span class="${prefix}label-small-default">…</span>
  */\n\n`;
 
-export async function generateTypographyClasses(): Promise<string> {
 	const tokens = await loadTypographyTokens(tokensPath);
 
 	const rules = tokens.map((token) => {
@@ -36,5 +37,5 @@ export async function generateTypographyClasses(): Promise<string> {
 }`;
 	});
 
-	return HEADER + rules.join('\n\n') + '\n';
+	return header + rules.join('\n\n') + '\n';
 }

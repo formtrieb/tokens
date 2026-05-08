@@ -15,16 +15,14 @@
  */
 
 import { promises } from 'node:fs';
-import { config } from '../config.js';
+import type { Config } from '../types.js';
 import { toKebabCase } from '../shared/kebab.js';
 import { loadTypographyTokens } from '../shared/typography-tokens.js';
-
-const { prefix, tokensPath } = config;
 
 /**
  * Converts a `{textCase.uppercase}` style reference to `--ds-text-case-uppercase`.
  */
-function tokenReferenceToCssVar(refString: string): string {
+function tokenReferenceToCssVar(refString: string, prefix: string): string {
 	const match = refString.match(/^\{(.+)\}$/);
 	if (!match) return '';
 
@@ -32,7 +30,7 @@ function tokenReferenceToCssVar(refString: string): string {
 	return `--${prefix}${toKebabCase(reference)}`;
 }
 
-function fixFontShorthandOrder(content: string): string {
+function fixFontShorthandOrder(content: string, prefix: string): string {
 	const escapedPrefix = prefix.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
 	const fontOrderFix = new RegExp(
 		`var\\(--${escapedPrefix}line-heights-([^)]+)\\)\\/var\\(--${escapedPrefix}font-sizes-([^)]+)\\)`,
@@ -41,10 +39,13 @@ function fixFontShorthandOrder(content: string): string {
 	return content.replace(fontOrderFix, `var(--${prefix}font-sizes-$2)/var(--${prefix}line-heights-$1)`);
 }
 
-export async function expandTypographyInFile(filePath: string): Promise<void> {
+export async function expandTypographyInFile(filePath: string, config: Config): Promise<void> {
+	const prefix = config.prefix;
+	const tokensPath = config.paths.tokens;
+
 	let content = await promises.readFile(filePath, 'utf-8');
 
-	content = fixFontShorthandOrder(content);
+	content = fixFontShorthandOrder(content, prefix);
 
 	const tokens = await loadTypographyTokens(tokensPath);
 
@@ -62,7 +63,7 @@ export async function expandTypographyInFile(filePath: string): Promise<void> {
 
 		for (const { suffix, value } of properties) {
 			if (!value) continue;
-			const cssVar = tokenReferenceToCssVar(value);
+			const cssVar = tokenReferenceToCssVar(value, prefix);
 			if (cssVar) {
 				additions.push(`  ${fullName}-${suffix}: var(${cssVar});`);
 			}

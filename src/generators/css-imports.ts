@@ -8,11 +8,14 @@
 
 import { mkdirSync, readdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
-import { config } from '../config.js';
+import type { Config } from '../types.js';
 
-const { cssRootPath, buildPath, utilitiesPath, mainCssPath } = config;
+export function generateCssImports(config: Config): void {
+	const cssRootPath = config.paths.output;
+	const buildPath = `${cssRootPath}/variables`;
+	const utilitiesPath = `${cssRootPath}/utilities`;
+	const mainCssPath = `${cssRootPath}/main.css`;
 
-export function generateCssImports(): void {
 	// 1. Read existing file and strip the auto-generated block
 	let existingLines: string[] = [];
 	try {

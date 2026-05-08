@@ -22,8 +22,8 @@ export async function runPipeline(config: Config, options: RunOptions = {}): Pro
   const steps = options.only ?? ALL_STEPS;
 
   if (steps.includes('themes')) await processAllThemes(config);
-  if (steps.includes('utilities')) await generateAllUtilities();
-  if (steps.includes('imports')) generateCssImports();
-  if (steps.includes('token-map')) await generateTokenMap();
-  if (steps.includes('bundle')) bundleCss();
+  if (steps.includes('utilities')) await generateAllUtilities(config);
+  if (steps.includes('imports')) generateCssImports(config);
+  if (steps.includes('token-map')) await generateTokenMap(config);
+  if (steps.includes('bundle')) bundleCss(config);
 }
