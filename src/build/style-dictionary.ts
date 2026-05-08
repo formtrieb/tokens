@@ -10,10 +10,8 @@ import StyleDictionary from 'style-dictionary';
 import { outputReferencesTransformed } from 'style-dictionary/utils';
 import { transforms } from 'style-dictionary/enums';
 import type { TransformedToken, Dictionary } from 'style-dictionary/types';
-import { config } from '../config.js';
 import type { Theme } from '../shared/types.js';
-
-const { prefix, tokensPath, buildPath } = config;
+import type { Config } from '../types.js';
 
 const TRANSFORMS = [
 	'ts/resolveMath',
@@ -63,12 +61,18 @@ register(StyleDictionary, TRANSFORM_OPTIONS);
  *                           raw resolved values. Only applied to tokens that
  *                           don't carry color modifiers (those need the
  *                           transformed form to preserve the modifier output).
+ * @param config             Resolved pipeline config (provides prefix and paths).
  */
 export async function buildTheme(
 	theme: Theme,
 	tempFile: string,
-	outputReferences = false
+	outputReferences: boolean,
+	config: Config
 ): Promise<void> {
+	const prefix = config.prefix;
+	const tokensPath = config.paths.tokens;
+	const buildPath = `${config.paths.output}/variables`;
+
 	const sdConfig = {
 		log: {
 			warnings: 'warn' as const,

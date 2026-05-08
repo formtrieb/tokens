@@ -7,26 +7,30 @@
  *   - Group with a single theme   → `:root { … }`                    (e.g. Foundation, Typography)
  *   - Group with multiple themes  → `[data-{group}="{name}"] { … }` (e.g. Mode: light/dark)
  *
- * Two groups get special treatment:
- *   - `Foundation` is emitted with raw values (no CSS-var references).
- *   - `Typography` gets post-processed via {@link expandTypographyInFile}.
+ * Reference behaviour per group is driven by `config.themeGroups` (with a fall
+ * back to `config.defaultGroupBehavior`). The `Typography` group additionally
+ * gets post-processed via {@link expandTypographyInFile}.
  */
 
 import { promises } from 'node:fs';
-import { config } from '../config.js';
 import type { GroupedThemes, Theme } from '../shared/types.js';
+import type { Config, ThemeGroupBehavior } from '../types.js';
 import { toKebabCase } from '../shared/kebab.js';
 import { buildTheme } from './style-dictionary.js';
 import { expandTypographyInFile } from './typography-expansion.js';
 
-const { tokensPath, buildPath } = config;
-
 const GROUP_NAMES = {
-	FOUNDATION: 'Foundation',
 	TYPOGRAPHY: 'Typography',
 } as const;
 
 const FILE_HEADER = '/**\n * Do not edit directly, this file was auto-generated.\n */\n\n';
+
+function getGroupBehavior(groupName: string, config: Config): ThemeGroupBehavior {
+	return (
+		config.themeGroups?.[groupName] ??
+		config.defaultGroupBehavior ?? { useReferences: true }
+	);
+}
 
 function groupThemesByGroup(themes: Theme[]): GroupedThemes {
 	return themes.reduce((acc, theme) => {
@@ -39,13 +43,18 @@ function groupThemesByGroup(themes: Theme[]): GroupedThemes {
 /**
  * Single-theme group → emit CSS with `:root` selector.
  */
-async function processSingleThemeGroup(groupName: string, theme: Theme): Promise<void> {
+async function processSingleThemeGroup(
+	groupName: string,
+	theme: Theme,
+	config: Config
+): Promise<void> {
+	const buildPath = `${config.paths.output}/variables`;
 	const outputFile = `${toKebabCase(groupName)}.css`;
 	const tempFile = `_temp_${theme.name}.css`;
 
-	const useReferences = groupName !== GROUP_NAMES.FOUNDATION;
+	const useReferences = getGroupBehavior(groupName, config).useReferences;
 
-	await buildTheme(theme, tempFile, useReferences);
+	await buildTheme(theme, tempFile, useReferences, config);
 
 	const content = await promises.readFile(`${buildPath}/${tempFile}`, 'utf-8');
 	await promises.writeFile(`${buildPath}/${outputFile}`, content);
@@ -63,17 +72,24 @@ async function processSingleThemeGroup(groupName: string, theme: Theme): Promise
  * Multi-theme group → emit one CSS file with `[data-{group}="{name}"]`
  * selectors for each variant.
  */
-async function processMultiThemeGroup(groupName: string, themes: Theme[]): Promise<void> {
+async function processMultiThemeGroup(
+	groupName: string,
+	themes: Theme[],
+	config: Config
+): Promise<void> {
+	const buildPath = `${config.paths.output}/variables`;
 	const baseName = toKebabCase(groupName);
 	const outputFile = `${baseName}.css`;
 	const dataAttribute = baseName;
+
+	const useReferences = getGroupBehavior(groupName, config).useReferences;
 
 	let combinedOutput = FILE_HEADER;
 
 	for (const theme of themes) {
 		const tempFile = `_temp_${theme.name}.css`;
 
-		await buildTheme(theme, tempFile, true);
+		await buildTheme(theme, tempFile, useReferences, config);
 
 		let tempContent = await promises.readFile(`${buildPath}/${tempFile}`, 'utf-8');
 
@@ -91,7 +107,9 @@ async function processMultiThemeGroup(groupName: string, themes: Theme[]): Promi
 	console.log(`✓ Built ${outputFile} (${themes.length} variants with references)`);
 }
 
-export async function processAllThemes(): Promise<void> {
+export async function processAllThemes(config: Config): Promise<void> {
+	const tokensPath = config.paths.tokens;
+
 	const themesData = JSON.parse(
 		await promises.readFile(`${tokensPath}/$themes.json`, 'utf-8')
 	);
@@ -101,9 +119,9 @@ export async function processAllThemes(): Promise<void> {
 
 	for (const [groupName, groupThemes] of Object.entries(grouped)) {
 		if (groupThemes.length === 1) {
-			await processSingleThemeGroup(groupName, groupThemes[0]);
+			await processSingleThemeGroup(groupName, groupThemes[0], config);
 		} else {
-			await processMultiThemeGroup(groupName, groupThemes);
+			await processMultiThemeGroup(groupName, groupThemes, config);
 		}
 	}
 }

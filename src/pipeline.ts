@@ -18,10 +18,10 @@ export interface RunOptions {
 
 const ALL_STEPS: PipelineStep[] = ['themes', 'utilities', 'imports', 'token-map', 'bundle'];
 
-export async function runPipeline(_config: Config, options: RunOptions = {}): Promise<void> {
+export async function runPipeline(config: Config, options: RunOptions = {}): Promise<void> {
   const steps = options.only ?? ALL_STEPS;
 
-  if (steps.includes('themes')) await processAllThemes();
+  if (steps.includes('themes')) await processAllThemes(config);
   if (steps.includes('utilities')) await generateAllUtilities();
   if (steps.includes('imports')) generateCssImports();
   if (steps.includes('token-map')) await generateTokenMap();
