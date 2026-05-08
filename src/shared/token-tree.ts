@@ -36,6 +36,6 @@ export function matchGlob(tokens: Token[], glob: string): Token[] {
     return prefix.every((seg, i) => t.path[i] === seg);
   });
 }
-export function findByType(_tokens: Token[], _type: string): Token[] {
-  throw new Error('not implemented');
+export function findByType(tokens: Token[], type: string): Token[] {
+  return tokens.filter(t => t.$type === type);
 }

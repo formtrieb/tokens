@@ -61,3 +61,17 @@ describe('matchGlob', () => {
     expect(matchGlob(tokens, 'foo.*')).toEqual([]);
   });
 });
+
+describe('findByType', () => {
+  const tokens: Token[] = [
+    { path: ['display1'], value: {}, $type: 'typography', raw: {} },
+    { path: ['body'], value: {}, $type: 'typography', raw: {} },
+    { path: ['colors', 'brand'], value: '#fff', $type: 'color', raw: {} },
+  ];
+
+  it('filters tokens by $type', () => {
+    expect(findByType(tokens, 'typography')).toHaveLength(2);
+    expect(findByType(tokens, 'color')).toHaveLength(1);
+    expect(findByType(tokens, 'shadow')).toEqual([]);
+  });
+});
