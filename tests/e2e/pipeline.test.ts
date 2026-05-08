@@ -8,7 +8,7 @@ const ROOT = join(__dirname, '..', '..');
 
 function readDirRecursive(dir: string): Record<string, string> {
   const result: Record<string, string> = {};
-  for (const entry of readdirSync(dir)) {
+  for (const entry of readdirSync(dir).sort()) {
     const full = join(dir, entry);
     const rel = full.slice(ROOT.length + 1);
     if (statSync(full).isDirectory()) {
