@@ -1,8 +1,21 @@
 {
-  "name": "formtrieb-token-resolver",
+  "name": "@formtrieb/token-resolver",
   "version": "0.1.0",
   "private": true,
+  "description": "Tokens-Studio JSON → CSS variables, utility classes, SCSS mixins, and Figma↔CSS lookup map. Driven by a project-local config.",
   "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PLACEHOLDER-OWNER/formtrieb-token-resolver.git"
+  },
+  "keywords": [
+    "design-tokens",
+    "tokens-studio",
+    "style-dictionary",
+    "css-variables",
+    "design-system"
+  ],
   "engines": {
     "node": ">=20"
   },
