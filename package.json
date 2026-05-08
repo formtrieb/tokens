@@ -7,12 +7,12 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "tsx resolver/cli/build-all.ts",
-    "build:tokens": "tsx resolver/cli/build-tokens.ts",
-    "build:utilities": "tsx resolver/cli/generate-utilities.ts",
-    "build:imports": "tsx resolver/cli/generate-css-imports.ts",
-    "build:token-map": "tsx resolver/cli/generate-token-map.ts",
-    "build:bundle": "tsx resolver/cli/bundle-css.ts",
+    "build": "tsx src/cli/build-all.ts",
+    "build:tokens": "tsx src/cli/build-tokens.ts",
+    "build:utilities": "tsx src/cli/generate-utilities.ts",
+    "build:imports": "tsx src/cli/generate-css-imports.ts",
+    "build:token-map": "tsx src/cli/generate-token-map.ts",
+    "build:bundle": "tsx src/cli/bundle-css.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
