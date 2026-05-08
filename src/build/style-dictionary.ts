@@ -39,14 +39,31 @@ const TRANSFORM_OPTIONS: TransformOptions = {
 };
 
 /**
+ * Tests whether a token path contains any segment with one of the configured
+ * private prefixes. Used by the isSource filter to exclude private tokens.
+ */
+export function isPathPrivate(path: string[], prefixes: string[]): boolean {
+	return path.some((segment) => prefixes.some((p) => segment.startsWith(p)));
+}
+
+/**
+ * Module-scoped active config for the isSource filter. Set by buildTheme on
+ * entry and cleared on exit. Style-Dictionary's filter API is a global
+ * registry that doesn't accept context, so we thread config through here.
+ */
+let currentConfig: Config | undefined;
+
+/**
  * Source filter: include tokens originating from "enabled" sets, but skip
- * private tokens (path segments starting with "*").
+ * private tokens whose path segments start with any configured prefix
+ * (default ['*']).
  */
 StyleDictionary.registerFilter({
 	name: 'isSource',
 	filter: (token) => {
 		if (!token.isSource) return false;
-		return !token.path.some((segment: string) => segment.startsWith('*'));
+		const prefixes = currentConfig?.privateTokenPrefixes ?? ['*'];
+		return !isPathPrivate(token.path as string[], prefixes);
 	},
 });
 
@@ -69,52 +86,57 @@ export async function buildTheme(
 	outputReferences: boolean,
 	config: Config
 ): Promise<void> {
-	const prefix = config.prefix;
-	const tokensPath = config.paths.tokens;
-	const buildPath = `${config.paths.output}/variables`;
+	currentConfig = config;
+	try {
+		const prefix = config.prefix;
+		const tokensPath = config.paths.tokens;
+		const buildPath = `${config.paths.output}/variables`;
 
-	const sdConfig = {
-		log: {
-			warnings: 'warn' as const,
-			verbosity: 'verbose' as const,
-			errors: {
-				brokenReferences: 'console' as const,
+		const sdConfig = {
+			log: {
+				warnings: 'warn' as const,
+				verbosity: 'verbose' as const,
+				errors: {
+					brokenReferences: 'console' as const,
+				},
 			},
-		},
-		source: Object.entries(theme.selectedTokenSets)
-			.filter(([, val]) => val === 'enabled')
-			.map(([tokenset]) => `${tokensPath}/${tokenset}.json`),
-		include: Object.entries(theme.selectedTokenSets)
-			.filter(([, val]) => val === 'source')
-			.map(([tokenset]) => `${tokensPath}/${tokenset}.json`),
-		preprocessors: ['tokens-studio'],
-		platforms: {
-			css: {
-				prefix,
-				transformGroup: 'tokens-studio',
-				transforms: TRANSFORMS,
-				buildPath: `${buildPath}/`,
-				files: [
-					{
-						destination: tempFile,
-						format: 'css/variables',
-						filter: 'isSource',
-						options: {
-							outputReferences: outputReferences
-								? (token: TransformedToken, options: { dictionary: Dictionary; usesDtcg?: boolean }) => {
-										if (token.$extensions?.['studio.tokens']?.modify) {
-											return outputReferencesTransformed(token, options);
-										}
-										return true;
-								  }
-								: false,
+			source: Object.entries(theme.selectedTokenSets)
+				.filter(([, val]) => val === 'enabled')
+				.map(([tokenset]) => `${tokensPath}/${tokenset}.json`),
+			include: Object.entries(theme.selectedTokenSets)
+				.filter(([, val]) => val === 'source')
+				.map(([tokenset]) => `${tokensPath}/${tokenset}.json`),
+			preprocessors: ['tokens-studio'],
+			platforms: {
+				css: {
+					prefix,
+					transformGroup: 'tokens-studio',
+					transforms: TRANSFORMS,
+					buildPath: `${buildPath}/`,
+					files: [
+						{
+							destination: tempFile,
+							format: 'css/variables',
+							filter: 'isSource',
+							options: {
+								outputReferences: outputReferences
+									? (token: TransformedToken, options: { dictionary: Dictionary; usesDtcg?: boolean }) => {
+											if (token.$extensions?.['studio.tokens']?.modify) {
+												return outputReferencesTransformed(token, options);
+											}
+											return true;
+									  }
+									: false,
+							},
 						},
-					},
-				],
+					],
+				},
 			},
-		},
-	};
+		};
 
-	const sd = new StyleDictionary(sdConfig);
-	await sd.buildAllPlatforms();
+		const sd = new StyleDictionary(sdConfig);
+		await sd.buildAllPlatforms();
+	} finally {
+		currentConfig = undefined;
+	}
 }
