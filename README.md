@@ -8,6 +8,8 @@ Tokens-Studio JSON → CSS variables, utility classes, SCSS mixins, and Figma↔
 npm install --save-dev @formtrieb/token-resolver
 ```
 
+Your consumer project's `package.json` must have `"type": "module"` (this package is ESM-only). The CLI loads `.ts`, `.mjs`, and `.js` config files.
+
 ## Quick start
 
 Create `formtrieb-tokens.config.ts` in your project root:

@@ -33,7 +33,15 @@ export async function findConfigFile(startDir: string): Promise<string | null> {
 
 export async function loadConfig(path: string): Promise<Config> {
   const url = pathToFileURL(path).href;
-  const mod = await import(url);
+  let mod: { default?: unknown };
+  if (path.endsWith('.ts')) {
+    // Use tsx's programmatic API so consumers can write .ts configs
+    // without needing to compile them first or run the CLI under tsx.
+    const { tsImport } = await import('tsx/esm/api');
+    mod = await tsImport(url, import.meta.url) as { default?: unknown };
+  } else {
+    mod = await import(url) as { default?: unknown };
+  }
   if (!mod.default) {
     throw new Error(`Config file ${path} must have a default export.`);
   }

@@ -53,14 +53,14 @@
     "clean": "rm -rf cssOutput"
   },
   "devDependencies": {
-    "@tokens-studio/sd-transforms": "^2.0.3",
     "@types/node": "^25.6.1",
-    "style-dictionary": "^5.4.0",
-    "tsx": "^4.21.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.5"
   },
   "dependencies": {
-    "chokidar": "^5.0.0"
+    "@tokens-studio/sd-transforms": "^2.0.3",
+    "chokidar": "^5.0.0",
+    "style-dictionary": "^5.4.0",
+    "tsx": "^4.21.0"
   }
 }
