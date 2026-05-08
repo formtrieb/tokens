@@ -28,5 +28,7 @@ export async function runPipeline(config: Config, options: RunOptions = {}): Pro
   if (steps.includes('utilities')) await runUtilities(config);
   if (steps.includes('imports')) generateCssImports(config);
   if (steps.includes('token-map')) await generateTokenMap(config);
-  if (steps.includes('bundle')) bundleCss(config);
+  if (steps.includes('bundle') && config.output?.bundle !== false) {
+    bundleCss(config);
+  }
 }
