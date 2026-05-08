@@ -19,8 +19,11 @@
   "engines": {
     "node": ">=20"
   },
+  "bin": {
+    "formtrieb-tokens": "./src/cli.ts"
+  },
   "scripts": {
-    "build": "tsx src/cli/build-all.ts",
+    "build": "tsx src/cli.ts",
     "build:tokens": "tsx src/cli/build-tokens.ts",
     "build:imports": "tsx src/cli/generate-css-imports.ts",
     "build:token-map": "tsx src/cli/generate-token-map.ts",
