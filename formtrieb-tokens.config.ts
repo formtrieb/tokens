@@ -1,5 +1,5 @@
 import { defineConfig } from './src/define-config.js';
-import { typography, directional, container } from './src/builders/index.js';
+import { typography, typographyMixin, directional, container } from './src/builders/index.js';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 
@@ -20,6 +20,7 @@ export default defineConfig({
   defaultGroupBehavior: { useReferences: true },
   utilities: [
     typography(),
+    typographyMixin(),
     directional({
       name: 'stack',
       source: 'spacing.stack.*',
