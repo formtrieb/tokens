@@ -9,4 +9,5 @@ export type {
   BuilderContext,
   BuilderOutput,
   Token,
+  TypographyConfig,
 } from './types.js';
