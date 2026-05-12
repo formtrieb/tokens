@@ -49,8 +49,8 @@ export function buildExpansionAdditions(
 	config: Config
 ): string[] {
 	const prefix = config.prefix;
-	const tabularList = (config.typography?.fontVariantNumeric?.tabular ?? []).map((s) =>
-		s.toLowerCase()
+	const tabularPrefixes = (config.typography?.fontVariantNumeric?.tabular ?? []).map(
+		(path) => path.map((seg) => seg.toLowerCase())
 	);
 	const additions: string[] = [];
 
@@ -74,8 +74,11 @@ export function buildExpansionAdditions(
 			}
 		}
 
-		const topSegment = token.path[0]?.toLowerCase();
-		if (topSegment && tabularList.includes(topSegment)) {
+		const lowerPath = token.path.map((s) => s.toLowerCase());
+		const isTabular = tabularPrefixes.some(
+			(prefix) => prefix.length > 0 && prefix.every((seg, i) => lowerPath[i] === seg)
+		);
+		if (isTabular) {
 			additions.push(`  ${fullName}-fvn: tabular-nums;`);
 		}
 	}

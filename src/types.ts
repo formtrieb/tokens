@@ -28,7 +28,7 @@ export type BuilderFn = ((ctx: BuilderContext) => BuilderOutput | Promise<Builde
 
 export interface TypographyConfig {
   fontVariantNumeric?: {
-    tabular?: string[];
+    tabular?: string[][];
   };
 }
 

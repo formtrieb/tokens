@@ -32,6 +32,30 @@ const displayToken: TypographyToken = {
   },
 };
 
+const tableNumericToken: TypographyToken = {
+  path: ['Table', 'Numeric', 'Base', 'default'],
+  value: {
+    fontFamily: '{fontFamilies.baseFamily}',
+    letterSpacing: '{letterSpacings.default}',
+    textCase: '{textCase.default}',
+    textDecoration: '{textDecorations.default}',
+    paragraphIndent: '{paragraphIndents.none}',
+    paragraphSpacing: '{paragraphSpacings.none}',
+  },
+};
+
+const tableHeaderToken: TypographyToken = {
+  path: ['Table', 'Header', 'Base', 'default'],
+  value: {
+    fontFamily: '{fontFamilies.baseFamily}',
+    letterSpacing: '{letterSpacings.default}',
+    textCase: '{textCase.default}',
+    textDecoration: '{textDecorations.default}',
+    paragraphIndent: '{paragraphIndents.none}',
+    paragraphSpacing: '{paragraphSpacings.none}',
+  },
+};
+
 describe('buildExpansionAdditions', () => {
   it('emits letter-spacing/text-transform/text-decoration vars per token', () => {
     const additions = buildExpansionAdditions([monoToken], baseCfg);
@@ -57,7 +81,7 @@ describe('buildExpansionAdditions', () => {
   it('emits -fvn: tabular-nums for tokens whose top path segment matches', () => {
     const cfg: Config = {
       ...baseCfg,
-      typography: { fontVariantNumeric: { tabular: ['mono', 'metric'] } },
+      typography: { fontVariantNumeric: { tabular: [['mono'], ['metric']] } },
     };
     const additions = buildExpansionAdditions([monoToken, displayToken], cfg);
     expect(additions).toContain('  --ds-mono-base-default-fvn: tabular-nums;');
@@ -67,7 +91,7 @@ describe('buildExpansionAdditions', () => {
   it('matches case-insensitively (config "Mono" matches path "Mono")', () => {
     const cfg: Config = {
       ...baseCfg,
-      typography: { fontVariantNumeric: { tabular: ['Mono'] } },
+      typography: { fontVariantNumeric: { tabular: [['Mono']] } },
     };
     const additions = buildExpansionAdditions([monoToken], cfg);
     expect(additions).toContain('  --ds-mono-base-default-fvn: tabular-nums;');
@@ -76,7 +100,7 @@ describe('buildExpansionAdditions', () => {
   it('matches case-insensitively (config "mono" matches path "Mono")', () => {
     const cfg: Config = {
       ...baseCfg,
-      typography: { fontVariantNumeric: { tabular: ['mono'] } },
+      typography: { fontVariantNumeric: { tabular: [['mono']] } },
     };
     const additions = buildExpansionAdditions([monoToken], cfg);
     expect(additions).toContain('  --ds-mono-base-default-fvn: tabular-nums;');
@@ -85,7 +109,52 @@ describe('buildExpansionAdditions', () => {
   it('does NOT match when only a deeper segment matches the config string', () => {
     const cfg: Config = {
       ...baseCfg,
-      typography: { fontVariantNumeric: { tabular: ['base'] } },
+      typography: { fontVariantNumeric: { tabular: [['base']] } },
+    };
+    const additions = buildExpansionAdditions([monoToken], cfg);
+    expect(additions.some((l) => l.includes('-fvn:'))).toBe(false);
+  });
+
+  it('matches a deeper-path prefix (config [["table","numeric"]] matches Table.Numeric.Base)', () => {
+    const cfg: Config = {
+      ...baseCfg,
+      typography: { fontVariantNumeric: { tabular: [['table', 'numeric']] } },
+    };
+    const additions = buildExpansionAdditions([tableNumericToken], cfg);
+    expect(additions).toContain('  --ds-table-numeric-base-default-fvn: tabular-nums;');
+  });
+
+  it('does NOT match siblings (Table.Header is not matched by [["table","numeric"]])', () => {
+    const cfg: Config = {
+      ...baseCfg,
+      typography: { fontVariantNumeric: { tabular: [['table', 'numeric']] } },
+    };
+    const additions = buildExpansionAdditions([tableHeaderToken], cfg);
+    expect(additions.some((l) => l.includes('-fvn:'))).toBe(false);
+  });
+
+  it('empty inner array does NOT match anything (defensive)', () => {
+    const cfg: Config = {
+      ...baseCfg,
+      typography: { fontVariantNumeric: { tabular: [[]] } },
+    };
+    const additions = buildExpansionAdditions([monoToken], cfg);
+    expect(additions.some((l) => l.includes('-fvn:'))).toBe(false);
+  });
+
+  it('matches when prefix length equals token path length (exact match)', () => {
+    const cfg: Config = {
+      ...baseCfg,
+      typography: { fontVariantNumeric: { tabular: [['table', 'numeric', 'base', 'default']] } },
+    };
+    const additions = buildExpansionAdditions([tableNumericToken], cfg);
+    expect(additions).toContain('  --ds-table-numeric-base-default-fvn: tabular-nums;');
+  });
+
+  it('does NOT match when prefix is longer than token path', () => {
+    const cfg: Config = {
+      ...baseCfg,
+      typography: { fontVariantNumeric: { tabular: [['mono', 'base', 'default', 'extra']] } },
     };
     const additions = buildExpansionAdditions([monoToken], cfg);
     expect(additions.some((l) => l.includes('-fvn:'))).toBe(false);

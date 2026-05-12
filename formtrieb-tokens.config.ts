@@ -20,7 +20,7 @@ export default defineConfig({
   defaultGroupBehavior: { useReferences: true },
   typography: {
     fontVariantNumeric: {
-      tabular: ['mono', 'metric'],
+      tabular: [['mono'], ['metric']],
     },
   },
   utilities: [
