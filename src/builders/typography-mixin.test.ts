@@ -26,4 +26,18 @@ describe('typographyMixin', () => {
     expect(out.content).toContain('text-indent: var(--ds-#{$token}-text-indent)');
     expect(out.content).toContain('margin-block-end: var(--ds-#{$token}-margin-block-end)');
   });
+
+  it('core mixin includes font-variant-numeric with -fvn variable and normal fallback', async () => {
+    const out = await typographyMixin()({ tokens, config: cfg });
+    expect(out.content).toContain('font-variant-numeric: var(--ds-#{$token}-fvn, normal)');
+  });
+
+  it('paragraph mixin does NOT contain font-variant-numeric', async () => {
+    const out = await typographyMixin()({ tokens, config: cfg });
+    const paragraphMixin = out.content
+      .split('@mixin')
+      .find((b) => b.startsWith(' typography-paragraph'));
+    expect(paragraphMixin).toBeDefined();
+    expect(paragraphMixin).not.toContain('font-variant-numeric');
+  });
 });

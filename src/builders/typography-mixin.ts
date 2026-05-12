@@ -18,6 +18,7 @@ export function typographyMixin(): BuilderFn {
       `  letter-spacing: var(--${p}#{$token}-letter-spacing);\n` +
       `  text-transform: var(--${p}#{$token}-text-transform);\n` +
       `  text-decoration: var(--${p}#{$token}-text-decoration);\n` +
+      `  font-variant-numeric: var(--${p}#{$token}-fvn, normal);\n` +
       `}\n\n` +
       `@mixin typography-paragraph($token) {\n` +
       `  text-indent: var(--${p}#{$token}-text-indent);\n` +
