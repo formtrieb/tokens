@@ -76,7 +76,7 @@ export function buildExpansionAdditions(
 
 		const lowerPath = token.path.map((s) => s.toLowerCase());
 		const isTabular = tabularPrefixes.some(
-			(prefix) => prefix.length > 0 && prefix.every((seg, i) => lowerPath[i] === seg)
+			(cfgPrefix) => cfgPrefix.length > 0 && cfgPrefix.every((seg, i) => lowerPath[i] === seg)
 		);
 		if (isTabular) {
 			additions.push(`  ${fullName}-fvn: tabular-nums;`);
