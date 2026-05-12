@@ -26,6 +26,12 @@ export type BuilderFn = ((ctx: BuilderContext) => BuilderOutput | Promise<Builde
   builderName?: string;
 };
 
+export interface TypographyConfig {
+  fontVariantNumeric?: {
+    tabular?: string[];
+  };
+}
+
 export interface Config {
   prefix: string;
   paths: ConfigPaths;
@@ -34,6 +40,7 @@ export interface Config {
   themeGroups?: Record<string, ThemeGroupBehavior>;
   defaultGroupBehavior?: ThemeGroupBehavior;
   utilities?: BuilderFn[];
+  typography?: TypographyConfig;
 }
 
 export interface Token {
