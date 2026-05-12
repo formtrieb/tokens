@@ -18,6 +18,11 @@ export default defineConfig({
     Foundation: { useReferences: false },
   },
   defaultGroupBehavior: { useReferences: true },
+  typography: {
+    fontVariantNumeric: {
+      tabular: ['mono', 'metric'],
+    },
+  },
   utilities: [
     typography(),
     typographyMixin(),
