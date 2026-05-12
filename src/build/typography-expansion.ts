@@ -18,10 +18,8 @@ import { promises } from 'node:fs';
 import type { Config } from '../types.js';
 import { toKebabCase } from '../shared/kebab.js';
 import { loadTypographyTokens } from '../shared/typography-tokens.js';
+import type { TypographyToken } from '../shared/types.js';
 
-/**
- * Converts a `{textCase.uppercase}` style reference to `--ds-text-case-uppercase`.
- */
 function tokenReferenceToCssVar(refString: string, prefix: string): string {
 	const match = refString.match(/^\{(.+)\}$/);
 	if (!match) return '';
@@ -39,16 +37,18 @@ function fixFontShorthandOrder(content: string, prefix: string): string {
 	return content.replace(fontOrderFix, `var(--${prefix}font-sizes-$2)/var(--${prefix}line-heights-$1)`);
 }
 
-export async function expandTypographyInFile(filePath: string, config: Config): Promise<void> {
+/**
+ * Pure helper: given the loaded typography tokens and the config, return
+ * the lines that must be appended inside the `:root { … }` block.
+ *
+ * Each line includes its own 2-space indentation, matching the existing
+ * style-dictionary output format.
+ */
+export function buildExpansionAdditions(
+	tokens: TypographyToken[],
+	config: Config
+): string[] {
 	const prefix = config.prefix;
-	const tokensPath = config.paths.tokens;
-
-	let content = await promises.readFile(filePath, 'utf-8');
-
-	content = fixFontShorthandOrder(content, prefix);
-
-	const tokens = await loadTypographyTokens(tokensPath);
-
 	const additions: string[] = [];
 
 	for (const token of tokens) {
@@ -71,6 +71,20 @@ export async function expandTypographyInFile(filePath: string, config: Config): 
 			}
 		}
 	}
+
+	return additions;
+}
+
+export async function expandTypographyInFile(filePath: string, config: Config): Promise<void> {
+	const prefix = config.prefix;
+	const tokensPath = config.paths.tokens;
+
+	let content = await promises.readFile(filePath, 'utf-8');
+
+	content = fixFontShorthandOrder(content, prefix);
+
+	const tokens = await loadTypographyTokens(tokensPath);
+	const additions = buildExpansionAdditions(tokens, config);
 
 	if (additions.length > 0) {
 		content = content.replace(/(\n})\s*$/, `\n${additions.join('\n')}\n$1`);
