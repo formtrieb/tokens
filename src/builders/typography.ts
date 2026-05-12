@@ -15,6 +15,7 @@ export function typography(): BuilderFn {
           `  letter-spacing: var(${baseVar}-letter-spacing);\n` +
           `  text-transform: var(${baseVar}-text-transform);\n` +
           `  text-decoration: var(${baseVar}-text-decoration);\n` +
+          `  font-variant-numeric: var(${baseVar}-fvn, normal);\n` +
           `}`
       );
       blocks.push(

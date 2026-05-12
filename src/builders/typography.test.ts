@@ -41,6 +41,22 @@ describe('typography', () => {
     expect(out.content).toContain('margin-block-end: var(--ds-display-1-margin-block-end)');
   });
 
+  it('core class includes font-variant-numeric with -fvn variable and normal fallback', async () => {
+    const out = await typography()({ tokens: typographyTokens, config: cfg });
+    expect(out.content).toContain('font-variant-numeric: var(--ds-display-1-fvn, normal)');
+    expect(out.content).toContain('font-variant-numeric: var(--ds-body-base-default-fvn, normal)');
+  });
+
+  it('--paragraph class does NOT contain font-variant-numeric', async () => {
+    const out = await typography()({ tokens: typographyTokens, config: cfg });
+    // Split the output into per-block chunks and inspect the --paragraph block specifically.
+    const paragraphBlock = out.content
+      .split('\n\n')
+      .find((b) => b.includes('.ds-display-1--paragraph {'));
+    expect(paragraphBlock).toBeDefined();
+    expect(paragraphBlock).not.toContain('font-variant-numeric');
+  });
+
   it('uses typography.css as filename', async () => {
     const out = await typography()({ tokens: typographyTokens, config: cfg });
     expect(out.filename).toBe('typography.css');
