@@ -1,10 +1,17 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { exec } from 'node:child_process';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
 
+const execAsync = promisify(exec);
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const ROOT = join(__dirname, '..', '..');
+
+beforeAll(async () => {
+  await execAsync('npm run build', { cwd: ROOT });
+}, 60_000);
 
 function readDirRecursive(dir: string): Record<string, string> {
   const result: Record<string, string> = {};
