@@ -7,3 +7,8 @@ dist/
 
 .mcp.json
 _context/*
+
+# Local recovery / scratch — not part of the package
+memory/
+tokensRadiusTest/
+.remember/
