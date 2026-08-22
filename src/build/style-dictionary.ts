@@ -13,9 +13,18 @@ import type { TransformedToken, Dictionary } from 'style-dictionary/types';
 import type { Theme } from '../shared/types.js';
 import type { Config } from '../types.js';
 
-const TRANSFORMS = [
+/**
+ * Platform-level transforms, appended by Style Dictionary to whatever the
+ * `tokens-studio` transformGroup already provides. Only list transforms the
+ * group does NOT provide, or ones that must deliberately run after it —
+ * `name/kebab` overrides the group's trailing `name/camel`.
+ *
+ * Never list `ts/color/modifiers` here: the group supplies it, already
+ * configured with `format: 'srgb'` from TRANSFORM_OPTIONS, and a second entry
+ * would apply every darken/lighten twice.
+ */
+export const TRANSFORMS = [
 	'ts/resolveMath',
-	'ts/color/modifiers',
 	'ts/opacity',
 	'ts/size/lineheight',
 	'ts/typography/fontWeight',
