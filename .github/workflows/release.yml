@@ -1,0 +1,78 @@
+name: Release
+
+# One tag publishes one package: core-v1.4.0, mcp-v2.6.0, resolver-v0.5.0.
+# The tag version must equal the package.json version.
+#
+# Publishes via npm Trusted Publishing (OIDC) — no NPM_TOKEN. On npmjs.com,
+# each package's trusted publisher points at this repository, this workflow
+# file (release.yml) and the environment `npm`.
+#
+# `pnpm pack` turns `workspace:^` into a real range (e.g. ^1.4.0), so publish
+# core before the packages that depend on it.
+
+on:
+  push:
+    tags:
+      - "core-v*"
+      - "mcp-v*"
+      - "resolver-v*"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+
+      # Trusted Publishing needs npm >= 11.5.1.
+      - name: Update npm
+        run: npm install -g npm@latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Resolve package from tag
+        id: pkg
+        run: |
+          tag="$GITHUB_REF_NAME"
+          name="${tag%%-v*}"
+          version="${tag#*-v}"
+          case "$name" in
+            core)     build=build ;;
+            mcp)      build=build ;;
+            resolver) build=build:package ;;
+            *) echo "Unknown package in tag $tag"; exit 1 ;;
+          esac
+          dir="packages/$name"
+          actual=$(node -p "require('./$dir/package.json').version")
+          if [ "$actual" != "$version" ]; then
+            echo "Tag says $version, $dir/package.json says $actual"; exit 1
+          fi
+          echo "dir=$dir" >> "$GITHUB_OUTPUT"
+          echo "build=$build" >> "$GITHUB_OUTPUT"
+
+      # Root test builds core first and runs every package, conformance included.
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: pnpm run ${{ steps.pkg.outputs.build }}
+
+      - name: Pack
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: pnpm pack --pack-destination "$RUNNER_TEMP/pack"
+
+      - name: Publish to npm with provenance
+        run: npm publish "$RUNNER_TEMP"/pack/*.tgz --provenance --access public
