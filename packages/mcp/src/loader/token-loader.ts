@@ -1,5 +1,5 @@
 import { readFileSync, readdirSync, statSync } from "node:fs";
-import { join, relative, sep } from "node:path";
+import { isAbsolute, join, relative, resolve, sep } from "node:path";
 
 export interface TokenSetData {
   name: string;
@@ -29,7 +29,7 @@ export class TokenLoader {
   private loadTokenSets(): void {
     this.sets.clear();
     for (const setName of this.tokenSetOrder) {
-      const filePath = join(this.tokensPath, ...setName.split("/")) + ".json";
+      const filePath = this.setFile(setName);
       try {
         const data = JSON.parse(readFileSync(filePath, "utf-8"));
         this.sets.set(setName, data);
@@ -37,6 +37,22 @@ export class TokenLoader {
         // Set listed in metadata but file missing — skip
       }
     }
+  }
+
+  /**
+   * Set names come from `$metadata.json` and become file paths. A name like
+   * `../x` would read outside the token folder, so it is refused.
+   */
+  private setFile(setName: string): string {
+    const root = resolve(this.tokensPath);
+    const filePath = resolve(root, ...setName.split("/")) + ".json";
+    const rel = relative(root, filePath);
+    if (rel.startsWith(`..${sep}`) || rel === ".." || isAbsolute(rel)) {
+      throw new Error(
+        `Token set "${setName}" in $metadata.json points outside the token folder.`
+      );
+    }
+    return filePath;
   }
 
   getTokenSetOrder(): string[] {

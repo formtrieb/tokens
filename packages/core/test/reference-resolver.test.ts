@@ -127,3 +127,37 @@ describe("applyColorModifier — lighten/darken in LCH space", () => {
     );
   });
 });
+
+describe("ReferenceResolver — hardening", () => {
+  it("resolves a wide, acyclic reference DAG in linear time", () => {
+    // Every level references the next one twice. Without sharing work inside
+    // one resolve() call this is 2^20 visits (seconds); with it, 20.
+    const entries: Record<string, Pick<RawToken, "$type" | "$value">> = {
+      "n.20": { $type: "number", $value: "1" },
+    };
+    for (let i = 19; i >= 0; i--) {
+      entries[`n.${i}`] = { $type: "number", $value: `{n.${i + 1}} * {n.${i + 1}}` };
+    }
+    const resolver = new ReferenceResolver(buildTokenMap(entries));
+
+    const start = performance.now();
+    const chain = resolver.resolve("n.0");
+    const elapsed = performance.now() - start;
+
+    expect(chain.errors).toEqual([]);
+    expect(Number(chain.finalValue)).toBe(1);
+    expect(elapsed).toBeLessThan(250);
+  });
+
+  it("resolves every reference of a composite whose targets are numbers", () => {
+    const resolver = new ReferenceResolver(
+      buildTokenMap({
+        a: { $type: "number", $value: 4 },
+        b: { $type: "number", $value: 2 },
+        t: { $type: "typography", $value: { x: "{a}", y: "{b}" } },
+      })
+    );
+
+    expect(resolver.resolve("t").finalValue).toEqual({ x: 4, y: 2 });
+  });
+});
