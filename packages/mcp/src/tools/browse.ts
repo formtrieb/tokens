@@ -304,7 +304,9 @@ function buildTreeView(
   prefix: string,
   maxDepth: number
 ): TreeNode {
-  const tree: TreeNode = {};
+  // Keys are token path segments; a prototype-free tree keeps a segment like
+  // `__proto__` an ordinary key instead of a write to Object.prototype.
+  const tree: TreeNode = Object.create(null);
 
   for (const token of tokens) {
     const relativePath = prefix
@@ -316,7 +318,7 @@ function buildTreeView(
       let current = tree;
       for (let i = 0; i < parts.length - 1; i++) {
         if (!(parts[i] in current)) {
-          current[parts[i]] = {};
+          current[parts[i]] = Object.create(null);
         }
         current = current[parts[i]] as TreeNode;
       }
@@ -332,7 +334,7 @@ function buildTreeView(
       let current = tree;
       for (let i = 0; i < maxDepth; i++) {
         if (!(parts[i] in current)) {
-          current[parts[i]] = {};
+          current[parts[i]] = Object.create(null);
         }
         current = current[parts[i]] as TreeNode;
       }

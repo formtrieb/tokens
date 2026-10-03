@@ -10,6 +10,20 @@ import {
 
 const MAX_DEPTH = 50;
 const REF_PATTERN = /\{([^}]+)\}/g;
+// Non-global twin for tests: a /g regex carries lastIndex from one .test()
+// call into the next, which skipped references in composites.
+const HAS_REF = /\{[^}]+\}/;
+
+/**
+ * State of one resolve() call. `visited` is the current path (cycle check);
+ * `memo` holds every token already resolved in this call, so a token reached
+ * along many paths is resolved once — a wide reference DAG otherwise costs
+ * 2^depth visits.
+ */
+interface Walk {
+  visited: Set<string>;
+  memo: Map<string, unknown>;
+}
 
 export class ReferenceResolver {
   private tokenMap: Map<string, RawToken>;
@@ -24,9 +38,9 @@ export class ReferenceResolver {
     if (cached) return cached;
 
     const chain: ResolutionChain = { steps: [], finalValue: null, errors: [] };
-    const visited = new Set<string>();
+    const walk: Walk = { visited: new Set(), memo: new Map() };
 
-    this.resolveRecursive(dotPath, chain, visited, 0);
+    this.resolveRecursive(dotPath, chain, walk, 0);
 
     this.cache.set(dotPath, chain);
     return chain;
@@ -35,7 +49,7 @@ export class ReferenceResolver {
   private resolveRecursive(
     dotPath: string,
     chain: ResolutionChain,
-    visited: Set<string>,
+    walk: Walk,
     depth: number
   ): unknown {
     if (depth > MAX_DEPTH) {
@@ -43,7 +57,9 @@ export class ReferenceResolver {
       return null;
     }
 
-    if (visited.has(dotPath)) {
+    if (walk.memo.has(dotPath)) return walk.memo.get(dotPath);
+
+    if (walk.visited.has(dotPath)) {
       chain.errors.push(`Circular reference detected at "${dotPath}"`);
       return null;
     }
@@ -54,7 +70,7 @@ export class ReferenceResolver {
       return null;
     }
 
-    visited.add(dotPath);
+    walk.visited.add(dotPath);
 
     const modifier = token.$extensions?.["studio.tokens"]?.modify;
     chain.steps.push({
@@ -64,17 +80,18 @@ export class ReferenceResolver {
       ...(modifier && { modifier }),
     });
 
-    const resolved = this.resolveValue(token, chain, visited, depth);
+    const resolved = this.resolveValue(token, chain, walk, depth);
     chain.finalValue = resolved;
 
-    visited.delete(dotPath);
+    walk.visited.delete(dotPath);
+    walk.memo.set(dotPath, resolved);
     return resolved;
   }
 
   private resolveValue(
     token: RawToken,
     chain: ResolutionChain,
-    visited: Set<string>,
+    walk: Walk,
     depth: number
   ): unknown {
     const value = token.$value;
@@ -83,7 +100,7 @@ export class ReferenceResolver {
       const resolved: Record<string, unknown> = {};
       for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
         if (typeof v === "string" && hasReferences(v)) {
-          resolved[k] = this.resolveStringValue(v, chain, visited, depth);
+          resolved[k] = this.resolveStringValue(v, chain, walk, depth);
         } else {
           resolved[k] = v;
         }
@@ -92,7 +109,7 @@ export class ReferenceResolver {
     }
 
     if (typeof value === "string") {
-      let resolved = this.resolveStringValue(value, chain, visited, depth);
+      let resolved = this.resolveStringValue(value, chain, walk, depth);
 
       if (typeof resolved === "string" && isLchFormula(resolved)) {
         chain.lchValue = resolved;
@@ -111,7 +128,7 @@ export class ReferenceResolver {
         const modify = this.resolveModifierValue(
           token.$extensions["studio.tokens"].modify,
           chain,
-          visited,
+          walk,
           depth
         );
         const modified = applyColorModifier(resolved, modify);
@@ -134,14 +151,14 @@ export class ReferenceResolver {
   private resolveModifierValue(
     modify: ColorModifier,
     chain: ResolutionChain,
-    visited: Set<string>,
+    walk: Walk,
     depth: number
   ): ColorModifier {
     if (typeof modify.value === "string" && modify.value.includes("{")) {
       const resolved = this.resolveStringValue(
         modify.value,
         chain,
-        visited,
+        walk,
         depth
       );
       return { ...modify, value: String(resolved) };
@@ -152,12 +169,12 @@ export class ReferenceResolver {
   private resolveStringValue(
     value: string,
     chain: ResolutionChain,
-    visited: Set<string>,
+    walk: Walk,
     depth: number
   ): string | number {
     if (isPureReference(value)) {
       const refPath = value.slice(1, -1);
-      const resolved = this.resolveRecursive(refPath, chain, visited, depth + 1);
+      const resolved = this.resolveRecursive(refPath, chain, walk, depth + 1);
       if (resolved !== null) return resolved as string | number;
       return value;
     }
@@ -167,7 +184,7 @@ export class ReferenceResolver {
         const resolved = this.resolveRecursive(
           refPath,
           chain,
-          visited,
+          walk,
           depth + 1
         );
         if (resolved !== null) return String(resolved);
@@ -207,5 +224,5 @@ function isPureReference(value: string): boolean {
 }
 
 function hasReferences(value: string): boolean {
-  return typeof value === "string" && REF_PATTERN.test(value);
+  return typeof value === "string" && HAS_REF.test(value);
 }
