@@ -199,4 +199,4 @@ await runPipeline(config);
 
 ## License
 
-MIT
+[Apache-2.0](./LICENSE). Versions up to 0.4.0 were published under MIT.

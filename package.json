@@ -1,6 +1,7 @@
 {
   "name": "formtrieb-tokens",
   "private": true,
+  "license": "Apache-2.0",
   "description": "Formtrieb token tooling — core model and resolution, CSS rendering, MCP server, CLI. One repository, one resolution.",
   "type": "module",
   "scripts": {
