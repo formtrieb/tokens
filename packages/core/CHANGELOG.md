@@ -5,6 +5,39 @@ All notable changes to `@formtrieb/tokens-core` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] — 2026-10-03
+
+### Added
+
+- `applyColorModifier(base, modifier, output)` takes an output form:
+  `"hex"` (default, unchanged) or `"srgb"` — unrounded `rgb(r% g% b% / a)` at
+  five significant digits, the shape `@tokens-studio/sd-transforms` writes
+  with `format: 'srgb'`. `@formtrieb/token-resolver` ships this form, so the
+  generated CSS and `tokens-mcp` now take colour from one implementation.
+  New exported type `ModifierOutput`.
+- `mix` modifier (`modify.color` is the colour to mix towards; may be a token
+  reference).
+- `lighten` / `darken` honour the modifier's `space`: `hsl`, `srgb` and `p3`
+  next to `lch`, formula for formula as sd-transforms has them. An unknown
+  space still falls back to `lch`.
+
+### Fixed
+
+- **Colour is rounded once, for output.** The reference resolver rounded every
+  intermediate colour to hex — an `lch()` value before its modifier, a
+  modifier's result before the next one. Chains could land one 8-bit step
+  away from the CSS. It now carries the unrounded value through the chain.
+- A composite whose first reference resolved to a number left every later
+  reference unresolved (`{"x": 4, "y": "{b}"}`): a `/g` regex carried
+  `lastIndex` from one test into the next.
+- A wide, acyclic reference graph was resolved once per path — `2^depth`
+  visits. Each token is now resolved once per `resolve()` call. A token reached
+  twice in one chain appears once in `chain.steps`.
+
+**Colour values change** for tokens with `hsl`/`srgb`/`p3` lighten/darken
+(previously computed as `lch`) and for some modifier chains (one 8-bit step).
+No signatures changed.
+
 ## [1.3.0] — 2026-08-23
 
 ### Fixed

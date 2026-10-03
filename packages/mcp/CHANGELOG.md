@@ -5,6 +5,22 @@ All notable changes to `@formtrieb/tokens-mcp` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.0] — 2026-10-03
+
+### Changed
+
+- Requires `@formtrieb/tokens-core` ^1.4.0. `resolve_token` / `resolve_batch`
+  report different colours for tokens with `hsl`/`srgb`/`p3` lighten/darken and
+  for some modifier chains (one 8-bit step) — the values the generated CSS
+  ships. `mix` modifiers resolve.
+
+### Security
+
+- A set name in `$metadata.json` that points outside the token folder
+  (`../…`) is refused with an error instead of read.
+- `browse_tokens` builds its tree without a prototype: a `__proto__` path
+  segment stays a key instead of writing to `Object.prototype`.
+
 ## [2.5.1] — 2026-08-19
 
 ### Fixed

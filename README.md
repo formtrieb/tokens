@@ -25,6 +25,19 @@ pnpm conformance   # core vs resolver, compared with conformance/baseline.json
 - `packages/resolver` carries the full history of the former `formtrieb/token-resolver` repository (imported via `git subtree`).
 - `packages/core` and `packages/mcp` were moved from the `cdf-workstation` monorepo at commit `c250aaf` (2026-08-23). Their published snapshots lived at `formtrieb/tokens-core` and `formtrieb/tokens-mcp`.
 
+## Releasing
+
+One tag publishes one package through `.github/workflows/release.yml`
+(npm Trusted Publishing, with provenance):
+
+```bash
+git tag core-v1.4.0 && git push origin core-v1.4.0          # first: the others depend on it
+git tag mcp-v2.6.0 resolver-v0.5.0 && git push origin mcp-v2.6.0 resolver-v0.5.0
+```
+
+The tag version must equal the package's `package.json`. `pnpm pack`
+replaces `workspace:^` with the released range.
+
 ## License
 
 [Apache-2.0](./LICENSE) for the whole repository. `@formtrieb/token-resolver` up to 0.4.0 was published under MIT.
