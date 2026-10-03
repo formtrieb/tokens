@@ -1,0 +1,46 @@
+{
+  "name": "@formtrieb/tokens-core",
+  "version": "1.3.0",
+  "description": "Core library for Tokens-Studio-shaped design token systems — loaders, theme composition, reference resolution, and DTCG-aware analysis primitives. Pure functions, framework-agnostic.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/formtrieb/tokens-core.git"
+  },
+  "homepage": "https://github.com/formtrieb/tokens-core",
+  "bugs": {
+    "url": "https://github.com/formtrieb/tokens-core/issues"
+  },
+  "keywords": [
+    "design-tokens",
+    "tokens-studio",
+    "dtcg",
+    "design-system",
+    "theme",
+    "token-resolution"
+  ],
+  "scripts": {
+    "build": "rm -rf dist tsconfig.tsbuildinfo && tsc",
+    "test": "vitest",
+    "prepublishOnly": "npm run build && vitest --run --passWithNoTests"
+  },
+  "dependencies": {
+    "culori": "^4.0.0"
+  },
+  "devDependencies": {
+    "@tokens-studio/sd-transforms": "^2.0.3",
+    "style-dictionary": "^5.5.2",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^3.0.0"
+  }
+}
