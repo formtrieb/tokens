@@ -5,6 +5,9 @@
  *   pnpm conformance --update-baseline     pin the current state
  *   pnpm conformance --tokens <dir>        any Tokens-Studio export (no baseline check
  *                                          unless --baseline <file> is given)
+ *   pnpm conformance --css                 whole resolver output vs render, file by
+ *                                          file (src/css.ts); with --tokens <dir>
+ *                                          also --config <resolver config>
  *
  * Exit 0 when the result equals the baseline (or no baseline applies),
  * 1 when findings appeared or disappeared. A disappeared finding is a change
@@ -26,6 +29,8 @@ export const REPO_ROOT = fileURLToPath(new URL('../..', import.meta.url));
 export const DEFAULT_TOKENS = join(REPO_ROOT, 'packages/resolver/tests/fixtures/tokens');
 export const DEFAULT_BASELINE = join(REPO_ROOT, 'conformance/baseline.json');
 const DEFAULT_OUT = join(REPO_ROOT, 'conformance/out');
+const DEFAULT_CONFIG = join(REPO_ROOT, 'packages/resolver/formtrieb-tokens.config.ts');
+const DEFAULT_ALLOWLIST = join(REPO_ROOT, 'conformance/css-allowlist.json');
 
 export interface Finding {
   theme: string;
@@ -187,7 +192,41 @@ function arg(flag: string): string | undefined {
   return i >= 0 ? process.argv[i + 1] : undefined;
 }
 
+async function mainCss() {
+  const tokens = arg('--tokens');
+  const config = arg('--config');
+  if (tokens && !config) {
+    console.error('--css with --tokens needs the resolver config of that system: --config <file>');
+    process.exit(2);
+  }
+  // Loaded only here: the token mode and its baseline test never pull in render.
+  const { runCssConformance, renderCssReport, cssSummary } = await import('./css.js');
+  const outDir = resolve(arg('--out') ?? DEFAULT_OUT);
+  const allow = JSON.parse(readFileSync(DEFAULT_ALLOWLIST, 'utf-8'));
+  const run = await runCssConformance(
+    resolve(tokens ?? DEFAULT_TOKENS),
+    resolve(config ?? DEFAULT_CONFIG),
+    allow,
+    outDir
+  );
+
+  mkdirSync(outDir, { recursive: true });
+  writeFileSync(join(outDir, 'css-report.md'), renderCssReport(run, REPO_ROOT));
+  writeFileSync(join(outDir, 'css-result.json'), JSON.stringify(run, null, 2) + '\n');
+  console.log(cssSummary(run));
+  for (const f of run.files) {
+    const note = f.status === 'missing' && f.error ? ` — ${f.error}` : '';
+    console.log(`  ${f.status === 'identical' || f.status === 'allowed' ? '✓' : '✗'} ${f.file} [${f.status}]${note}`);
+  }
+  const shown = (p: string) => (relative(process.cwd(), p).startsWith('..') ? p : relative(process.cwd(), p));
+  if (run.seeded.length) console.log(`seeded: ${run.seeded.join(', ')}`);
+  console.log(`report: ${shown(join(outDir, 'css-report.md'))}`);
+  console.log(`trees:  ${shown(join(outDir, 'css'))}/{sd,render}`);
+  if (run.files.some((f) => f.status !== 'identical' && f.status !== 'allowed')) process.exitCode = 1;
+}
+
 async function main() {
+  if (process.argv.includes('--css')) return mainCss();
   const tokensDir = resolve(arg('--tokens') ?? DEFAULT_TOKENS);
   const update = process.argv.includes('--update-baseline');
   const explicitBaseline = arg('--baseline');

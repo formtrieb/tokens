@@ -1,0 +1,14 @@
+[
+  {
+    "issue": "FOR-496",
+    "reason": "Mixed-unit math on a reference ({breakpoints.x}-1px): the resolver writes `var(--…)-1px`, which is invalid CSS; render writes `calc(var(--…) - 1px)`. Any token of that shape, not only content.maxWidth.",
+    "file": "^(variables/.*\\.css|bundle\\.css)$",
+    "line": "^\\s*--[\\w-]+: (?:(?:var\\(--[\\w-]+\\)|-?[\\d.]+(?:px|rem|%)?)\\s*[-+*/]\\s*(?:var\\(--[\\w-]+\\)|-?[\\d.]+(?:px|rem|%)?)|calc\\((?:var\\(--[\\w-]+\\)|-?[\\d.]+(?:px|rem|%)?) [-+*/] (?:var\\(--[\\w-]+\\)|-?[\\d.]+(?:px|rem|%)?)\\));$"
+  },
+  {
+    "issue": "FOR-497",
+    "reason": "A value that is no valid CSS (empty cubic-bezier) breaks render's build with path and theme instead of being written; the resolver writes `cubic-bezier([object Object], …)`.",
+    "file": "^(variables/.*\\.css|bundle\\.css)$",
+    "line": "\\[object Object\\]"
+  }
+]
