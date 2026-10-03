@@ -13,10 +13,17 @@ and lists where the two disagree. One theme is one comparison, because one
 theme is one CSS block.
 
 ```bash
-pnpm conformance                      # default fixture, compared with baseline.json
+pnpm conformance                      # synthetic fixture, compared with baseline.json
 pnpm conformance --update-baseline    # pin the current state deliberately
 pnpm conformance --tokens <dir>       # any Tokens-Studio export; add --baseline <file> to compare
 ```
+
+The default is the synthetic fixture in `packages/resolver/tests/fixtures/tokens`
+— customer-free, but with the same patterns as a production system: LCH ramps
+built from helper numbers with zero-amount modifiers, math in helpers, alpha
+chains with referenced multipliers, chained modifiers in lch/hsl/srgb, device
+and shape axes, private `*` tokens, typography composites. A real system runs
+through `--tokens <local path>`; it is never checked in.
 
 The run writes `out/report.md` (per theme, per `$type`, every finding with
 both values) and `out/result.json`. Both are ignored by git.
@@ -41,25 +48,32 @@ form before comparing:
 a finding appears **or disappears** — a fix is a change too and is pinned on
 purpose with `--update-baseline`, never silently.
 
-## What the first run found (2026-10-03, the production design system export)
+## What the first run found (2026-10-03, a production export via `--tokens`)
 
 2455 tokens compared across 16 themes: 2430 match, 13 rounding, 8 divergent,
 4 unparseable, 105 composite not compared.
 
-- **letter-spacing is shipped 16× too small.** `-5%` becomes `-0.003125rem`
-  (= −0.05 px) instead of `−0.05em`: sd-transforms turns `%` into `em`, then
-  `size/pxToRem` treats the em number as px. core reports `-5%`. Six tokens.
-  *Fixed in FOR-495: the resolver converts only px or unitless values to rem;
-  the six findings left the baseline (now 2436 match, 2 divergent).*
-- **`content.maxWidth` is shipped as invalid CSS.** `{breakpoints.tablet}-1px`
-  leaves the pipeline as `var(--…-breakpoints-tablet)-1px` without `calc()`;
-  core leaves `1024px-1px`. Neither machine can evaluate mixed-unit math.
-- **The easing tokens are empty in the source** (`[{},{},{},{}]`); sd ships
-  `cubic-bezier([object Object], …)`. Already noted in the customer lab.
-- The 13 rounding cases are the four foundation colours documented in
-  tokens-core 1.3.0 plus their semantic aliases.
-  *Gone since FOR-498: the resolver computes colour modifiers with core
-  instead of sd-transforms/colorjs (now 2449 match, 0 rounding).*
+- **letter-spacing was shipped 16× too small.** `-5%` became `-0.003125rem`
+  instead of `-0.05em`: sd-transforms turns `%` into `em`, then
+  `size/pxToRem` treated the em number as px. *Fixed in FOR-495.*
+- **A max-width with mixed-unit math ships as invalid CSS.**
+  `{breakpoints.tablet}-1px` leaves the pipeline without `calc()`; core leaves
+  `1024px-1px`. Neither machine can evaluate mixed-unit math. Open.
+- **Empty easing tokens in the source** (`[{},{},{},{}]`) ship as
+  `cubic-bezier([object Object], …)`. A source defect.
+- **13 rounding cases**: colours one 8-bit step apart, culori vs colorjs.
+  *Gone since FOR-498: the resolver computes colour modifiers with core.*
+
+## What the synthetic fixture pins
+
+300 match, 4 rounding, 1 divergent, 21 composite not compared.
+
+- The divergent case is the mixed-unit max-width above, kept on purpose.
+- The 4 rounding cases are **chained modifiers** (`darken` on an lch ramp
+  step, `srgb` lighten on one): core's reference resolver rounds every
+  intermediate colour to 8-bit hex, the resolver carries the unrounded value
+  into the next modifier. Both use core's maths; they differ in where they
+  quantise.
 
 This instrument is scaffolding. Once core is the only reader and resolver,
 the resolver's own snapshot test guards both sides and this folder can go.

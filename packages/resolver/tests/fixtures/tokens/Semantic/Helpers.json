@@ -1,0 +1,18 @@
+{
+  "color": {
+    "text": {
+      "lightness": {
+        "multiplier": {
+          "secondary": {
+            "$type": "other",
+            "$value": "0.6"
+          },
+          "tertiary": {
+            "$type": "other",
+            "$value": "0.4"
+          }
+        }
+      }
+    }
+  }
+}

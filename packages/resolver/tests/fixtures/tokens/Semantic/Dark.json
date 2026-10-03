@@ -1,0 +1,283 @@
+{
+  "color": {
+    "page": {
+      "$type": "color",
+      "$value": "{colors.black}"
+    },
+    "backdrop": {
+      "$type": "color",
+      "$value": "{colors.black}",
+      "$extensions": {
+        "studio.tokens": {
+          "modify": {
+            "type": "alpha",
+            "value": "0.6",
+            "space": "lch"
+          }
+        }
+      }
+    },
+    "text": {
+      "primary": {
+        "$type": "color",
+        "$value": "{colors.white}"
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": "{color.text.primary}",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "alpha",
+              "value": "{color.text.lightness.multiplier.secondary}",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "tertiary": {
+        "$type": "color",
+        "$value": "{color.text.primary}",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "alpha",
+              "value": "{color.text.lightness.multiplier.tertiary}",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "inverted": {
+        "primary": {
+          "$type": "color",
+          "$value": "{colors.black}"
+        },
+        "secondary": {
+          "$type": "color",
+          "$value": "{color.text.inverted.primary}",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "{color.text.lightness.multiplier.secondary}",
+                "space": "lch"
+              }
+            }
+          }
+        }
+      },
+      "accent": {
+        "$type": "color",
+        "$value": "{colors.plum.4}"
+      },
+      "highlight": {
+        "$type": "color",
+        "$value": "{colors.sun.0}"
+      }
+    },
+    "brand": {
+      "primary": {
+        "$type": "color",
+        "$value": "{colors.ocean.5}"
+      },
+      "hover": {
+        "$type": "color",
+        "$value": "{colors.ocean.5}",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "darken",
+              "value": "0.2",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "pressed": {
+        "$type": "color",
+        "$value": "{colors.ocean.5}",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0.2",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "deep": {
+        "$type": "color",
+        "$value": "{colors.ocean.11}"
+      }
+    },
+    "surface": {
+      "level0": {
+        "$type": "color",
+        "$value": "{colors.black}"
+      },
+      "level1": {
+        "$type": "color",
+        "$value": "{colors.neutral.10}"
+      },
+      "level2": {
+        "$type": "color",
+        "$value": "{colors.neutral.9}"
+      },
+      "fresh": {
+        "$type": "color",
+        "$value": "{colors.moss.0}"
+      }
+    },
+    "divider": {
+      "$type": "color",
+      "$value": "{colors.neutral.8}"
+    },
+    "interaction": {
+      "stroke": {
+        "neutral": {
+          "primary": {
+            "$type": "color",
+            "$value": "{colors.white}",
+            "$extensions": {
+              "studio.tokens": {
+                "modify": {
+                  "type": "alpha",
+                  "value": "0.12",
+                  "space": "srgb"
+                }
+              }
+            }
+          },
+          "secondary": {
+            "$type": "color",
+            "$value": "{colors.neutral.7}"
+          }
+        }
+      }
+    },
+    "status": {
+      "positive": {
+        "background": {
+          "$type": "color",
+          "$value": "{colors.moss.10}"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{colors.moss.2}"
+        },
+        "stroke": {
+          "$type": "color",
+          "$value": "{colors.moss.7}"
+        },
+        "indicator": {
+          "$type": "color",
+          "$value": "{colors.moss.5}"
+        }
+      },
+      "negative": {
+        "background": {
+          "$type": "color",
+          "$value": "{colors.ember.10}"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{colors.ember.2}"
+        },
+        "stroke": {
+          "$type": "color",
+          "$value": "{colors.ember.7}"
+        },
+        "indicator": {
+          "$type": "color",
+          "$value": "{colors.ember.5}"
+        }
+      },
+      "warning": {
+        "background": {
+          "$type": "color",
+          "$value": "{colors.sun.10}"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{colors.sun.2}"
+        },
+        "stroke": {
+          "$type": "color",
+          "$value": "{colors.sun.7}"
+        },
+        "indicator": {
+          "$type": "color",
+          "$value": "{colors.sun.5}"
+        }
+      },
+      "info": {
+        "background": {
+          "$type": "color",
+          "$value": "{colors.ocean.10}"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "{colors.ocean.2}"
+        },
+        "stroke": {
+          "$type": "color",
+          "$value": "{colors.ocean.7}"
+        },
+        "indicator": {
+          "$type": "color",
+          "$value": "{colors.ocean.5}"
+        }
+      }
+    }
+  },
+  "shadow": {
+    "elevation": {
+      "1": {
+        "$type": "boxShadow",
+        "$value": [
+          {
+            "x": "0",
+            "y": "{dimension.0_5x}",
+            "blur": "{dimension.2x}",
+            "spread": "0",
+            "color": "rgba(0,0,0,0.08)",
+            "type": "dropShadow"
+          }
+        ]
+      },
+      "2": {
+        "$type": "boxShadow",
+        "$value": [
+          {
+            "x": "0",
+            "y": "0",
+            "blur": "{dimension.1x}",
+            "spread": "0",
+            "color": "rgba(0,0,0,0.05)",
+            "type": "dropShadow"
+          },
+          {
+            "x": "0",
+            "y": "{dimension.1x}",
+            "blur": "{dimension.6x}",
+            "spread": "0",
+            "color": "rgba(0,0,0,0.10)",
+            "type": "dropShadow"
+          }
+        ]
+      }
+    }
+  },
+  "opacity": {
+    "disabled": {
+      "$type": "number",
+      "$value": "{opacity.medium}"
+    },
+    "hover": {
+      "$type": "number",
+      "$value": "{opacity.subtle}"
+    }
+  }
+}

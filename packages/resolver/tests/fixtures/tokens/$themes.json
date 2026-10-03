@@ -1,0 +1,132 @@
+[
+  {
+    "id": "foundation",
+    "name": "Foundation",
+    "group": "Foundation",
+    "selectedTokenSets": {
+      "Foundation/Foundation": "enabled",
+      "Foundation/Helpers": "source"
+    }
+  },
+  {
+    "id": "light",
+    "name": "Light",
+    "group": "Semantic",
+    "selectedTokenSets": {
+      "Foundation/Foundation": "source",
+      "Foundation/Helpers": "source",
+      "Semantic/Helpers": "source",
+      "Semantic/Light": "enabled"
+    }
+  },
+  {
+    "id": "dark",
+    "name": "Dark",
+    "group": "Semantic",
+    "selectedTokenSets": {
+      "Foundation/Foundation": "source",
+      "Foundation/Helpers": "source",
+      "Semantic/Helpers": "source",
+      "Semantic/Dark": "enabled"
+    }
+  },
+  {
+    "id": "desktop",
+    "name": "Desktop",
+    "group": "Device",
+    "selectedTokenSets": {
+      "Foundation/Foundation": "source",
+      "Foundation/Helpers": "source",
+      "Device/Desktop": "enabled"
+    }
+  },
+  {
+    "id": "tablet",
+    "name": "Tablet",
+    "group": "Device",
+    "selectedTokenSets": {
+      "Foundation/Foundation": "source",
+      "Foundation/Helpers": "source",
+      "Device/Tablet": "enabled"
+    }
+  },
+  {
+    "id": "mobile",
+    "name": "Mobile",
+    "group": "Device",
+    "selectedTokenSets": {
+      "Foundation/Foundation": "source",
+      "Foundation/Helpers": "source",
+      "Device/Mobile": "enabled"
+    }
+  },
+  {
+    "id": "round",
+    "name": "Round",
+    "group": "Shape",
+    "selectedTokenSets": {
+      "Foundation/Foundation": "source",
+      "Foundation/Helpers": "source",
+      "Shape/Round": "enabled"
+    }
+  },
+  {
+    "id": "sharp",
+    "name": "Sharp",
+    "group": "Shape",
+    "selectedTokenSets": {
+      "Foundation/Foundation": "source",
+      "Foundation/Helpers": "source",
+      "Shape/Sharp": "enabled"
+    }
+  },
+  {
+    "id": "typography",
+    "name": "Typography",
+    "group": "Typography",
+    "selectedTokenSets": {
+      "Foundation/Foundation": "source",
+      "Foundation/Helpers": "source",
+      "Device/Desktop": "source",
+      "Device/Tablet": "source",
+      "Device/Mobile": "source",
+      "Typography/Typography": "enabled"
+    }
+  },
+  {
+    "id": "button",
+    "name": "Button",
+    "group": "Components-Button",
+    "selectedTokenSets": {
+      "Foundation/Foundation": "source",
+      "Foundation/Helpers": "source",
+      "Semantic/Helpers": "source",
+      "Semantic/Light": "source",
+      "Semantic/Dark": "source",
+      "Device/Desktop": "source",
+      "Device/Tablet": "source",
+      "Device/Mobile": "source",
+      "Shape/Round": "source",
+      "Shape/Sharp": "source",
+      "Components/Button": "enabled"
+    }
+  },
+  {
+    "id": "card",
+    "name": "Card",
+    "group": "Components-Card",
+    "selectedTokenSets": {
+      "Foundation/Foundation": "source",
+      "Foundation/Helpers": "source",
+      "Semantic/Helpers": "source",
+      "Semantic/Light": "source",
+      "Semantic/Dark": "source",
+      "Device/Desktop": "source",
+      "Device/Tablet": "source",
+      "Device/Mobile": "source",
+      "Shape/Round": "source",
+      "Shape/Sharp": "source",
+      "Components/Card": "enabled"
+    }
+  }
+]

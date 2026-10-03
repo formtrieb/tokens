@@ -1,0 +1,1001 @@
+{
+  "colors": {
+    "white": {
+      "$type": "color",
+      "$value": "#fff",
+      "$extensions": {
+        "studio.tokens": {
+          "modify": {
+            "type": "lighten",
+            "value": "0",
+            "space": "lch"
+          }
+        }
+      }
+    },
+    "black": {
+      "$type": "color",
+      "$value": "#000",
+      "$extensions": {
+        "studio.tokens": {
+          "modify": {
+            "type": "lighten",
+            "value": "0",
+            "space": "lch"
+          }
+        }
+      }
+    },
+    "neutral": {
+      "1": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.1} {number.colors.neutral.baseChroma} {number.colors.neutral.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "2": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.2} {number.colors.neutral.baseChroma} {number.colors.neutral.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "3": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.3} {number.colors.neutral.baseChroma} {number.colors.neutral.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "4": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.4} {number.colors.neutral.baseChroma} {number.colors.neutral.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "5": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.5} {number.colors.neutral.baseChroma} {number.colors.neutral.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "6": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.6} {number.colors.neutral.baseChroma} {number.colors.neutral.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "7": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.7} {number.colors.neutral.baseChroma} {number.colors.neutral.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "8": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.8} {number.colors.neutral.baseChroma} {number.colors.neutral.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "9": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.9} {number.colors.neutral.baseChroma} {number.colors.neutral.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "10": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.10} {number.colors.neutral.baseChroma} {number.colors.neutral.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      }
+    },
+    "ocean": {
+      "1": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.1} {number.colors.chroma.1} {number.colors.ocean.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "2": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.2} {number.colors.chroma.2} {number.colors.ocean.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "3": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.3} {number.colors.chroma.3} {number.colors.ocean.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "4": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.4} {number.colors.chroma.4} {number.colors.ocean.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "5": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.5} {number.colors.chroma.5} {number.colors.ocean.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "6": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.6} {number.colors.chroma.6} {number.colors.ocean.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "7": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.7} {number.colors.chroma.7} {number.colors.ocean.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "8": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.8} {number.colors.chroma.8} {number.colors.ocean.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "9": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.9} {number.colors.chroma.9} {number.colors.ocean.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "10": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.10} {number.colors.chroma.10} {number.colors.ocean.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "11": {
+        "$type": "color",
+        "$value": "{colors.ocean.10}",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "darken",
+              "value": "0.2",
+              "space": "lch"
+            }
+          }
+        }
+      }
+    },
+    "ember": {
+      "1": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.1} {number.colors.chroma.1} {number.colors.ember.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "2": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.2} {number.colors.chroma.2} {number.colors.ember.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "3": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.3} {number.colors.chroma.3} {number.colors.ember.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "4": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.4} {number.colors.chroma.4} {number.colors.ember.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "5": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.5} {number.colors.chroma.5} {number.colors.ember.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "6": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.6} {number.colors.chroma.6} {number.colors.ember.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "7": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.7} {number.colors.chroma.7} {number.colors.ember.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "8": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.8} {number.colors.chroma.8} {number.colors.ember.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "9": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.9} {number.colors.chroma.9} {number.colors.ember.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "10": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.10} {number.colors.chroma.10} {number.colors.ember.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      }
+    },
+    "moss": {
+      "1": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.1} {number.colors.chroma.1} {number.colors.moss.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "2": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.2} {number.colors.chroma.2} {number.colors.moss.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "3": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.3} {number.colors.chroma.3} {number.colors.moss.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "4": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.4} {number.colors.chroma.4} {number.colors.moss.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "5": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.5} {number.colors.chroma.5} {number.colors.moss.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "6": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.6} {number.colors.chroma.6} {number.colors.moss.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "7": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.7} {number.colors.chroma.7} {number.colors.moss.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "8": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.8} {number.colors.chroma.8} {number.colors.moss.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "9": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.9} {number.colors.chroma.9} {number.colors.moss.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "10": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.10} {number.colors.chroma.10} {number.colors.moss.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "0": {
+        "$type": "color",
+        "$value": "{colors.moss.1}",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0.2",
+              "space": "srgb"
+            }
+          }
+        }
+      }
+    },
+    "sun": {
+      "1": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.1} {number.colors.chroma.1} {number.colors.sun.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "2": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.2} {number.colors.chroma.2} {number.colors.sun.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "3": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.3} {number.colors.chroma.3} {number.colors.sun.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "4": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.4} {number.colors.chroma.4} {number.colors.sun.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "5": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.5} {number.colors.chroma.5} {number.colors.sun.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "6": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.6} {number.colors.chroma.6} {number.colors.sun.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "7": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.7} {number.colors.chroma.7} {number.colors.sun.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "8": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.8} {number.colors.chroma.8} {number.colors.sun.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "9": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.9} {number.colors.chroma.9} {number.colors.sun.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "10": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.10} {number.colors.chroma.10} {number.colors.sun.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "0": {
+        "$type": "color",
+        "$value": "{colors.sun.1}",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0.3",
+              "space": "hsl"
+            }
+          }
+        }
+      }
+    },
+    "plum": {
+      "1": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.1} {number.colors.plum.chroma.1} {number.colors.plum.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "2": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.2} {number.colors.plum.chroma.2} {number.colors.plum.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "3": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.3} {number.colors.plum.chroma.3} {number.colors.plum.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "4": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.4} {number.colors.plum.chroma.4} {number.colors.plum.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "5": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.5} {number.colors.plum.chroma.5} {number.colors.plum.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "6": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.6} {number.colors.plum.chroma.6} {number.colors.plum.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "7": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.7} {number.colors.plum.chroma.7} {number.colors.plum.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "8": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.8} {number.colors.plum.chroma.8} {number.colors.plum.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "9": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.9} {number.colors.plum.chroma.9} {number.colors.plum.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      },
+      "10": {
+        "$type": "color",
+        "$value": "lch({number.colors.lightness.10} {number.colors.plum.chroma.10} {number.colors.plum.baseHue})",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0",
+              "space": "lch"
+            }
+          }
+        }
+      }
+    }
+  },
+  "dimension": {
+    "0x": {
+      "$type": "dimension",
+      "$value": "0px"
+    },
+    "0_25x": {
+      "$type": "dimension",
+      "$value": "1px"
+    },
+    "0_5x": {
+      "$type": "dimension",
+      "$value": "2px"
+    },
+    "1x": {
+      "$type": "dimension",
+      "$value": "4px"
+    },
+    "2x": {
+      "$type": "dimension",
+      "$value": "8px"
+    },
+    "3x": {
+      "$type": "dimension",
+      "$value": "12px"
+    },
+    "4x": {
+      "$type": "dimension",
+      "$value": "16px"
+    },
+    "6x": {
+      "$type": "dimension",
+      "$value": "24px"
+    },
+    "8x": {
+      "$type": "dimension",
+      "$value": "32px"
+    },
+    "10x": {
+      "$type": "dimension",
+      "$value": "40px"
+    },
+    "12x": {
+      "$type": "dimension",
+      "$value": "48px"
+    },
+    "16x": {
+      "$type": "dimension",
+      "$value": "64px"
+    }
+  },
+  "breakpoints": {
+    "mobile": {
+      "$type": "dimension",
+      "$value": "0px"
+    },
+    "tablet": {
+      "$type": "dimension",
+      "$value": "768px"
+    },
+    "desktop": {
+      "$type": "dimension",
+      "$value": "1280px"
+    }
+  },
+  "borderWidth": {
+    "thin": {
+      "$type": "dimension",
+      "$value": "1px"
+    },
+    "thick": {
+      "$type": "dimension",
+      "$value": "2px"
+    }
+  },
+  "zIndex": {
+    "base": {
+      "$type": "number",
+      "$value": "0"
+    },
+    "overlay": {
+      "$type": "number",
+      "$value": "100"
+    },
+    "modal": {
+      "$type": "number",
+      "$value": "200"
+    }
+  },
+  "opacity": {
+    "none": {
+      "$type": "number",
+      "$value": "0"
+    },
+    "subtle": {
+      "$type": "number",
+      "$value": "0.08"
+    },
+    "medium": {
+      "$type": "number",
+      "$value": "0.4"
+    },
+    "full": {
+      "$type": "number",
+      "$value": "1"
+    }
+  },
+  "duration": {
+    "fast": {
+      "$type": "duration",
+      "$value": "100ms"
+    },
+    "normal": {
+      "$type": "duration",
+      "$value": "200ms"
+    },
+    "slow": {
+      "$type": "duration",
+      "$value": "400ms"
+    }
+  },
+  "easing": {
+    "standard": {
+      "$type": "cubicBezier",
+      "$value": [
+        0.2,
+        0,
+        0,
+        1
+      ]
+    },
+    "exit": {
+      "$type": "cubicBezier",
+      "$value": [
+        0.4,
+        0,
+        1,
+        1
+      ]
+    }
+  }
+}

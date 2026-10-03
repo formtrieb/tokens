@@ -1,0 +1,24 @@
+{
+  "radius": {
+    "none": {
+      "$type": "borderRadius",
+      "$value": "{dimension.0x}"
+    },
+    "xs": {
+      "$type": "borderRadius",
+      "$value": "{dimension.0x}"
+    },
+    "sm": {
+      "$type": "borderRadius",
+      "$value": "{dimension.0_5x}"
+    },
+    "md": {
+      "$type": "borderRadius",
+      "$value": "{dimension.1x}"
+    },
+    "full": {
+      "$type": "borderRadius",
+      "$value": "0"
+    }
+  }
+}
