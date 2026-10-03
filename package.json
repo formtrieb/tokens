@@ -1,0 +1,16 @@
+{
+  "name": "formtrieb-tokens",
+  "private": true,
+  "description": "Formtrieb token tooling — core model and resolution, CSS rendering, MCP server, CLI. One repository, one resolution.",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r exec vitest run",
+    "typecheck": "pnpm -r exec tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
+  "packageManager": "pnpm@10.33.2"
+}
