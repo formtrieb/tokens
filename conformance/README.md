@@ -35,7 +35,7 @@ form before comparing:
 
 | Category | Meaning |
 |---|---|
-| `match` | same meaning (`#d62c18` = `rgb(84% 17% 9%)`, `16px` = `1rem`, `Bold` = `700`, `0px` = `0`) |
+| `match` | same meaning (`#336699` = `rgb(20% 40% 60%)`, `16px` = `1rem`, `Bold` = `700`, `0px` = `0`) |
 | `rounding` | colours one 8-bit step apart — the culori/colorjs gamut-mapping tie documented in tokens-core 1.3.0. Since FOR-498 both machines take colour from core, so any rounding finding is a regression |
 | `divergent` | different meaning; the two machines would ship different values |
 | `unparseable` | a value neither machine could have meant — a defect in the source, or an unresolved reference |

@@ -1,7 +1,7 @@
 /**
  * Value comparison between the two machines.
  *
- * tokens-core hands back the resolved raw value (`#d62c18`, `16px`, `Bold`);
+ * tokens-core hands back the resolved raw value (`#336699`, `16px`, `Bold`);
  * Style Dictionary hands back the CSS-platform-transformed value
  * (`rgb(84% 17% 9%)`, `1rem`, `700`). The two notations are expected to
  * differ; the *meaning* must not. Each type therefore gets a canonical form

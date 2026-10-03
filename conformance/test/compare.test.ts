@@ -3,7 +3,7 @@ import { compareValues, parseQuantity } from '../src/compare.js';
 
 describe('compareValues', () => {
   it('reads colour notations by meaning, not by spelling', () => {
-    expect(compareValues('color', '#d62c18', 'rgb(84% 17.255% 9.412%)').category).toBe('match');
+    expect(compareValues('color', '#336699', 'rgb(20% 40% 60%)').category).toBe('match');
     expect(compareValues('color', '#000000', 'rgb(0, 0, 0)').category).toBe('match');
     expect(compareValues('color', 'rgba(0, 0, 0, 0.22)', 'rgb(0% 0% 0% / 0.22)').category).toBe('match');
   });
