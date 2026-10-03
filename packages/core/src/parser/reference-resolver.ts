@@ -18,11 +18,14 @@ const HAS_REF = /\{[^}]+\}/;
  * State of one resolve() call. `visited` is the current path (cycle check);
  * `memo` holds every token already resolved in this call, so a token reached
  * along many paths is resolved once — a wide reference DAG otherwise costs
- * 2^depth visits.
+ * 2^depth visits. `unrounded` holds a colour token's value before it was
+ * rounded to hex — the `lch()` formula, or a modifier's `srgb` output — so the
+ * next modifier in a chain starts from the same value the resolver hands on.
  */
 interface Walk {
   visited: Set<string>;
   memo: Map<string, unknown>;
+  unrounded: Map<string, string>;
 }
 
 export class ReferenceResolver {
@@ -38,7 +41,7 @@ export class ReferenceResolver {
     if (cached) return cached;
 
     const chain: ResolutionChain = { steps: [], finalValue: null, errors: [] };
-    const walk: Walk = { visited: new Set(), memo: new Map() };
+    const walk: Walk = { visited: new Set(), memo: new Map(), unrounded: new Map() };
 
     this.resolveRecursive(dotPath, chain, walk, 0);
 
@@ -109,10 +112,14 @@ export class ReferenceResolver {
     }
 
     if (typeof value === "string") {
-      let resolved = this.resolveStringValue(value, chain, walk, depth);
+      let resolved = this.resolveStringValue(value, chain, walk, depth, true);
+      let unrounded = isPureReference(value)
+        ? walk.unrounded.get(value.slice(1, -1))
+        : undefined;
 
       if (typeof resolved === "string" && isLchFormula(resolved)) {
         chain.lchValue = resolved;
+        unrounded = resolved;
         const result = resolveLchToHexWithGamut(resolved);
         if (result) {
           resolved = result.hex;
@@ -131,10 +138,15 @@ export class ReferenceResolver {
           walk,
           depth
         );
-        const modified = applyColorModifier(resolved, modify);
+        // Round once, for output: the modifier works on the unrounded base,
+        // and its own unrounded result travels on to the next modifier.
+        const base = unrounded ?? resolved;
+        const modified = applyColorModifier(base, modify);
         if (modified) resolved = modified;
+        unrounded = applyColorModifier(base, modify, "srgb") ?? undefined;
       }
 
+      if (unrounded !== undefined) walk.unrounded.set(token.dotPath, unrounded);
       return resolved;
     }
 
@@ -170,7 +182,8 @@ export class ReferenceResolver {
     value: string,
     chain: ResolutionChain,
     walk: Walk,
-    depth: number
+    depth: number,
+    keepLch = false
   ): string | number {
     if (isPureReference(value)) {
       const refPath = value.slice(1, -1);
@@ -198,7 +211,7 @@ export class ReferenceResolver {
         }
       }
 
-      if (isLchFormula(substituted)) {
+      if (!keepLch && isLchFormula(substituted)) {
         chain.lchValue = substituted;
         const result = resolveLchToHexWithGamut(substituted);
         if (result) {
