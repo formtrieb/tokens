@@ -16,11 +16,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/formtrieb/tokens-mcp.git"
+    "url": "git+https://github.com/formtrieb/tokens.git",
+    "directory": "packages/mcp"
   },
-  "homepage": "https://github.com/formtrieb/tokens-mcp",
+  "homepage": "https://github.com/formtrieb/tokens/tree/main/packages/mcp#readme",
   "bugs": {
-    "url": "https://github.com/formtrieb/tokens-mcp/issues"
+    "url": "https://github.com/formtrieb/tokens/issues"
   },
   "keywords": [
     "design-tokens",

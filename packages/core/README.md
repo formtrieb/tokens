@@ -4,7 +4,7 @@
 theme composition, reference resolution, and DTCG-aware analysis primitives.
 Pure functions, framework-agnostic.**
 
-This package is the substrate that [`@formtrieb/tokens-mcp`](https://github.com/formtrieb/tokens-mcp) wraps for LLM
+This package is the substrate that [`@formtrieb/tokens-mcp`](https://github.com/formtrieb/tokens/tree/main/packages/mcp) wraps for LLM
 clients. It has no I/O of its own beyond optional file-reading helpers, no MCP
 layer, no opinionated-DS assumptions — just typed functions for parsing
 `$themes.json` + token sets, resolving `{token.references}` through theme
@@ -70,7 +70,7 @@ console.log(chain.steps);       // → full reference path for traceability
 
 | Package | Role |
 |---|---|
-| [`@formtrieb/tokens-mcp`](https://github.com/formtrieb/tokens-mcp) | MCP server exposing this library to LLM clients (Claude Desktop, MCP Inspector, custom runtimes). Thin adapter — every parsing/resolution decision lives here. |
+| [`@formtrieb/tokens-mcp`](https://github.com/formtrieb/tokens/tree/main/packages/mcp) | MCP server exposing this library to LLM clients (Claude Desktop, MCP Inspector, custom runtimes). Thin adapter — every parsing/resolution decision lives here. |
 | [`@formtrieb/cdf-core`](https://github.com/formtrieb/cdf-core) + [`@formtrieb/cdf-mcp`](https://github.com/formtrieb/cdf-mcp) | Component Description Format. Independent of this package. CDF inlines its own generic `TokenTree` (forked from this library 2026-04-26) so it has no runtime dep on `tokens-core`. |
 
 ## Development

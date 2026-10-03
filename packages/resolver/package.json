@@ -4,13 +4,14 @@
   "description": "Tokens-Studio JSON → CSS variables, utility classes, SCSS mixins, and Figma↔CSS lookup map. Driven by a project-local config.",
   "type": "module",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/formtrieb/token-resolver#readme",
+  "homepage": "https://github.com/formtrieb/tokens/tree/main/packages/resolver#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/formtrieb/token-resolver.git"
+    "url": "git+https://github.com/formtrieb/tokens.git",
+    "directory": "packages/resolver"
   },
   "bugs": {
-    "url": "https://github.com/formtrieb/token-resolver/issues"
+    "url": "https://github.com/formtrieb/tokens/issues"
   },
   "keywords": [
     "design-tokens",

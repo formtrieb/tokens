@@ -14,11 +14,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/formtrieb/tokens-core.git"
+    "url": "git+https://github.com/formtrieb/tokens.git",
+    "directory": "packages/core"
   },
-  "homepage": "https://github.com/formtrieb/tokens-core",
+  "homepage": "https://github.com/formtrieb/tokens/tree/main/packages/core#readme",
   "bugs": {
-    "url": "https://github.com/formtrieb/tokens-core/issues"
+    "url": "https://github.com/formtrieb/tokens/issues"
   },
   "keywords": [
     "design-tokens",
