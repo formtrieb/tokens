@@ -29,7 +29,7 @@ form before comparing:
 | Category | Meaning |
 |---|---|
 | `match` | same meaning (`#d62c18` = `rgb(84% 17% 9%)`, `16px` = `1rem`, `Bold` = `700`, `0px` = `0`) |
-| `rounding` | colours one 8-bit step apart — the culori/colorjs gamut-mapping tie documented in tokens-core 1.3.0 |
+| `rounding` | colours one 8-bit step apart — the culori/colorjs gamut-mapping tie documented in tokens-core 1.3.0. Since FOR-498 both machines take colour from core, so any rounding finding is a regression |
 | `divergent` | different meaning; the two machines would ship different values |
 | `unparseable` | a value neither machine could have meant — a defect in the source, or an unresolved reference |
 | `missing` | the token exists for one machine only |
@@ -58,6 +58,8 @@ purpose with `--update-baseline`, never silently.
   `cubic-bezier([object Object], …)`. Already noted in the customer lab.
 - The 13 rounding cases are the four foundation colours documented in
   tokens-core 1.3.0 plus their semantic aliases.
+  *Gone since FOR-498: the resolver computes colour modifiers with core
+  instead of sd-transforms/colorjs (now 2449 match, 0 rounding).*
 
 This instrument is scaffolding. Once core is the only reader and resolver,
 the resolver's own snapshot test guards both sides and this folder can go.

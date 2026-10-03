@@ -19,6 +19,8 @@ export interface ColorModifier {
   type: "lighten" | "darken" | "alpha" | "mix";
   value: string;
   space: string;
+  /** The colour to mix towards; only read by `mix`. */
+  color?: string;
 }
 
 export interface ResolutionStep {

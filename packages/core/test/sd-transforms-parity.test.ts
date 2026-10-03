@@ -223,3 +223,61 @@ describe("parity with @tokens-studio/sd-transforms", () => {
     expect(worst).toBeLessThanOrEqual(1);
   });
 });
+
+/**
+ * The resolver ships what `applyColorModifier(…, "srgb")` returns, in place of
+ * sd-transforms' `ts/color/modifiers`. In gamut that must be the same CSS
+ * string — same `rgb(r% g% b% / a)` shape, same five significant digits — so
+ * swapping the machine moves no shipped colour. Out of gamut the two gamut
+ * searches may settle a hair apart; the 8-bit ceiling above still holds.
+ */
+const SPACE_CASES: Array<{ base: string; modifier: Modifier & { color?: string } }> = [
+  { base: "#2072b6", modifier: { type: "lighten", value: "0.2", space: "hsl" } },
+  { base: "#2072b6", modifier: { type: "darken", value: "0.3", space: "hsl" } },
+  { base: "#2072b6", modifier: { type: "lighten", value: "0.2", space: "srgb" } },
+  { base: "#2072b6", modifier: { type: "darken", value: "0.3", space: "srgb" } },
+  { base: "#2072b6", modifier: { type: "lighten", value: "0.2", space: "p3" } },
+  { base: "#2072b6", modifier: { type: "darken", value: "0.3", space: "p3" } },
+  { base: "#2072b6", modifier: { type: "alpha", value: "0.4", space: "srgb" } },
+  { base: "#2072b6", modifier: { type: "mix", value: "0.5", space: "srgb", color: "#ffffff" } },
+  { base: "#2072b6", modifier: { type: "mix", value: "0.25", space: "lch", color: "#808080" } },
+  { base: "#2072b6", modifier: { type: "mix", value: "0.3", space: "hsl", color: "#f305b7" } },
+];
+
+describe("srgb output — the string the resolver ships", () => {
+  const inGamutReal = REAL_CASES.filter(({ base, modifier }) =>
+    modifier.type === "alpha"
+      ? displayable(parse(base)!)
+      : modifiedColorInGamut(base, modifier)
+  );
+
+  it.each(inGamutReal)(
+    "equals sd-transforms for $base $modifier.type $modifier.value",
+    ({ base, modifier }) => {
+      expect(applyColorModifier(base, modifier, "srgb")).toBe(reference(base, modifier));
+    }
+  );
+
+  it.each(SPACE_CASES)(
+    "equals sd-transforms in $modifier.space for $base $modifier.type $modifier.value",
+    ({ base, modifier }) => {
+      expect(applyColorModifier(base, modifier, "srgb")).toBe(reference(base, modifier));
+    }
+  );
+
+  it.each([...REAL_CASES, ...EDGE_CASES])(
+    "stays within 1/255 of sd-transforms for $base $modifier.type $modifier.value",
+    ({ base, modifier }) => {
+      const ours = applyColorModifier(base, modifier, "srgb");
+      expect(ours).toMatch(/^rgb\(/);
+      expect(maxChannelDelta(ours!, reference(base, modifier))).toBeLessThanOrEqual(1);
+    }
+  );
+
+  it("keeps the hex output for the other spaces in step with the srgb output", () => {
+    for (const { base, modifier } of SPACE_CASES) {
+      const hex = applyColorModifier(base, modifier);
+      expect(maxChannelDelta(hex!, applyColorModifier(base, modifier, "srgb")!)).toBe(0);
+    }
+  });
+});

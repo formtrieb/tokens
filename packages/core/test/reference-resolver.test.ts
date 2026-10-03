@@ -161,3 +161,26 @@ describe("ReferenceResolver — hardening", () => {
     expect(resolver.resolve("t").finalValue).toEqual({ x: 4, y: 2 });
   });
 });
+
+describe("ReferenceResolver — mix modifier", () => {
+  it("mixes towards a colour given as a token reference", () => {
+    const resolver = new ReferenceResolver(
+      buildTokenMap({
+        "base.white": { $type: "color", $value: "#ffffff" },
+        "brand": {
+          $type: "color",
+          $value: "#2072b6",
+          $extensions: {
+            "studio.tokens": {
+              modify: { type: "mix", value: "0.5", space: "srgb", color: "{base.white}" },
+            },
+          },
+        },
+      })
+    );
+
+    expect(resolver.resolve("brand").finalValue).toBe(
+      applyColorModifier("#2072b6", { type: "mix", value: "0.5", space: "srgb", color: "#ffffff" })
+    );
+  });
+});
