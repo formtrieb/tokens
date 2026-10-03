@@ -5,7 +5,7 @@ clients — browse, resolve, theme compose/compare, validation. Per-call
 `tokens_path` with walk-up auto-detection and mtime-aware LRU cache for
 live brand iteration.**
 
-This package is a thin MCP adapter over [`@formtrieb/tokens-core`](https://github.com/formtrieb/tokens-core).
+This package is a thin MCP adapter over [`@formtrieb/tokens-core`](https://github.com/formtrieb/tokens/tree/main/packages/core).
 The 10 tools below let an LLM client (Claude Desktop, MCP Inspector,
 custom runtimes) inspect a Tokens-Studio workspace, resolve token
 references through theme composition, compare themes, and audit the
@@ -143,7 +143,7 @@ the `env` block is the only required change:
 
 | Package | Role |
 |---|---|
-| [`@formtrieb/tokens-core`](https://github.com/formtrieb/tokens-core) | Pure-function library for parsing + resolving + composing Tokens-Studio workspaces. This MCP server is a thin wrapper. |
+| [`@formtrieb/tokens-core`](https://github.com/formtrieb/tokens/tree/main/packages/core) | Pure-function library for parsing + resolving + composing Tokens-Studio workspaces. This MCP server is a thin wrapper. |
 | [`@formtrieb/cdf-mcp`](https://github.com/formtrieb/cdf-mcp) | Component Description Format MCP. Independent product. Use both side-by-side in a single Claude session if you author components against tokens. |
 
 ## Format support
