@@ -1,0 +1,46 @@
+{
+  "name": "@formtrieb/tokens-render",
+  "version": "0.0.0",
+  "description": "Renders a Tokens-Studio-shaped token system to CSS — variables per render table, utilities, imports, bundle, token map. Pure functions over the tokens-core tree; no file system.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "private": false,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/formtrieb/tokens.git",
+    "directory": "packages/render"
+  },
+  "homepage": "https://github.com/formtrieb/tokens/tree/main/packages/render#readme",
+  "bugs": {
+    "url": "https://github.com/formtrieb/tokens/issues"
+  },
+  "keywords": [
+    "design-tokens",
+    "tokens-studio",
+    "css-variables",
+    "design-system"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "rm -rf dist tsconfig.tsbuildinfo && tsc",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@formtrieb/tokens-core": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "change-case": "^5.4.4",
+    "typescript": "^5.0.0",
+    "vitest": "^3.0.0"
+  }
+}
