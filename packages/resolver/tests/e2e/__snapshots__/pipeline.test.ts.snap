@@ -1,0 +1,1746 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`pipeline E2E > produces stable CSS output 1`] = `
+{
+  "cssOutput/css/bundle.css": "/* Auto-generated — do not edit. Run: npx formtrieb-tokens */
+/* Auto-generated — do not edit manually. Run: npx formtrieb-tokens */
+/* --- ./variables/components-button.css --- */
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --ds-button-border: var(--ds-border-width-thin);
+  --ds-button-text: var(--ds-color-text-inverted-primary);
+  --ds-button-radius: var(--ds-radius-sm);
+  --ds-button-height: var(--ds-controls-height-medium);
+  --ds-button-padding: var(--ds-spacing-inset-m);
+  --ds-button-background: var(--ds-color-brand-primary);
+  --ds-button-background-hover: var(--ds-color-brand-hover);
+}
+/* --- ./variables/components-card.css --- */
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --ds-card-shadow: var(--ds-shadow-elevation-1);
+  --ds-card-radius: var(--ds-radius-md);
+  --ds-card-gap: var(--ds-spacing-stack-2x);
+  --ds-card-background: var(--ds-color-surface-level1);
+}
+/* --- ./variables/device.css --- */
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+[data-device="Desktop"] {
+  --ds-device-name: desktop;
+  --ds-layout-grid-columns: 12;
+  --ds-content-max-width: 75rem;
+  --ds-font-sizes-body-small: 0.875rem;
+  --ds-font-sizes-body-large: 1.125rem;
+  --ds-font-sizes-mono-base: 0.875rem;
+  --ds-line-heights-body-small: 20px;
+  --ds-line-heights-body-base: 1.5;
+  --ds-line-heights-body-large: 28px;
+  --ds-line-heights-mono-base: 20px;
+  --ds-line-heights-metric-base: 1.2;
+  --ds-spacing-stack-1x: var(--ds-dimension-1x);
+  --ds-spacing-stack-2x: var(--ds-dimension-2x);
+  --ds-spacing-stack-4x: var(--ds-dimension-4x);
+  --ds-spacing-inset-s: var(--ds-dimension-2x);
+  --ds-spacing-inset-m: var(--ds-dimension-4x);
+  --ds-spacing-inset-l: var(--ds-dimension-6x);
+  --ds-spacing-component-gap: var(--ds-dimension-2x);
+  --ds-layout-grid-margin: var(--ds-dimension-8x);
+  --ds-layout-grid-gutter: var(--ds-dimension-6x);
+  --ds-content-min-width: var(--ds-breakpoints-desktop);
+  --ds-paragraph-spacings-none: var(--ds-dimension-0x);
+  --ds-paragraph-spacings-s: var(--ds-dimension-2x);
+  --ds-paragraph-spacings-m: var(--ds-dimension-4x);
+  --ds-font-sizes-title-1: var(--ds-dimension-12x);
+  --ds-font-sizes-title-2: var(--ds-dimension-8x);
+  --ds-font-sizes-body-base: var(--ds-dimension-4x);
+  --ds-font-sizes-metric-base: var(--ds-dimension-10x);
+  --ds-line-heights-title-1: var(--ds-dimension-16x);
+  --ds-line-heights-title-2: var(--ds-dimension-10x);
+  --ds-controls-min-target: var(--ds-dimension-10x);
+  --ds-controls-height-small: var(--ds-dimension-6x);
+  --ds-controls-height-medium: var(--ds-dimension-8x);
+}
+[data-device="Tablet"] {
+  --ds-device-name: tablet;
+  --ds-layout-grid-columns: 12;
+  --ds-font-sizes-body-small: 0.875rem;
+  --ds-font-sizes-body-large: 1.125rem;
+  --ds-font-sizes-mono-base: 0.875rem;
+  --ds-line-heights-body-small: 20px;
+  --ds-line-heights-body-base: 1.5;
+  --ds-line-heights-body-large: 28px;
+  --ds-line-heights-mono-base: 20px;
+  --ds-line-heights-metric-base: 1.2;
+  --ds-spacing-stack-1x: var(--ds-dimension-1x);
+  --ds-spacing-stack-2x: var(--ds-dimension-2x);
+  --ds-spacing-stack-4x: var(--ds-dimension-4x);
+  --ds-spacing-inset-s: var(--ds-dimension-2x);
+  --ds-spacing-inset-m: var(--ds-dimension-4x);
+  --ds-spacing-inset-l: var(--ds-dimension-6x);
+  --ds-spacing-component-gap: var(--ds-dimension-2x);
+  --ds-layout-grid-margin: var(--ds-dimension-8x);
+  --ds-layout-grid-gutter: var(--ds-dimension-6x);
+  --ds-content-min-width: var(--ds-breakpoints-tablet);
+  --ds-content-max-width: var(--ds-breakpoints-desktop)-1px;
+  --ds-paragraph-spacings-none: var(--ds-dimension-0x);
+  --ds-paragraph-spacings-s: var(--ds-dimension-2x);
+  --ds-paragraph-spacings-m: var(--ds-dimension-4x);
+  --ds-font-sizes-title-1: var(--ds-dimension-12x);
+  --ds-font-sizes-title-2: var(--ds-dimension-8x);
+  --ds-font-sizes-body-base: var(--ds-dimension-4x);
+  --ds-font-sizes-metric-base: var(--ds-dimension-10x);
+  --ds-line-heights-title-1: var(--ds-dimension-16x);
+  --ds-line-heights-title-2: var(--ds-dimension-10x);
+  --ds-controls-min-target: var(--ds-dimension-10x);
+  --ds-controls-height-small: var(--ds-dimension-6x);
+  --ds-controls-height-medium: var(--ds-dimension-8x);
+}
+[data-device="Mobile"] {
+  --ds-device-name: mobile;
+  --ds-layout-grid-columns: 4;
+  --ds-content-max-width: 100%;
+  --ds-font-sizes-body-small: 0.875rem;
+  --ds-font-sizes-body-large: 1.125rem;
+  --ds-font-sizes-mono-base: 0.875rem;
+  --ds-line-heights-body-small: 20px;
+  --ds-line-heights-body-base: 1.5;
+  --ds-line-heights-body-large: 28px;
+  --ds-line-heights-mono-base: 20px;
+  --ds-line-heights-metric-base: 1.2;
+  --ds-spacing-stack-1x: var(--ds-dimension-1x);
+  --ds-spacing-stack-2x: var(--ds-dimension-2x);
+  --ds-spacing-stack-4x: var(--ds-dimension-3x);
+  --ds-spacing-inset-s: var(--ds-dimension-2x);
+  --ds-spacing-inset-m: var(--ds-dimension-3x);
+  --ds-spacing-inset-l: var(--ds-dimension-4x);
+  --ds-spacing-component-gap: var(--ds-dimension-2x);
+  --ds-layout-grid-margin: var(--ds-dimension-4x);
+  --ds-layout-grid-gutter: var(--ds-dimension-4x);
+  --ds-content-min-width: var(--ds-breakpoints-mobile);
+  --ds-paragraph-spacings-none: var(--ds-dimension-0x);
+  --ds-paragraph-spacings-s: var(--ds-dimension-2x);
+  --ds-paragraph-spacings-m: var(--ds-dimension-4x);
+  --ds-font-sizes-title-1: var(--ds-dimension-8x);
+  --ds-font-sizes-title-2: var(--ds-dimension-6x);
+  --ds-font-sizes-body-base: var(--ds-dimension-4x);
+  --ds-font-sizes-metric-base: var(--ds-dimension-8x);
+  --ds-line-heights-title-1: var(--ds-dimension-10x);
+  --ds-line-heights-title-2: var(--ds-dimension-8x);
+  --ds-controls-min-target: var(--ds-dimension-12x);
+  --ds-controls-height-small: var(--ds-dimension-6x);
+  --ds-controls-height-medium: var(--ds-dimension-10x);
+}
+/* --- ./variables/foundation.css --- */
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --ds-colors-white: rgb(255, 255, 255);
+  --ds-colors-black: rgb(0, 0, 0);
+  --ds-colors-neutral-1: rgb(96.601% 96.601% 96.601%);
+  --ds-colors-neutral-2: rgb(92.103% 92.103% 92.103%);
+  --ds-colors-neutral-3: rgb(84.332% 84.332% 84.332%);
+  --ds-colors-neutral-4: rgb(75.613% 75.613% 75.613%);
+  --ds-colors-neutral-5: rgb(67.078% 67.078% 67.078%);
+  --ds-colors-neutral-6: rgb(58.739% 58.739% 58.739%);
+  --ds-colors-neutral-7: rgb(50.612% 50.612% 50.612%);
+  --ds-colors-neutral-8: rgb(41.744% 41.744% 41.744%);
+  --ds-colors-neutral-9: rgb(33.198% 33.198% 33.198%);
+  --ds-colors-neutral-10: rgb(24.131% 24.131% 24.131%);
+  --ds-colors-ocean-1: rgb(89.92% 97.811% 100%);
+  --ds-colors-ocean-2: rgb(80.742% 94.087% 100%);
+  --ds-colors-ocean-3: rgb(64.367% 87.493% 100%);
+  --ds-colors-ocean-4: rgb(40.982% 80.101% 100%);
+  --ds-colors-ocean-5: rgb(0% 72.737% 100%);
+  --ds-colors-ocean-6: rgb(0% 64.576% 91.321%);
+  --ds-colors-ocean-7: rgb(0% 56% 78.476%);
+  --ds-colors-ocean-8: rgb(0% 46.379% 65.56%);
+  --ds-colors-ocean-9: rgb(0% 36.92% 53.852%);
+  --ds-colors-ocean-10: rgb(0% 26.921% 41.167%);
+  --ds-colors-ocean-11: rgb(4.351% 21.776% 32.779%);
+  --ds-colors-ember-1: rgb(100% 93.913% 92.384%);
+  --ds-colors-ember-2: rgb(100% 88.2% 86.05%);
+  --ds-colors-ember-3: rgb(100% 77.597% 74.497%);
+  --ds-colors-ember-4: rgb(100% 64.564% 60.91%);
+  --ds-colors-ember-5: rgb(100% 49.715% 46.771%);
+  --ds-colors-ember-6: rgb(99.589% 36.209% 35.582%);
+  --ds-colors-ember-7: rgb(88.754% 28.069% 28.769%);
+  --ds-colors-ember-8: rgb(74.295% 22.203% 23.065%);
+  --ds-colors-ember-9: rgb(58.658% 18.672% 18.69%);
+  --ds-colors-ember-10: rgb(42.66% 14.07% 13.653%);
+  --ds-colors-moss-0: rgb(92.982% 98.934% 92.446%);
+  --ds-colors-moss-1: rgb(91.227% 98.668% 90.558%);
+  --ds-colors-moss-2: rgb(81.109% 96.067% 80.079%);
+  --ds-colors-moss-3: rgb(66.343% 90.246% 65.467%);
+  --ds-colors-moss-4: rgb(49.625% 83.163% 49.976%);
+  --ds-colors-moss-5: rgb(31.968% 75.72% 35.49%);
+  --ds-colors-moss-6: rgb(10.18% 67.802% 22.705%);
+  --ds-colors-moss-7: rgb(0% 59.02% 15.634%);
+  --ds-colors-moss-8: rgb(0% 48.909% 11.604%);
+  --ds-colors-moss-9: rgb(0% 38.827% 10.33%);
+  --ds-colors-moss-10: rgb(3.1271% 28.247% 7.9228%);
+  --ds-colors-sun-0: rgb(99.448% 97.55% 91.227%);
+  --ds-colors-sun-1: rgb(99.211% 96.5% 87.467%);
+  --ds-colors-sun-2: rgb(96.82% 91.931% 73.93%);
+  --ds-colors-sun-3: rgb(90.829% 84.115% 55.739%);
+  --ds-colors-sun-4: rgb(83.144% 75.399% 36.243%);
+  --ds-colors-sun-5: rgb(74.838% 66.909% 15.737%);
+  --ds-colors-sun-6: rgb(66.084% 58.637% 0%);
+  --ds-colors-sun-7: rgb(57.129% 50.547% 0%);
+  --ds-colors-sun-8: rgb(47.245% 41.693% 0%);
+  --ds-colors-sun-9: rgb(37.661% 33.144% 0%);
+  --ds-colors-sun-10: rgb(27.564% 24.076% 0%);
+  --ds-colors-plum-1: rgb(99.186% 95.516% 99.611%);
+  --ds-colors-plum-2: rgb(97.163% 89.915% 98.063%);
+  --ds-colors-plum-3: rgb(92.087% 80.842% 93.604%);
+  --ds-colors-plum-4: rgb(85.829% 70.794% 88.035%);
+  --ds-colors-plum-5: rgb(79.161% 61.088% 82.022%);
+  --ds-colors-plum-6: rgb(71.802% 51.955% 75.143%);
+  --ds-colors-plum-7: rgb(62.895% 44.103% 66.134%);
+  --ds-colors-plum-8: rgb(52.241% 36.157% 55.027%);
+  --ds-colors-plum-9: rgb(41.369% 28.911% 43.491%);
+  --ds-colors-plum-10: rgb(30.046% 21.073% 31.547%);
+  --ds-dimension-0x: 0;
+  --ds-dimension-0-25x: 0.0625rem;
+  --ds-dimension-0-5x: 0.125rem;
+  --ds-dimension-1x: 0.25rem;
+  --ds-dimension-2x: 0.5rem;
+  --ds-dimension-3x: 0.75rem;
+  --ds-dimension-4x: 1rem;
+  --ds-dimension-6x: 1.5rem;
+  --ds-dimension-8x: 2rem;
+  --ds-dimension-10x: 2.5rem;
+  --ds-dimension-12x: 3rem;
+  --ds-dimension-16x: 4rem;
+  --ds-breakpoints-mobile: 0;
+  --ds-breakpoints-tablet: 48rem;
+  --ds-breakpoints-desktop: 80rem;
+  --ds-border-width-thin: 0.0625rem;
+  --ds-border-width-thick: 0.125rem;
+  --ds-z-index-base: 0;
+  --ds-z-index-overlay: 100;
+  --ds-z-index-modal: 200;
+  --ds-opacity-none: 0;
+  --ds-opacity-subtle: 0.08;
+  --ds-opacity-medium: 0.4;
+  --ds-opacity-full: 1;
+  --ds-duration-fast: 100ms;
+  --ds-duration-normal: 200ms;
+  --ds-duration-slow: 400ms;
+  --ds-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+}
+/* --- ./variables/semantic.css --- */
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+[data-semantic="Light"] {
+  --ds-opacity-disabled: var(--ds-opacity-medium);
+  --ds-opacity-hover: var(--ds-opacity-subtle);
+  --ds-color-text-primary: var(--ds-colors-black);
+  --ds-color-text-inverted-primary: var(--ds-colors-white);
+  --ds-color-page: var(--ds-colors-white);
+  --ds-color-backdrop: rgb(0% 0% 0% / 0.6);
+  --ds-color-surface-level0: var(--ds-colors-white);
+  --ds-color-interaction-stroke-neutral-primary: rgb(0% 0% 0% / 0.12);
+  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0,0,0,0.08);
+  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0,0,0,0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0,0,0,0.10);
+  --ds-color-text-secondary: rgb(0% 0% 0% / 0.6);
+  --ds-color-text-tertiary: rgb(0% 0% 0% / 0.4);
+  --ds-color-text-inverted-secondary: rgb(100% 100% 100% / 0.6);
+  --ds-color-text-accent: var(--ds-colors-plum-7);
+  --ds-color-brand-primary: var(--ds-colors-ocean-6);
+  --ds-color-brand-hover: rgb(10.15% 50.714% 71.176%);
+  --ds-color-brand-pressed: rgb(38.437% 71.461% 93.202%);
+  --ds-color-surface-level1: var(--ds-colors-neutral-1);
+  --ds-color-surface-level2: var(--ds-colors-neutral-2);
+  --ds-color-divider: var(--ds-colors-neutral-3);
+  --ds-color-interaction-stroke-neutral-secondary: var(--ds-colors-neutral-4);
+  --ds-color-status-positive-background: var(--ds-colors-moss-1);
+  --ds-color-status-positive-text: var(--ds-colors-moss-9);
+  --ds-color-status-positive-stroke: var(--ds-colors-moss-4);
+  --ds-color-status-positive-indicator: var(--ds-colors-moss-6);
+  --ds-color-status-negative-background: var(--ds-colors-ember-1);
+  --ds-color-status-negative-text: var(--ds-colors-ember-9);
+  --ds-color-status-negative-stroke: var(--ds-colors-ember-4);
+  --ds-color-status-negative-indicator: var(--ds-colors-ember-6);
+  --ds-color-status-warning-background: var(--ds-colors-sun-1);
+  --ds-color-status-warning-text: var(--ds-colors-sun-9);
+  --ds-color-status-warning-stroke: var(--ds-colors-sun-4);
+  --ds-color-status-warning-indicator: var(--ds-colors-sun-6);
+  --ds-color-status-info-background: var(--ds-colors-ocean-1);
+  --ds-color-status-info-text: var(--ds-colors-ocean-9);
+  --ds-color-status-info-stroke: var(--ds-colors-ocean-4);
+  --ds-color-status-info-indicator: var(--ds-colors-ocean-6);
+  --ds-color-text-highlight: var(--ds-colors-sun-0);
+  --ds-color-brand-deep: var(--ds-colors-ocean-11);
+  --ds-color-surface-fresh: var(--ds-colors-moss-0);
+}
+[data-semantic="Dark"] {
+  --ds-opacity-disabled: var(--ds-opacity-medium);
+  --ds-opacity-hover: var(--ds-opacity-subtle);
+  --ds-color-text-primary: var(--ds-colors-white);
+  --ds-color-text-inverted-primary: var(--ds-colors-black);
+  --ds-color-page: var(--ds-colors-black);
+  --ds-color-backdrop: rgb(0% 0% 0% / 0.6);
+  --ds-color-surface-level0: var(--ds-colors-black);
+  --ds-color-interaction-stroke-neutral-primary: rgb(100% 100% 100% / 0.12);
+  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0,0,0,0.08);
+  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0,0,0,0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0,0,0,0.10);
+  --ds-color-text-secondary: rgb(100% 100% 100% / 0.6);
+  --ds-color-text-tertiary: rgb(100% 100% 100% / 0.4);
+  --ds-color-text-inverted-secondary: rgb(0% 0% 0% / 0.6);
+  --ds-color-text-accent: var(--ds-colors-plum-4);
+  --ds-color-brand-primary: var(--ds-colors-ocean-5);
+  --ds-color-brand-hover: rgb(11.098% 56.962% 77.798%);
+  --ds-color-brand-pressed: rgb(40.539% 78.117% 100%);
+  --ds-color-surface-level1: var(--ds-colors-neutral-10);
+  --ds-color-surface-level2: var(--ds-colors-neutral-9);
+  --ds-color-divider: var(--ds-colors-neutral-8);
+  --ds-color-interaction-stroke-neutral-secondary: var(--ds-colors-neutral-7);
+  --ds-color-status-positive-background: var(--ds-colors-moss-10);
+  --ds-color-status-positive-text: var(--ds-colors-moss-2);
+  --ds-color-status-positive-stroke: var(--ds-colors-moss-7);
+  --ds-color-status-positive-indicator: var(--ds-colors-moss-5);
+  --ds-color-status-negative-background: var(--ds-colors-ember-10);
+  --ds-color-status-negative-text: var(--ds-colors-ember-2);
+  --ds-color-status-negative-stroke: var(--ds-colors-ember-7);
+  --ds-color-status-negative-indicator: var(--ds-colors-ember-5);
+  --ds-color-status-warning-background: var(--ds-colors-sun-10);
+  --ds-color-status-warning-text: var(--ds-colors-sun-2);
+  --ds-color-status-warning-stroke: var(--ds-colors-sun-7);
+  --ds-color-status-warning-indicator: var(--ds-colors-sun-5);
+  --ds-color-status-info-background: var(--ds-colors-ocean-10);
+  --ds-color-status-info-text: var(--ds-colors-ocean-2);
+  --ds-color-status-info-stroke: var(--ds-colors-ocean-7);
+  --ds-color-status-info-indicator: var(--ds-colors-ocean-5);
+  --ds-color-text-highlight: var(--ds-colors-sun-0);
+  --ds-color-brand-deep: var(--ds-colors-ocean-11);
+  --ds-color-surface-fresh: var(--ds-colors-moss-0);
+}
+/* --- ./variables/shape.css --- */
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+[data-shape="Round"] {
+  --ds-radius-full: 6249.9375rem;
+  --ds-radius-none: var(--ds-dimension-0x);
+  --ds-radius-xs: var(--ds-dimension-0-5x);
+  --ds-radius-sm: var(--ds-dimension-1x);
+  --ds-radius-md: var(--ds-dimension-2x);
+}
+[data-shape="Sharp"] {
+  --ds-radius-full: 0;
+  --ds-radius-none: var(--ds-dimension-0x);
+  --ds-radius-xs: var(--ds-dimension-0x);
+  --ds-radius-sm: var(--ds-dimension-0-5x);
+  --ds-radius-md: var(--ds-dimension-1x);
+}
+/* --- ./variables/typography.css --- */
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --ds-letter-spacings-tight2: -0.03em;
+  --ds-letter-spacings-tight1: -0.01em;
+  --ds-letter-spacings-default: 0em;
+  --ds-letter-spacings-wide1: 0.02em;
+  --ds-letter-spacings-wide2: 0.08em;
+  --ds-text-case-default: none;
+  --ds-text-case-upper: uppercase;
+  --ds-text-decorations-default: none;
+  --ds-text-decorations-underline: underline;
+  --ds-paragraph-indents-none: 0;
+  --ds-font-families-base: Inter;
+  --ds-font-families-mono: 'JetBrains Mono';
+  --ds-font-weights-regular: 400;
+  --ds-font-weights-medium: 500;
+  --ds-font-weights-semibold: 600;
+  --ds-font-weights-bold: 700;
+  --ds-title-1: var(--ds-font-weights-bold) var(--ds-font-sizes-title-1)/var(--ds-line-heights-title-1) var(--ds-font-families-base);
+  --ds-title-2: var(--ds-font-weights-semibold) var(--ds-font-sizes-title-2)/var(--ds-line-heights-title-2) var(--ds-font-families-base);
+  --ds-body-small-default: var(--ds-font-weights-regular) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-body-small-strong: var(--ds-font-weights-semibold) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-body-base-default: var(--ds-font-weights-regular) var(--ds-font-sizes-body-base)/var(--ds-line-heights-body-base) var(--ds-font-families-base);
+  --ds-body-base-strong: var(--ds-font-weights-semibold) var(--ds-font-sizes-body-base)/var(--ds-line-heights-body-base) var(--ds-font-families-base);
+  --ds-body-large-default: var(--ds-font-weights-regular) var(--ds-font-sizes-body-large)/var(--ds-line-heights-body-large) var(--ds-font-families-base);
+  --ds-body-large-strong: var(--ds-font-weights-semibold) var(--ds-font-sizes-body-large)/var(--ds-line-heights-body-large) var(--ds-font-families-base);
+  --ds-label-base: var(--ds-font-weights-medium) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-overline-base: var(--ds-font-weights-semibold) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-link-base: var(--ds-font-weights-regular) var(--ds-font-sizes-body-base)/var(--ds-line-heights-body-base) var(--ds-font-families-base);
+  --ds-mono-base: var(--ds-font-weights-regular) var(--ds-font-sizes-mono-base)/var(--ds-line-heights-mono-base) var(--ds-font-families-mono);
+  --ds-metric-base: var(--ds-font-weights-bold) var(--ds-font-sizes-metric-base)/var(--ds-line-heights-metric-base) var(--ds-font-families-base);
+  --ds-table-header: var(--ds-font-weights-semibold) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-table-cell: var(--ds-font-weights-regular) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-table-numeric-base: var(--ds-font-weights-regular) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-mono);
+  --ds-title-1-letter-spacing: var(--ds-letter-spacings-tight2);
+  --ds-title-1-text-transform: var(--ds-text-case-default);
+  --ds-title-1-text-decoration: var(--ds-text-decorations-default);
+  --ds-title-1-text-indent: var(--ds-paragraph-indents-none);
+  --ds-title-1-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-title-2-letter-spacing: var(--ds-letter-spacings-tight1);
+  --ds-title-2-text-transform: var(--ds-text-case-default);
+  --ds-title-2-text-decoration: var(--ds-text-decorations-default);
+  --ds-title-2-text-indent: var(--ds-paragraph-indents-none);
+  --ds-title-2-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-body-small-default-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-body-small-default-text-transform: var(--ds-text-case-default);
+  --ds-body-small-default-text-decoration: var(--ds-text-decorations-default);
+  --ds-body-small-default-text-indent: var(--ds-paragraph-indents-none);
+  --ds-body-small-default-margin-block-end: var(--ds-paragraph-spacings-m);
+  --ds-body-small-strong-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-body-small-strong-text-transform: var(--ds-text-case-default);
+  --ds-body-small-strong-text-decoration: var(--ds-text-decorations-default);
+  --ds-body-small-strong-text-indent: var(--ds-paragraph-indents-none);
+  --ds-body-small-strong-margin-block-end: var(--ds-paragraph-spacings-m);
+  --ds-body-base-default-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-body-base-default-text-transform: var(--ds-text-case-default);
+  --ds-body-base-default-text-decoration: var(--ds-text-decorations-default);
+  --ds-body-base-default-text-indent: var(--ds-paragraph-indents-none);
+  --ds-body-base-default-margin-block-end: var(--ds-paragraph-spacings-m);
+  --ds-body-base-strong-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-body-base-strong-text-transform: var(--ds-text-case-default);
+  --ds-body-base-strong-text-decoration: var(--ds-text-decorations-default);
+  --ds-body-base-strong-text-indent: var(--ds-paragraph-indents-none);
+  --ds-body-base-strong-margin-block-end: var(--ds-paragraph-spacings-m);
+  --ds-body-large-default-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-body-large-default-text-transform: var(--ds-text-case-default);
+  --ds-body-large-default-text-decoration: var(--ds-text-decorations-default);
+  --ds-body-large-default-text-indent: var(--ds-paragraph-indents-none);
+  --ds-body-large-default-margin-block-end: var(--ds-paragraph-spacings-m);
+  --ds-body-large-strong-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-body-large-strong-text-transform: var(--ds-text-case-default);
+  --ds-body-large-strong-text-decoration: var(--ds-text-decorations-default);
+  --ds-body-large-strong-text-indent: var(--ds-paragraph-indents-none);
+  --ds-body-large-strong-margin-block-end: var(--ds-paragraph-spacings-m);
+  --ds-label-base-letter-spacing: var(--ds-letter-spacings-wide1);
+  --ds-label-base-text-transform: var(--ds-text-case-default);
+  --ds-label-base-text-decoration: var(--ds-text-decorations-default);
+  --ds-label-base-text-indent: var(--ds-paragraph-indents-none);
+  --ds-label-base-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-overline-base-letter-spacing: var(--ds-letter-spacings-wide2);
+  --ds-overline-base-text-transform: var(--ds-text-case-upper);
+  --ds-overline-base-text-decoration: var(--ds-text-decorations-default);
+  --ds-overline-base-text-indent: var(--ds-paragraph-indents-none);
+  --ds-overline-base-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-link-base-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-link-base-text-transform: var(--ds-text-case-default);
+  --ds-link-base-text-decoration: var(--ds-text-decorations-underline);
+  --ds-link-base-text-indent: var(--ds-paragraph-indents-none);
+  --ds-link-base-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-mono-base-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-mono-base-text-transform: var(--ds-text-case-default);
+  --ds-mono-base-text-decoration: var(--ds-text-decorations-default);
+  --ds-mono-base-text-indent: var(--ds-paragraph-indents-none);
+  --ds-mono-base-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-mono-base-fvn: tabular-nums;
+  --ds-metric-base-letter-spacing: var(--ds-letter-spacings-tight1);
+  --ds-metric-base-text-transform: var(--ds-text-case-default);
+  --ds-metric-base-text-decoration: var(--ds-text-decorations-default);
+  --ds-metric-base-text-indent: var(--ds-paragraph-indents-none);
+  --ds-metric-base-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-metric-base-fvn: tabular-nums;
+  --ds-table-header-letter-spacing: var(--ds-letter-spacings-wide1);
+  --ds-table-header-text-transform: var(--ds-text-case-default);
+  --ds-table-header-text-decoration: var(--ds-text-decorations-default);
+  --ds-table-header-text-indent: var(--ds-paragraph-indents-none);
+  --ds-table-header-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-table-cell-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-table-cell-text-transform: var(--ds-text-case-default);
+  --ds-table-cell-text-decoration: var(--ds-text-decorations-default);
+  --ds-table-cell-text-indent: var(--ds-paragraph-indents-none);
+  --ds-table-cell-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-table-numeric-base-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-table-numeric-base-text-transform: var(--ds-text-case-default);
+  --ds-table-numeric-base-text-decoration: var(--ds-text-decorations-default);
+  --ds-table-numeric-base-text-indent: var(--ds-paragraph-indents-none);
+  --ds-table-numeric-base-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-table-numeric-base-fvn: tabular-nums;
+
+}
+/* Utility classes — auto-generated */
+/* --- ./utilities/content.css --- */
+.ds-content {
+  width: 100%;
+  max-width: var(--ds-content-max-width);
+  margin-inline: auto;
+  padding-inline: var(--ds-layout-grid-margin);
+}
+/* --- ./utilities/inset.css --- */
+.ds-inset-s { padding: var(--ds-spacing-inset-s); }
+.ds-inset-m { padding: var(--ds-spacing-inset-m); }
+.ds-inset-l { padding: var(--ds-spacing-inset-l); }
+/* --- ./utilities/stack.css --- */
+.ds-stack-1x { gap: var(--ds-spacing-stack-1x); }
+.ds-stack-2x { gap: var(--ds-spacing-stack-2x); }
+.ds-stack-4x { gap: var(--ds-spacing-stack-4x); }
+/* --- ./utilities/typography.css --- */
+.ds-title-1 {
+  font: var(--ds-title-1);
+  letter-spacing: var(--ds-title-1-letter-spacing);
+  text-transform: var(--ds-title-1-text-transform);
+  text-decoration: var(--ds-title-1-text-decoration);
+  font-variant-numeric: var(--ds-title-1-fvn, normal);
+}
+
+.ds-title-1--paragraph {
+  text-indent: var(--ds-title-1-text-indent);
+  margin-block-end: var(--ds-title-1-margin-block-end);
+}
+
+.ds-title-2 {
+  font: var(--ds-title-2);
+  letter-spacing: var(--ds-title-2-letter-spacing);
+  text-transform: var(--ds-title-2-text-transform);
+  text-decoration: var(--ds-title-2-text-decoration);
+  font-variant-numeric: var(--ds-title-2-fvn, normal);
+}
+
+.ds-title-2--paragraph {
+  text-indent: var(--ds-title-2-text-indent);
+  margin-block-end: var(--ds-title-2-margin-block-end);
+}
+
+.ds-body-small-default {
+  font: var(--ds-body-small-default);
+  letter-spacing: var(--ds-body-small-default-letter-spacing);
+  text-transform: var(--ds-body-small-default-text-transform);
+  text-decoration: var(--ds-body-small-default-text-decoration);
+  font-variant-numeric: var(--ds-body-small-default-fvn, normal);
+}
+
+.ds-body-small-default--paragraph {
+  text-indent: var(--ds-body-small-default-text-indent);
+  margin-block-end: var(--ds-body-small-default-margin-block-end);
+}
+
+.ds-body-small-strong {
+  font: var(--ds-body-small-strong);
+  letter-spacing: var(--ds-body-small-strong-letter-spacing);
+  text-transform: var(--ds-body-small-strong-text-transform);
+  text-decoration: var(--ds-body-small-strong-text-decoration);
+  font-variant-numeric: var(--ds-body-small-strong-fvn, normal);
+}
+
+.ds-body-small-strong--paragraph {
+  text-indent: var(--ds-body-small-strong-text-indent);
+  margin-block-end: var(--ds-body-small-strong-margin-block-end);
+}
+
+.ds-body-base-default {
+  font: var(--ds-body-base-default);
+  letter-spacing: var(--ds-body-base-default-letter-spacing);
+  text-transform: var(--ds-body-base-default-text-transform);
+  text-decoration: var(--ds-body-base-default-text-decoration);
+  font-variant-numeric: var(--ds-body-base-default-fvn, normal);
+}
+
+.ds-body-base-default--paragraph {
+  text-indent: var(--ds-body-base-default-text-indent);
+  margin-block-end: var(--ds-body-base-default-margin-block-end);
+}
+
+.ds-body-base-strong {
+  font: var(--ds-body-base-strong);
+  letter-spacing: var(--ds-body-base-strong-letter-spacing);
+  text-transform: var(--ds-body-base-strong-text-transform);
+  text-decoration: var(--ds-body-base-strong-text-decoration);
+  font-variant-numeric: var(--ds-body-base-strong-fvn, normal);
+}
+
+.ds-body-base-strong--paragraph {
+  text-indent: var(--ds-body-base-strong-text-indent);
+  margin-block-end: var(--ds-body-base-strong-margin-block-end);
+}
+
+.ds-body-large-default {
+  font: var(--ds-body-large-default);
+  letter-spacing: var(--ds-body-large-default-letter-spacing);
+  text-transform: var(--ds-body-large-default-text-transform);
+  text-decoration: var(--ds-body-large-default-text-decoration);
+  font-variant-numeric: var(--ds-body-large-default-fvn, normal);
+}
+
+.ds-body-large-default--paragraph {
+  text-indent: var(--ds-body-large-default-text-indent);
+  margin-block-end: var(--ds-body-large-default-margin-block-end);
+}
+
+.ds-body-large-strong {
+  font: var(--ds-body-large-strong);
+  letter-spacing: var(--ds-body-large-strong-letter-spacing);
+  text-transform: var(--ds-body-large-strong-text-transform);
+  text-decoration: var(--ds-body-large-strong-text-decoration);
+  font-variant-numeric: var(--ds-body-large-strong-fvn, normal);
+}
+
+.ds-body-large-strong--paragraph {
+  text-indent: var(--ds-body-large-strong-text-indent);
+  margin-block-end: var(--ds-body-large-strong-margin-block-end);
+}
+
+.ds-label-base {
+  font: var(--ds-label-base);
+  letter-spacing: var(--ds-label-base-letter-spacing);
+  text-transform: var(--ds-label-base-text-transform);
+  text-decoration: var(--ds-label-base-text-decoration);
+  font-variant-numeric: var(--ds-label-base-fvn, normal);
+}
+
+.ds-label-base--paragraph {
+  text-indent: var(--ds-label-base-text-indent);
+  margin-block-end: var(--ds-label-base-margin-block-end);
+}
+
+.ds-overline-base {
+  font: var(--ds-overline-base);
+  letter-spacing: var(--ds-overline-base-letter-spacing);
+  text-transform: var(--ds-overline-base-text-transform);
+  text-decoration: var(--ds-overline-base-text-decoration);
+  font-variant-numeric: var(--ds-overline-base-fvn, normal);
+}
+
+.ds-overline-base--paragraph {
+  text-indent: var(--ds-overline-base-text-indent);
+  margin-block-end: var(--ds-overline-base-margin-block-end);
+}
+
+.ds-link-base {
+  font: var(--ds-link-base);
+  letter-spacing: var(--ds-link-base-letter-spacing);
+  text-transform: var(--ds-link-base-text-transform);
+  text-decoration: var(--ds-link-base-text-decoration);
+  font-variant-numeric: var(--ds-link-base-fvn, normal);
+}
+
+.ds-link-base--paragraph {
+  text-indent: var(--ds-link-base-text-indent);
+  margin-block-end: var(--ds-link-base-margin-block-end);
+}
+
+.ds-mono-base {
+  font: var(--ds-mono-base);
+  letter-spacing: var(--ds-mono-base-letter-spacing);
+  text-transform: var(--ds-mono-base-text-transform);
+  text-decoration: var(--ds-mono-base-text-decoration);
+  font-variant-numeric: var(--ds-mono-base-fvn, normal);
+}
+
+.ds-mono-base--paragraph {
+  text-indent: var(--ds-mono-base-text-indent);
+  margin-block-end: var(--ds-mono-base-margin-block-end);
+}
+
+.ds-metric-base {
+  font: var(--ds-metric-base);
+  letter-spacing: var(--ds-metric-base-letter-spacing);
+  text-transform: var(--ds-metric-base-text-transform);
+  text-decoration: var(--ds-metric-base-text-decoration);
+  font-variant-numeric: var(--ds-metric-base-fvn, normal);
+}
+
+.ds-metric-base--paragraph {
+  text-indent: var(--ds-metric-base-text-indent);
+  margin-block-end: var(--ds-metric-base-margin-block-end);
+}
+
+.ds-table-header {
+  font: var(--ds-table-header);
+  letter-spacing: var(--ds-table-header-letter-spacing);
+  text-transform: var(--ds-table-header-text-transform);
+  text-decoration: var(--ds-table-header-text-decoration);
+  font-variant-numeric: var(--ds-table-header-fvn, normal);
+}
+
+.ds-table-header--paragraph {
+  text-indent: var(--ds-table-header-text-indent);
+  margin-block-end: var(--ds-table-header-margin-block-end);
+}
+
+.ds-table-cell {
+  font: var(--ds-table-cell);
+  letter-spacing: var(--ds-table-cell-letter-spacing);
+  text-transform: var(--ds-table-cell-text-transform);
+  text-decoration: var(--ds-table-cell-text-decoration);
+  font-variant-numeric: var(--ds-table-cell-fvn, normal);
+}
+
+.ds-table-cell--paragraph {
+  text-indent: var(--ds-table-cell-text-indent);
+  margin-block-end: var(--ds-table-cell-margin-block-end);
+}
+
+.ds-table-numeric-base {
+  font: var(--ds-table-numeric-base);
+  letter-spacing: var(--ds-table-numeric-base-letter-spacing);
+  text-transform: var(--ds-table-numeric-base-text-transform);
+  text-decoration: var(--ds-table-numeric-base-text-decoration);
+  font-variant-numeric: var(--ds-table-numeric-base-fvn, normal);
+}
+
+.ds-table-numeric-base--paragraph {
+  text-indent: var(--ds-table-numeric-base-text-indent);
+  margin-block-end: var(--ds-table-numeric-base-margin-block-end);
+}
+
+",
+  "cssOutput/css/main.css": "/* Auto-generated — do not edit manually. Run: npx formtrieb-tokens */
+@import './variables/components-button.css';
+@import './variables/components-card.css';
+@import './variables/device.css';
+@import './variables/foundation.css';
+@import './variables/semantic.css';
+@import './variables/shape.css';
+@import './variables/typography.css';
+/* Utility classes — auto-generated */
+@import './utilities/content.css';
+@import './utilities/inset.css';
+@import './utilities/stack.css';
+@import './utilities/typography.css';
+",
+  "cssOutput/css/utilities/content.css": ".ds-content {
+  width: 100%;
+  max-width: var(--ds-content-max-width);
+  margin-inline: auto;
+  padding-inline: var(--ds-layout-grid-margin);
+}
+",
+  "cssOutput/css/utilities/inset.css": ".ds-inset-s { padding: var(--ds-spacing-inset-s); }
+.ds-inset-m { padding: var(--ds-spacing-inset-m); }
+.ds-inset-l { padding: var(--ds-spacing-inset-l); }
+",
+  "cssOutput/css/utilities/stack.css": ".ds-stack-1x { gap: var(--ds-spacing-stack-1x); }
+.ds-stack-2x { gap: var(--ds-spacing-stack-2x); }
+.ds-stack-4x { gap: var(--ds-spacing-stack-4x); }
+",
+  "cssOutput/css/utilities/typography.css": ".ds-title-1 {
+  font: var(--ds-title-1);
+  letter-spacing: var(--ds-title-1-letter-spacing);
+  text-transform: var(--ds-title-1-text-transform);
+  text-decoration: var(--ds-title-1-text-decoration);
+  font-variant-numeric: var(--ds-title-1-fvn, normal);
+}
+
+.ds-title-1--paragraph {
+  text-indent: var(--ds-title-1-text-indent);
+  margin-block-end: var(--ds-title-1-margin-block-end);
+}
+
+.ds-title-2 {
+  font: var(--ds-title-2);
+  letter-spacing: var(--ds-title-2-letter-spacing);
+  text-transform: var(--ds-title-2-text-transform);
+  text-decoration: var(--ds-title-2-text-decoration);
+  font-variant-numeric: var(--ds-title-2-fvn, normal);
+}
+
+.ds-title-2--paragraph {
+  text-indent: var(--ds-title-2-text-indent);
+  margin-block-end: var(--ds-title-2-margin-block-end);
+}
+
+.ds-body-small-default {
+  font: var(--ds-body-small-default);
+  letter-spacing: var(--ds-body-small-default-letter-spacing);
+  text-transform: var(--ds-body-small-default-text-transform);
+  text-decoration: var(--ds-body-small-default-text-decoration);
+  font-variant-numeric: var(--ds-body-small-default-fvn, normal);
+}
+
+.ds-body-small-default--paragraph {
+  text-indent: var(--ds-body-small-default-text-indent);
+  margin-block-end: var(--ds-body-small-default-margin-block-end);
+}
+
+.ds-body-small-strong {
+  font: var(--ds-body-small-strong);
+  letter-spacing: var(--ds-body-small-strong-letter-spacing);
+  text-transform: var(--ds-body-small-strong-text-transform);
+  text-decoration: var(--ds-body-small-strong-text-decoration);
+  font-variant-numeric: var(--ds-body-small-strong-fvn, normal);
+}
+
+.ds-body-small-strong--paragraph {
+  text-indent: var(--ds-body-small-strong-text-indent);
+  margin-block-end: var(--ds-body-small-strong-margin-block-end);
+}
+
+.ds-body-base-default {
+  font: var(--ds-body-base-default);
+  letter-spacing: var(--ds-body-base-default-letter-spacing);
+  text-transform: var(--ds-body-base-default-text-transform);
+  text-decoration: var(--ds-body-base-default-text-decoration);
+  font-variant-numeric: var(--ds-body-base-default-fvn, normal);
+}
+
+.ds-body-base-default--paragraph {
+  text-indent: var(--ds-body-base-default-text-indent);
+  margin-block-end: var(--ds-body-base-default-margin-block-end);
+}
+
+.ds-body-base-strong {
+  font: var(--ds-body-base-strong);
+  letter-spacing: var(--ds-body-base-strong-letter-spacing);
+  text-transform: var(--ds-body-base-strong-text-transform);
+  text-decoration: var(--ds-body-base-strong-text-decoration);
+  font-variant-numeric: var(--ds-body-base-strong-fvn, normal);
+}
+
+.ds-body-base-strong--paragraph {
+  text-indent: var(--ds-body-base-strong-text-indent);
+  margin-block-end: var(--ds-body-base-strong-margin-block-end);
+}
+
+.ds-body-large-default {
+  font: var(--ds-body-large-default);
+  letter-spacing: var(--ds-body-large-default-letter-spacing);
+  text-transform: var(--ds-body-large-default-text-transform);
+  text-decoration: var(--ds-body-large-default-text-decoration);
+  font-variant-numeric: var(--ds-body-large-default-fvn, normal);
+}
+
+.ds-body-large-default--paragraph {
+  text-indent: var(--ds-body-large-default-text-indent);
+  margin-block-end: var(--ds-body-large-default-margin-block-end);
+}
+
+.ds-body-large-strong {
+  font: var(--ds-body-large-strong);
+  letter-spacing: var(--ds-body-large-strong-letter-spacing);
+  text-transform: var(--ds-body-large-strong-text-transform);
+  text-decoration: var(--ds-body-large-strong-text-decoration);
+  font-variant-numeric: var(--ds-body-large-strong-fvn, normal);
+}
+
+.ds-body-large-strong--paragraph {
+  text-indent: var(--ds-body-large-strong-text-indent);
+  margin-block-end: var(--ds-body-large-strong-margin-block-end);
+}
+
+.ds-label-base {
+  font: var(--ds-label-base);
+  letter-spacing: var(--ds-label-base-letter-spacing);
+  text-transform: var(--ds-label-base-text-transform);
+  text-decoration: var(--ds-label-base-text-decoration);
+  font-variant-numeric: var(--ds-label-base-fvn, normal);
+}
+
+.ds-label-base--paragraph {
+  text-indent: var(--ds-label-base-text-indent);
+  margin-block-end: var(--ds-label-base-margin-block-end);
+}
+
+.ds-overline-base {
+  font: var(--ds-overline-base);
+  letter-spacing: var(--ds-overline-base-letter-spacing);
+  text-transform: var(--ds-overline-base-text-transform);
+  text-decoration: var(--ds-overline-base-text-decoration);
+  font-variant-numeric: var(--ds-overline-base-fvn, normal);
+}
+
+.ds-overline-base--paragraph {
+  text-indent: var(--ds-overline-base-text-indent);
+  margin-block-end: var(--ds-overline-base-margin-block-end);
+}
+
+.ds-link-base {
+  font: var(--ds-link-base);
+  letter-spacing: var(--ds-link-base-letter-spacing);
+  text-transform: var(--ds-link-base-text-transform);
+  text-decoration: var(--ds-link-base-text-decoration);
+  font-variant-numeric: var(--ds-link-base-fvn, normal);
+}
+
+.ds-link-base--paragraph {
+  text-indent: var(--ds-link-base-text-indent);
+  margin-block-end: var(--ds-link-base-margin-block-end);
+}
+
+.ds-mono-base {
+  font: var(--ds-mono-base);
+  letter-spacing: var(--ds-mono-base-letter-spacing);
+  text-transform: var(--ds-mono-base-text-transform);
+  text-decoration: var(--ds-mono-base-text-decoration);
+  font-variant-numeric: var(--ds-mono-base-fvn, normal);
+}
+
+.ds-mono-base--paragraph {
+  text-indent: var(--ds-mono-base-text-indent);
+  margin-block-end: var(--ds-mono-base-margin-block-end);
+}
+
+.ds-metric-base {
+  font: var(--ds-metric-base);
+  letter-spacing: var(--ds-metric-base-letter-spacing);
+  text-transform: var(--ds-metric-base-text-transform);
+  text-decoration: var(--ds-metric-base-text-decoration);
+  font-variant-numeric: var(--ds-metric-base-fvn, normal);
+}
+
+.ds-metric-base--paragraph {
+  text-indent: var(--ds-metric-base-text-indent);
+  margin-block-end: var(--ds-metric-base-margin-block-end);
+}
+
+.ds-table-header {
+  font: var(--ds-table-header);
+  letter-spacing: var(--ds-table-header-letter-spacing);
+  text-transform: var(--ds-table-header-text-transform);
+  text-decoration: var(--ds-table-header-text-decoration);
+  font-variant-numeric: var(--ds-table-header-fvn, normal);
+}
+
+.ds-table-header--paragraph {
+  text-indent: var(--ds-table-header-text-indent);
+  margin-block-end: var(--ds-table-header-margin-block-end);
+}
+
+.ds-table-cell {
+  font: var(--ds-table-cell);
+  letter-spacing: var(--ds-table-cell-letter-spacing);
+  text-transform: var(--ds-table-cell-text-transform);
+  text-decoration: var(--ds-table-cell-text-decoration);
+  font-variant-numeric: var(--ds-table-cell-fvn, normal);
+}
+
+.ds-table-cell--paragraph {
+  text-indent: var(--ds-table-cell-text-indent);
+  margin-block-end: var(--ds-table-cell-margin-block-end);
+}
+
+.ds-table-numeric-base {
+  font: var(--ds-table-numeric-base);
+  letter-spacing: var(--ds-table-numeric-base-letter-spacing);
+  text-transform: var(--ds-table-numeric-base-text-transform);
+  text-decoration: var(--ds-table-numeric-base-text-decoration);
+  font-variant-numeric: var(--ds-table-numeric-base-fvn, normal);
+}
+
+.ds-table-numeric-base--paragraph {
+  text-indent: var(--ds-table-numeric-base-text-indent);
+  margin-block-end: var(--ds-table-numeric-base-margin-block-end);
+}
+",
+  "cssOutput/css/variables/components-button.css": "/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --ds-button-border: var(--ds-border-width-thin);
+  --ds-button-text: var(--ds-color-text-inverted-primary);
+  --ds-button-radius: var(--ds-radius-sm);
+  --ds-button-height: var(--ds-controls-height-medium);
+  --ds-button-padding: var(--ds-spacing-inset-m);
+  --ds-button-background: var(--ds-color-brand-primary);
+  --ds-button-background-hover: var(--ds-color-brand-hover);
+}
+",
+  "cssOutput/css/variables/components-card.css": "/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --ds-card-shadow: var(--ds-shadow-elevation-1);
+  --ds-card-radius: var(--ds-radius-md);
+  --ds-card-gap: var(--ds-spacing-stack-2x);
+  --ds-card-background: var(--ds-color-surface-level1);
+}
+",
+  "cssOutput/css/variables/device.css": "/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+[data-device="Desktop"] {
+  --ds-device-name: desktop;
+  --ds-layout-grid-columns: 12;
+  --ds-content-max-width: 75rem;
+  --ds-font-sizes-body-small: 0.875rem;
+  --ds-font-sizes-body-large: 1.125rem;
+  --ds-font-sizes-mono-base: 0.875rem;
+  --ds-line-heights-body-small: 20px;
+  --ds-line-heights-body-base: 1.5;
+  --ds-line-heights-body-large: 28px;
+  --ds-line-heights-mono-base: 20px;
+  --ds-line-heights-metric-base: 1.2;
+  --ds-spacing-stack-1x: var(--ds-dimension-1x);
+  --ds-spacing-stack-2x: var(--ds-dimension-2x);
+  --ds-spacing-stack-4x: var(--ds-dimension-4x);
+  --ds-spacing-inset-s: var(--ds-dimension-2x);
+  --ds-spacing-inset-m: var(--ds-dimension-4x);
+  --ds-spacing-inset-l: var(--ds-dimension-6x);
+  --ds-spacing-component-gap: var(--ds-dimension-2x);
+  --ds-layout-grid-margin: var(--ds-dimension-8x);
+  --ds-layout-grid-gutter: var(--ds-dimension-6x);
+  --ds-content-min-width: var(--ds-breakpoints-desktop);
+  --ds-paragraph-spacings-none: var(--ds-dimension-0x);
+  --ds-paragraph-spacings-s: var(--ds-dimension-2x);
+  --ds-paragraph-spacings-m: var(--ds-dimension-4x);
+  --ds-font-sizes-title-1: var(--ds-dimension-12x);
+  --ds-font-sizes-title-2: var(--ds-dimension-8x);
+  --ds-font-sizes-body-base: var(--ds-dimension-4x);
+  --ds-font-sizes-metric-base: var(--ds-dimension-10x);
+  --ds-line-heights-title-1: var(--ds-dimension-16x);
+  --ds-line-heights-title-2: var(--ds-dimension-10x);
+  --ds-controls-min-target: var(--ds-dimension-10x);
+  --ds-controls-height-small: var(--ds-dimension-6x);
+  --ds-controls-height-medium: var(--ds-dimension-8x);
+}
+[data-device="Tablet"] {
+  --ds-device-name: tablet;
+  --ds-layout-grid-columns: 12;
+  --ds-font-sizes-body-small: 0.875rem;
+  --ds-font-sizes-body-large: 1.125rem;
+  --ds-font-sizes-mono-base: 0.875rem;
+  --ds-line-heights-body-small: 20px;
+  --ds-line-heights-body-base: 1.5;
+  --ds-line-heights-body-large: 28px;
+  --ds-line-heights-mono-base: 20px;
+  --ds-line-heights-metric-base: 1.2;
+  --ds-spacing-stack-1x: var(--ds-dimension-1x);
+  --ds-spacing-stack-2x: var(--ds-dimension-2x);
+  --ds-spacing-stack-4x: var(--ds-dimension-4x);
+  --ds-spacing-inset-s: var(--ds-dimension-2x);
+  --ds-spacing-inset-m: var(--ds-dimension-4x);
+  --ds-spacing-inset-l: var(--ds-dimension-6x);
+  --ds-spacing-component-gap: var(--ds-dimension-2x);
+  --ds-layout-grid-margin: var(--ds-dimension-8x);
+  --ds-layout-grid-gutter: var(--ds-dimension-6x);
+  --ds-content-min-width: var(--ds-breakpoints-tablet);
+  --ds-content-max-width: var(--ds-breakpoints-desktop)-1px;
+  --ds-paragraph-spacings-none: var(--ds-dimension-0x);
+  --ds-paragraph-spacings-s: var(--ds-dimension-2x);
+  --ds-paragraph-spacings-m: var(--ds-dimension-4x);
+  --ds-font-sizes-title-1: var(--ds-dimension-12x);
+  --ds-font-sizes-title-2: var(--ds-dimension-8x);
+  --ds-font-sizes-body-base: var(--ds-dimension-4x);
+  --ds-font-sizes-metric-base: var(--ds-dimension-10x);
+  --ds-line-heights-title-1: var(--ds-dimension-16x);
+  --ds-line-heights-title-2: var(--ds-dimension-10x);
+  --ds-controls-min-target: var(--ds-dimension-10x);
+  --ds-controls-height-small: var(--ds-dimension-6x);
+  --ds-controls-height-medium: var(--ds-dimension-8x);
+}
+[data-device="Mobile"] {
+  --ds-device-name: mobile;
+  --ds-layout-grid-columns: 4;
+  --ds-content-max-width: 100%;
+  --ds-font-sizes-body-small: 0.875rem;
+  --ds-font-sizes-body-large: 1.125rem;
+  --ds-font-sizes-mono-base: 0.875rem;
+  --ds-line-heights-body-small: 20px;
+  --ds-line-heights-body-base: 1.5;
+  --ds-line-heights-body-large: 28px;
+  --ds-line-heights-mono-base: 20px;
+  --ds-line-heights-metric-base: 1.2;
+  --ds-spacing-stack-1x: var(--ds-dimension-1x);
+  --ds-spacing-stack-2x: var(--ds-dimension-2x);
+  --ds-spacing-stack-4x: var(--ds-dimension-3x);
+  --ds-spacing-inset-s: var(--ds-dimension-2x);
+  --ds-spacing-inset-m: var(--ds-dimension-3x);
+  --ds-spacing-inset-l: var(--ds-dimension-4x);
+  --ds-spacing-component-gap: var(--ds-dimension-2x);
+  --ds-layout-grid-margin: var(--ds-dimension-4x);
+  --ds-layout-grid-gutter: var(--ds-dimension-4x);
+  --ds-content-min-width: var(--ds-breakpoints-mobile);
+  --ds-paragraph-spacings-none: var(--ds-dimension-0x);
+  --ds-paragraph-spacings-s: var(--ds-dimension-2x);
+  --ds-paragraph-spacings-m: var(--ds-dimension-4x);
+  --ds-font-sizes-title-1: var(--ds-dimension-8x);
+  --ds-font-sizes-title-2: var(--ds-dimension-6x);
+  --ds-font-sizes-body-base: var(--ds-dimension-4x);
+  --ds-font-sizes-metric-base: var(--ds-dimension-8x);
+  --ds-line-heights-title-1: var(--ds-dimension-10x);
+  --ds-line-heights-title-2: var(--ds-dimension-8x);
+  --ds-controls-min-target: var(--ds-dimension-12x);
+  --ds-controls-height-small: var(--ds-dimension-6x);
+  --ds-controls-height-medium: var(--ds-dimension-10x);
+}
+",
+  "cssOutput/css/variables/foundation.css": "/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --ds-colors-white: rgb(255, 255, 255);
+  --ds-colors-black: rgb(0, 0, 0);
+  --ds-colors-neutral-1: rgb(96.601% 96.601% 96.601%);
+  --ds-colors-neutral-2: rgb(92.103% 92.103% 92.103%);
+  --ds-colors-neutral-3: rgb(84.332% 84.332% 84.332%);
+  --ds-colors-neutral-4: rgb(75.613% 75.613% 75.613%);
+  --ds-colors-neutral-5: rgb(67.078% 67.078% 67.078%);
+  --ds-colors-neutral-6: rgb(58.739% 58.739% 58.739%);
+  --ds-colors-neutral-7: rgb(50.612% 50.612% 50.612%);
+  --ds-colors-neutral-8: rgb(41.744% 41.744% 41.744%);
+  --ds-colors-neutral-9: rgb(33.198% 33.198% 33.198%);
+  --ds-colors-neutral-10: rgb(24.131% 24.131% 24.131%);
+  --ds-colors-ocean-1: rgb(89.92% 97.811% 100%);
+  --ds-colors-ocean-2: rgb(80.742% 94.087% 100%);
+  --ds-colors-ocean-3: rgb(64.367% 87.493% 100%);
+  --ds-colors-ocean-4: rgb(40.982% 80.101% 100%);
+  --ds-colors-ocean-5: rgb(0% 72.737% 100%);
+  --ds-colors-ocean-6: rgb(0% 64.576% 91.321%);
+  --ds-colors-ocean-7: rgb(0% 56% 78.476%);
+  --ds-colors-ocean-8: rgb(0% 46.379% 65.56%);
+  --ds-colors-ocean-9: rgb(0% 36.92% 53.852%);
+  --ds-colors-ocean-10: rgb(0% 26.921% 41.167%);
+  --ds-colors-ocean-11: rgb(4.351% 21.776% 32.779%);
+  --ds-colors-ember-1: rgb(100% 93.913% 92.384%);
+  --ds-colors-ember-2: rgb(100% 88.2% 86.05%);
+  --ds-colors-ember-3: rgb(100% 77.597% 74.497%);
+  --ds-colors-ember-4: rgb(100% 64.564% 60.91%);
+  --ds-colors-ember-5: rgb(100% 49.715% 46.771%);
+  --ds-colors-ember-6: rgb(99.589% 36.209% 35.582%);
+  --ds-colors-ember-7: rgb(88.754% 28.069% 28.769%);
+  --ds-colors-ember-8: rgb(74.295% 22.203% 23.065%);
+  --ds-colors-ember-9: rgb(58.658% 18.672% 18.69%);
+  --ds-colors-ember-10: rgb(42.66% 14.07% 13.653%);
+  --ds-colors-moss-0: rgb(92.982% 98.934% 92.446%);
+  --ds-colors-moss-1: rgb(91.227% 98.668% 90.558%);
+  --ds-colors-moss-2: rgb(81.109% 96.067% 80.079%);
+  --ds-colors-moss-3: rgb(66.343% 90.246% 65.467%);
+  --ds-colors-moss-4: rgb(49.625% 83.163% 49.976%);
+  --ds-colors-moss-5: rgb(31.968% 75.72% 35.49%);
+  --ds-colors-moss-6: rgb(10.18% 67.802% 22.705%);
+  --ds-colors-moss-7: rgb(0% 59.02% 15.634%);
+  --ds-colors-moss-8: rgb(0% 48.909% 11.604%);
+  --ds-colors-moss-9: rgb(0% 38.827% 10.33%);
+  --ds-colors-moss-10: rgb(3.1271% 28.247% 7.9228%);
+  --ds-colors-sun-0: rgb(99.448% 97.55% 91.227%);
+  --ds-colors-sun-1: rgb(99.211% 96.5% 87.467%);
+  --ds-colors-sun-2: rgb(96.82% 91.931% 73.93%);
+  --ds-colors-sun-3: rgb(90.829% 84.115% 55.739%);
+  --ds-colors-sun-4: rgb(83.144% 75.399% 36.243%);
+  --ds-colors-sun-5: rgb(74.838% 66.909% 15.737%);
+  --ds-colors-sun-6: rgb(66.084% 58.637% 0%);
+  --ds-colors-sun-7: rgb(57.129% 50.547% 0%);
+  --ds-colors-sun-8: rgb(47.245% 41.693% 0%);
+  --ds-colors-sun-9: rgb(37.661% 33.144% 0%);
+  --ds-colors-sun-10: rgb(27.564% 24.076% 0%);
+  --ds-colors-plum-1: rgb(99.186% 95.516% 99.611%);
+  --ds-colors-plum-2: rgb(97.163% 89.915% 98.063%);
+  --ds-colors-plum-3: rgb(92.087% 80.842% 93.604%);
+  --ds-colors-plum-4: rgb(85.829% 70.794% 88.035%);
+  --ds-colors-plum-5: rgb(79.161% 61.088% 82.022%);
+  --ds-colors-plum-6: rgb(71.802% 51.955% 75.143%);
+  --ds-colors-plum-7: rgb(62.895% 44.103% 66.134%);
+  --ds-colors-plum-8: rgb(52.241% 36.157% 55.027%);
+  --ds-colors-plum-9: rgb(41.369% 28.911% 43.491%);
+  --ds-colors-plum-10: rgb(30.046% 21.073% 31.547%);
+  --ds-dimension-0x: 0;
+  --ds-dimension-0-25x: 0.0625rem;
+  --ds-dimension-0-5x: 0.125rem;
+  --ds-dimension-1x: 0.25rem;
+  --ds-dimension-2x: 0.5rem;
+  --ds-dimension-3x: 0.75rem;
+  --ds-dimension-4x: 1rem;
+  --ds-dimension-6x: 1.5rem;
+  --ds-dimension-8x: 2rem;
+  --ds-dimension-10x: 2.5rem;
+  --ds-dimension-12x: 3rem;
+  --ds-dimension-16x: 4rem;
+  --ds-breakpoints-mobile: 0;
+  --ds-breakpoints-tablet: 48rem;
+  --ds-breakpoints-desktop: 80rem;
+  --ds-border-width-thin: 0.0625rem;
+  --ds-border-width-thick: 0.125rem;
+  --ds-z-index-base: 0;
+  --ds-z-index-overlay: 100;
+  --ds-z-index-modal: 200;
+  --ds-opacity-none: 0;
+  --ds-opacity-subtle: 0.08;
+  --ds-opacity-medium: 0.4;
+  --ds-opacity-full: 1;
+  --ds-duration-fast: 100ms;
+  --ds-duration-normal: 200ms;
+  --ds-duration-slow: 400ms;
+  --ds-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+}
+",
+  "cssOutput/css/variables/semantic.css": "/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+[data-semantic="Light"] {
+  --ds-opacity-disabled: var(--ds-opacity-medium);
+  --ds-opacity-hover: var(--ds-opacity-subtle);
+  --ds-color-text-primary: var(--ds-colors-black);
+  --ds-color-text-inverted-primary: var(--ds-colors-white);
+  --ds-color-page: var(--ds-colors-white);
+  --ds-color-backdrop: rgb(0% 0% 0% / 0.6);
+  --ds-color-surface-level0: var(--ds-colors-white);
+  --ds-color-interaction-stroke-neutral-primary: rgb(0% 0% 0% / 0.12);
+  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0,0,0,0.08);
+  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0,0,0,0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0,0,0,0.10);
+  --ds-color-text-secondary: rgb(0% 0% 0% / 0.6);
+  --ds-color-text-tertiary: rgb(0% 0% 0% / 0.4);
+  --ds-color-text-inverted-secondary: rgb(100% 100% 100% / 0.6);
+  --ds-color-text-accent: var(--ds-colors-plum-7);
+  --ds-color-brand-primary: var(--ds-colors-ocean-6);
+  --ds-color-brand-hover: rgb(10.15% 50.714% 71.176%);
+  --ds-color-brand-pressed: rgb(38.437% 71.461% 93.202%);
+  --ds-color-surface-level1: var(--ds-colors-neutral-1);
+  --ds-color-surface-level2: var(--ds-colors-neutral-2);
+  --ds-color-divider: var(--ds-colors-neutral-3);
+  --ds-color-interaction-stroke-neutral-secondary: var(--ds-colors-neutral-4);
+  --ds-color-status-positive-background: var(--ds-colors-moss-1);
+  --ds-color-status-positive-text: var(--ds-colors-moss-9);
+  --ds-color-status-positive-stroke: var(--ds-colors-moss-4);
+  --ds-color-status-positive-indicator: var(--ds-colors-moss-6);
+  --ds-color-status-negative-background: var(--ds-colors-ember-1);
+  --ds-color-status-negative-text: var(--ds-colors-ember-9);
+  --ds-color-status-negative-stroke: var(--ds-colors-ember-4);
+  --ds-color-status-negative-indicator: var(--ds-colors-ember-6);
+  --ds-color-status-warning-background: var(--ds-colors-sun-1);
+  --ds-color-status-warning-text: var(--ds-colors-sun-9);
+  --ds-color-status-warning-stroke: var(--ds-colors-sun-4);
+  --ds-color-status-warning-indicator: var(--ds-colors-sun-6);
+  --ds-color-status-info-background: var(--ds-colors-ocean-1);
+  --ds-color-status-info-text: var(--ds-colors-ocean-9);
+  --ds-color-status-info-stroke: var(--ds-colors-ocean-4);
+  --ds-color-status-info-indicator: var(--ds-colors-ocean-6);
+  --ds-color-text-highlight: var(--ds-colors-sun-0);
+  --ds-color-brand-deep: var(--ds-colors-ocean-11);
+  --ds-color-surface-fresh: var(--ds-colors-moss-0);
+}
+[data-semantic="Dark"] {
+  --ds-opacity-disabled: var(--ds-opacity-medium);
+  --ds-opacity-hover: var(--ds-opacity-subtle);
+  --ds-color-text-primary: var(--ds-colors-white);
+  --ds-color-text-inverted-primary: var(--ds-colors-black);
+  --ds-color-page: var(--ds-colors-black);
+  --ds-color-backdrop: rgb(0% 0% 0% / 0.6);
+  --ds-color-surface-level0: var(--ds-colors-black);
+  --ds-color-interaction-stroke-neutral-primary: rgb(100% 100% 100% / 0.12);
+  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0,0,0,0.08);
+  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0,0,0,0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0,0,0,0.10);
+  --ds-color-text-secondary: rgb(100% 100% 100% / 0.6);
+  --ds-color-text-tertiary: rgb(100% 100% 100% / 0.4);
+  --ds-color-text-inverted-secondary: rgb(0% 0% 0% / 0.6);
+  --ds-color-text-accent: var(--ds-colors-plum-4);
+  --ds-color-brand-primary: var(--ds-colors-ocean-5);
+  --ds-color-brand-hover: rgb(11.098% 56.962% 77.798%);
+  --ds-color-brand-pressed: rgb(40.539% 78.117% 100%);
+  --ds-color-surface-level1: var(--ds-colors-neutral-10);
+  --ds-color-surface-level2: var(--ds-colors-neutral-9);
+  --ds-color-divider: var(--ds-colors-neutral-8);
+  --ds-color-interaction-stroke-neutral-secondary: var(--ds-colors-neutral-7);
+  --ds-color-status-positive-background: var(--ds-colors-moss-10);
+  --ds-color-status-positive-text: var(--ds-colors-moss-2);
+  --ds-color-status-positive-stroke: var(--ds-colors-moss-7);
+  --ds-color-status-positive-indicator: var(--ds-colors-moss-5);
+  --ds-color-status-negative-background: var(--ds-colors-ember-10);
+  --ds-color-status-negative-text: var(--ds-colors-ember-2);
+  --ds-color-status-negative-stroke: var(--ds-colors-ember-7);
+  --ds-color-status-negative-indicator: var(--ds-colors-ember-5);
+  --ds-color-status-warning-background: var(--ds-colors-sun-10);
+  --ds-color-status-warning-text: var(--ds-colors-sun-2);
+  --ds-color-status-warning-stroke: var(--ds-colors-sun-7);
+  --ds-color-status-warning-indicator: var(--ds-colors-sun-5);
+  --ds-color-status-info-background: var(--ds-colors-ocean-10);
+  --ds-color-status-info-text: var(--ds-colors-ocean-2);
+  --ds-color-status-info-stroke: var(--ds-colors-ocean-7);
+  --ds-color-status-info-indicator: var(--ds-colors-ocean-5);
+  --ds-color-text-highlight: var(--ds-colors-sun-0);
+  --ds-color-brand-deep: var(--ds-colors-ocean-11);
+  --ds-color-surface-fresh: var(--ds-colors-moss-0);
+}
+",
+  "cssOutput/css/variables/shape.css": "/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+[data-shape="Round"] {
+  --ds-radius-full: 6249.9375rem;
+  --ds-radius-none: var(--ds-dimension-0x);
+  --ds-radius-xs: var(--ds-dimension-0-5x);
+  --ds-radius-sm: var(--ds-dimension-1x);
+  --ds-radius-md: var(--ds-dimension-2x);
+}
+[data-shape="Sharp"] {
+  --ds-radius-full: 0;
+  --ds-radius-none: var(--ds-dimension-0x);
+  --ds-radius-xs: var(--ds-dimension-0x);
+  --ds-radius-sm: var(--ds-dimension-0-5x);
+  --ds-radius-md: var(--ds-dimension-1x);
+}
+",
+  "cssOutput/css/variables/typography.css": "/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --ds-letter-spacings-tight2: -0.03em;
+  --ds-letter-spacings-tight1: -0.01em;
+  --ds-letter-spacings-default: 0em;
+  --ds-letter-spacings-wide1: 0.02em;
+  --ds-letter-spacings-wide2: 0.08em;
+  --ds-text-case-default: none;
+  --ds-text-case-upper: uppercase;
+  --ds-text-decorations-default: none;
+  --ds-text-decorations-underline: underline;
+  --ds-paragraph-indents-none: 0;
+  --ds-font-families-base: Inter;
+  --ds-font-families-mono: 'JetBrains Mono';
+  --ds-font-weights-regular: 400;
+  --ds-font-weights-medium: 500;
+  --ds-font-weights-semibold: 600;
+  --ds-font-weights-bold: 700;
+  --ds-title-1: var(--ds-font-weights-bold) var(--ds-font-sizes-title-1)/var(--ds-line-heights-title-1) var(--ds-font-families-base);
+  --ds-title-2: var(--ds-font-weights-semibold) var(--ds-font-sizes-title-2)/var(--ds-line-heights-title-2) var(--ds-font-families-base);
+  --ds-body-small-default: var(--ds-font-weights-regular) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-body-small-strong: var(--ds-font-weights-semibold) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-body-base-default: var(--ds-font-weights-regular) var(--ds-font-sizes-body-base)/var(--ds-line-heights-body-base) var(--ds-font-families-base);
+  --ds-body-base-strong: var(--ds-font-weights-semibold) var(--ds-font-sizes-body-base)/var(--ds-line-heights-body-base) var(--ds-font-families-base);
+  --ds-body-large-default: var(--ds-font-weights-regular) var(--ds-font-sizes-body-large)/var(--ds-line-heights-body-large) var(--ds-font-families-base);
+  --ds-body-large-strong: var(--ds-font-weights-semibold) var(--ds-font-sizes-body-large)/var(--ds-line-heights-body-large) var(--ds-font-families-base);
+  --ds-label-base: var(--ds-font-weights-medium) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-overline-base: var(--ds-font-weights-semibold) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-link-base: var(--ds-font-weights-regular) var(--ds-font-sizes-body-base)/var(--ds-line-heights-body-base) var(--ds-font-families-base);
+  --ds-mono-base: var(--ds-font-weights-regular) var(--ds-font-sizes-mono-base)/var(--ds-line-heights-mono-base) var(--ds-font-families-mono);
+  --ds-metric-base: var(--ds-font-weights-bold) var(--ds-font-sizes-metric-base)/var(--ds-line-heights-metric-base) var(--ds-font-families-base);
+  --ds-table-header: var(--ds-font-weights-semibold) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-table-cell: var(--ds-font-weights-regular) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-table-numeric-base: var(--ds-font-weights-regular) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-mono);
+  --ds-title-1-letter-spacing: var(--ds-letter-spacings-tight2);
+  --ds-title-1-text-transform: var(--ds-text-case-default);
+  --ds-title-1-text-decoration: var(--ds-text-decorations-default);
+  --ds-title-1-text-indent: var(--ds-paragraph-indents-none);
+  --ds-title-1-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-title-2-letter-spacing: var(--ds-letter-spacings-tight1);
+  --ds-title-2-text-transform: var(--ds-text-case-default);
+  --ds-title-2-text-decoration: var(--ds-text-decorations-default);
+  --ds-title-2-text-indent: var(--ds-paragraph-indents-none);
+  --ds-title-2-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-body-small-default-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-body-small-default-text-transform: var(--ds-text-case-default);
+  --ds-body-small-default-text-decoration: var(--ds-text-decorations-default);
+  --ds-body-small-default-text-indent: var(--ds-paragraph-indents-none);
+  --ds-body-small-default-margin-block-end: var(--ds-paragraph-spacings-m);
+  --ds-body-small-strong-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-body-small-strong-text-transform: var(--ds-text-case-default);
+  --ds-body-small-strong-text-decoration: var(--ds-text-decorations-default);
+  --ds-body-small-strong-text-indent: var(--ds-paragraph-indents-none);
+  --ds-body-small-strong-margin-block-end: var(--ds-paragraph-spacings-m);
+  --ds-body-base-default-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-body-base-default-text-transform: var(--ds-text-case-default);
+  --ds-body-base-default-text-decoration: var(--ds-text-decorations-default);
+  --ds-body-base-default-text-indent: var(--ds-paragraph-indents-none);
+  --ds-body-base-default-margin-block-end: var(--ds-paragraph-spacings-m);
+  --ds-body-base-strong-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-body-base-strong-text-transform: var(--ds-text-case-default);
+  --ds-body-base-strong-text-decoration: var(--ds-text-decorations-default);
+  --ds-body-base-strong-text-indent: var(--ds-paragraph-indents-none);
+  --ds-body-base-strong-margin-block-end: var(--ds-paragraph-spacings-m);
+  --ds-body-large-default-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-body-large-default-text-transform: var(--ds-text-case-default);
+  --ds-body-large-default-text-decoration: var(--ds-text-decorations-default);
+  --ds-body-large-default-text-indent: var(--ds-paragraph-indents-none);
+  --ds-body-large-default-margin-block-end: var(--ds-paragraph-spacings-m);
+  --ds-body-large-strong-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-body-large-strong-text-transform: var(--ds-text-case-default);
+  --ds-body-large-strong-text-decoration: var(--ds-text-decorations-default);
+  --ds-body-large-strong-text-indent: var(--ds-paragraph-indents-none);
+  --ds-body-large-strong-margin-block-end: var(--ds-paragraph-spacings-m);
+  --ds-label-base-letter-spacing: var(--ds-letter-spacings-wide1);
+  --ds-label-base-text-transform: var(--ds-text-case-default);
+  --ds-label-base-text-decoration: var(--ds-text-decorations-default);
+  --ds-label-base-text-indent: var(--ds-paragraph-indents-none);
+  --ds-label-base-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-overline-base-letter-spacing: var(--ds-letter-spacings-wide2);
+  --ds-overline-base-text-transform: var(--ds-text-case-upper);
+  --ds-overline-base-text-decoration: var(--ds-text-decorations-default);
+  --ds-overline-base-text-indent: var(--ds-paragraph-indents-none);
+  --ds-overline-base-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-link-base-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-link-base-text-transform: var(--ds-text-case-default);
+  --ds-link-base-text-decoration: var(--ds-text-decorations-underline);
+  --ds-link-base-text-indent: var(--ds-paragraph-indents-none);
+  --ds-link-base-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-mono-base-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-mono-base-text-transform: var(--ds-text-case-default);
+  --ds-mono-base-text-decoration: var(--ds-text-decorations-default);
+  --ds-mono-base-text-indent: var(--ds-paragraph-indents-none);
+  --ds-mono-base-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-mono-base-fvn: tabular-nums;
+  --ds-metric-base-letter-spacing: var(--ds-letter-spacings-tight1);
+  --ds-metric-base-text-transform: var(--ds-text-case-default);
+  --ds-metric-base-text-decoration: var(--ds-text-decorations-default);
+  --ds-metric-base-text-indent: var(--ds-paragraph-indents-none);
+  --ds-metric-base-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-metric-base-fvn: tabular-nums;
+  --ds-table-header-letter-spacing: var(--ds-letter-spacings-wide1);
+  --ds-table-header-text-transform: var(--ds-text-case-default);
+  --ds-table-header-text-decoration: var(--ds-text-decorations-default);
+  --ds-table-header-text-indent: var(--ds-paragraph-indents-none);
+  --ds-table-header-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-table-cell-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-table-cell-text-transform: var(--ds-text-case-default);
+  --ds-table-cell-text-decoration: var(--ds-text-decorations-default);
+  --ds-table-cell-text-indent: var(--ds-paragraph-indents-none);
+  --ds-table-cell-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-table-numeric-base-letter-spacing: var(--ds-letter-spacings-default);
+  --ds-table-numeric-base-text-transform: var(--ds-text-case-default);
+  --ds-table-numeric-base-text-decoration: var(--ds-text-decorations-default);
+  --ds-table-numeric-base-text-indent: var(--ds-paragraph-indents-none);
+  --ds-table-numeric-base-margin-block-end: var(--ds-paragraph-spacings-none);
+  --ds-table-numeric-base-fvn: tabular-nums;
+
+}",
+}
+`;
+
+exports[`pipeline E2E > produces stable token-map output 1`] = `
+{
+  "categories": {
+    "Body": 36,
+    "Label": 6,
+    "Link": 6,
+    "Metric": 6,
+    "Mono": 6,
+    "Overline": 6,
+    "Table": 18,
+    "Title": 12,
+    "borderWidth": 2,
+    "breakpoints": 3,
+    "button": 7,
+    "card": 4,
+    "color": 36,
+    "colors": 65,
+    "content": 2,
+    "controls": 3,
+    "deviceName": 1,
+    "dimension": 12,
+    "duration": 3,
+    "easing": 2,
+    "fontFamilies": 2,
+    "fontSizes": 7,
+    "fontWeights": 4,
+    "layout": 3,
+    "letterSpacings": 5,
+    "lineHeights": 7,
+    "opacity": 6,
+    "paragraphIndents": 1,
+    "paragraphSpacings": 3,
+    "radius": 5,
+    "shadow": 2,
+    "spacing": 7,
+    "textCase": 2,
+    "textDecorations": 2,
+    "zIndex": 3,
+  },
+  "count": 295,
+  "figmaToCSS": {
+    "Body/base/default": "--ds-body-base-default",
+    "Body/base/default/letterSpacing": "--ds-body-base-default-letter-spacing",
+    "Body/base/default/marginBlockEnd": "--ds-body-base-default-margin-block-end",
+    "Body/base/default/textDecoration": "--ds-body-base-default-text-decoration",
+    "Body/base/default/textIndent": "--ds-body-base-default-text-indent",
+    "Body/base/default/textTransform": "--ds-body-base-default-text-transform",
+    "Body/base/strong": "--ds-body-base-strong",
+    "Body/base/strong/letterSpacing": "--ds-body-base-strong-letter-spacing",
+    "Body/base/strong/marginBlockEnd": "--ds-body-base-strong-margin-block-end",
+    "Body/base/strong/textDecoration": "--ds-body-base-strong-text-decoration",
+    "Body/base/strong/textIndent": "--ds-body-base-strong-text-indent",
+    "Body/base/strong/textTransform": "--ds-body-base-strong-text-transform",
+    "Body/large/default": "--ds-body-large-default",
+    "Body/large/default/letterSpacing": "--ds-body-large-default-letter-spacing",
+    "Body/large/default/marginBlockEnd": "--ds-body-large-default-margin-block-end",
+    "Body/large/default/textDecoration": "--ds-body-large-default-text-decoration",
+    "Body/large/default/textIndent": "--ds-body-large-default-text-indent",
+    "Body/large/default/textTransform": "--ds-body-large-default-text-transform",
+    "Body/large/strong": "--ds-body-large-strong",
+    "Body/large/strong/letterSpacing": "--ds-body-large-strong-letter-spacing",
+    "Body/large/strong/marginBlockEnd": "--ds-body-large-strong-margin-block-end",
+    "Body/large/strong/textDecoration": "--ds-body-large-strong-text-decoration",
+    "Body/large/strong/textIndent": "--ds-body-large-strong-text-indent",
+    "Body/large/strong/textTransform": "--ds-body-large-strong-text-transform",
+    "Body/small/default": "--ds-body-small-default",
+    "Body/small/default/letterSpacing": "--ds-body-small-default-letter-spacing",
+    "Body/small/default/marginBlockEnd": "--ds-body-small-default-margin-block-end",
+    "Body/small/default/textDecoration": "--ds-body-small-default-text-decoration",
+    "Body/small/default/textIndent": "--ds-body-small-default-text-indent",
+    "Body/small/default/textTransform": "--ds-body-small-default-text-transform",
+    "Body/small/strong": "--ds-body-small-strong",
+    "Body/small/strong/letterSpacing": "--ds-body-small-strong-letter-spacing",
+    "Body/small/strong/marginBlockEnd": "--ds-body-small-strong-margin-block-end",
+    "Body/small/strong/textDecoration": "--ds-body-small-strong-text-decoration",
+    "Body/small/strong/textIndent": "--ds-body-small-strong-text-indent",
+    "Body/small/strong/textTransform": "--ds-body-small-strong-text-transform",
+    "Label/Base": "--ds-label-base",
+    "Label/Base/letterSpacing": "--ds-label-base-letter-spacing",
+    "Label/Base/marginBlockEnd": "--ds-label-base-margin-block-end",
+    "Label/Base/textDecoration": "--ds-label-base-text-decoration",
+    "Label/Base/textIndent": "--ds-label-base-text-indent",
+    "Label/Base/textTransform": "--ds-label-base-text-transform",
+    "Link/Base": "--ds-link-base",
+    "Link/Base/letterSpacing": "--ds-link-base-letter-spacing",
+    "Link/Base/marginBlockEnd": "--ds-link-base-margin-block-end",
+    "Link/Base/textDecoration": "--ds-link-base-text-decoration",
+    "Link/Base/textIndent": "--ds-link-base-text-indent",
+    "Link/Base/textTransform": "--ds-link-base-text-transform",
+    "Metric/Base": "--ds-metric-base",
+    "Metric/Base/letterSpacing": "--ds-metric-base-letter-spacing",
+    "Metric/Base/marginBlockEnd": "--ds-metric-base-margin-block-end",
+    "Metric/Base/textDecoration": "--ds-metric-base-text-decoration",
+    "Metric/Base/textIndent": "--ds-metric-base-text-indent",
+    "Metric/Base/textTransform": "--ds-metric-base-text-transform",
+    "Mono/Base": "--ds-mono-base",
+    "Mono/Base/letterSpacing": "--ds-mono-base-letter-spacing",
+    "Mono/Base/marginBlockEnd": "--ds-mono-base-margin-block-end",
+    "Mono/Base/textDecoration": "--ds-mono-base-text-decoration",
+    "Mono/Base/textIndent": "--ds-mono-base-text-indent",
+    "Mono/Base/textTransform": "--ds-mono-base-text-transform",
+    "Overline/Base": "--ds-overline-base",
+    "Overline/Base/letterSpacing": "--ds-overline-base-letter-spacing",
+    "Overline/Base/marginBlockEnd": "--ds-overline-base-margin-block-end",
+    "Overline/Base/textDecoration": "--ds-overline-base-text-decoration",
+    "Overline/Base/textIndent": "--ds-overline-base-text-indent",
+    "Overline/Base/textTransform": "--ds-overline-base-text-transform",
+    "Table/Cell": "--ds-table-cell",
+    "Table/Cell/letterSpacing": "--ds-table-cell-letter-spacing",
+    "Table/Cell/marginBlockEnd": "--ds-table-cell-margin-block-end",
+    "Table/Cell/textDecoration": "--ds-table-cell-text-decoration",
+    "Table/Cell/textIndent": "--ds-table-cell-text-indent",
+    "Table/Cell/textTransform": "--ds-table-cell-text-transform",
+    "Table/Header": "--ds-table-header",
+    "Table/Header/letterSpacing": "--ds-table-header-letter-spacing",
+    "Table/Header/marginBlockEnd": "--ds-table-header-margin-block-end",
+    "Table/Header/textDecoration": "--ds-table-header-text-decoration",
+    "Table/Header/textIndent": "--ds-table-header-text-indent",
+    "Table/Header/textTransform": "--ds-table-header-text-transform",
+    "Table/Numeric/Base": "--ds-table-numeric-base",
+    "Table/Numeric/Base/letterSpacing": "--ds-table-numeric-base-letter-spacing",
+    "Table/Numeric/Base/marginBlockEnd": "--ds-table-numeric-base-margin-block-end",
+    "Table/Numeric/Base/textDecoration": "--ds-table-numeric-base-text-decoration",
+    "Table/Numeric/Base/textIndent": "--ds-table-numeric-base-text-indent",
+    "Table/Numeric/Base/textTransform": "--ds-table-numeric-base-text-transform",
+    "Title/1": "--ds-title-1",
+    "Title/1/letterSpacing": "--ds-title-1-letter-spacing",
+    "Title/1/marginBlockEnd": "--ds-title-1-margin-block-end",
+    "Title/1/textDecoration": "--ds-title-1-text-decoration",
+    "Title/1/textIndent": "--ds-title-1-text-indent",
+    "Title/1/textTransform": "--ds-title-1-text-transform",
+    "Title/2": "--ds-title-2",
+    "Title/2/letterSpacing": "--ds-title-2-letter-spacing",
+    "Title/2/marginBlockEnd": "--ds-title-2-margin-block-end",
+    "Title/2/textDecoration": "--ds-title-2-text-decoration",
+    "Title/2/textIndent": "--ds-title-2-text-indent",
+    "Title/2/textTransform": "--ds-title-2-text-transform",
+    "borderWidth/thick": "--ds-border-width-thick",
+    "borderWidth/thin": "--ds-border-width-thin",
+    "breakpoints/desktop": "--ds-breakpoints-desktop",
+    "breakpoints/mobile": "--ds-breakpoints-mobile",
+    "breakpoints/tablet": "--ds-breakpoints-tablet",
+    "button/background": "--ds-button-background",
+    "button/background-hover": "--ds-button-background-hover",
+    "button/border": "--ds-button-border",
+    "button/height": "--ds-button-height",
+    "button/padding": "--ds-button-padding",
+    "button/radius": "--ds-button-radius",
+    "button/text": "--ds-button-text",
+    "card/background": "--ds-card-background",
+    "card/gap": "--ds-card-gap",
+    "card/radius": "--ds-card-radius",
+    "card/shadow": "--ds-card-shadow",
+    "color/backdrop": "--ds-color-backdrop",
+    "color/brand/deep": "--ds-color-brand-deep",
+    "color/brand/hover": "--ds-color-brand-hover",
+    "color/brand/pressed": "--ds-color-brand-pressed",
+    "color/brand/primary": "--ds-color-brand-primary",
+    "color/divider": "--ds-color-divider",
+    "color/interaction/stroke/neutral/primary": "--ds-color-interaction-stroke-neutral-primary",
+    "color/interaction/stroke/neutral/secondary": "--ds-color-interaction-stroke-neutral-secondary",
+    "color/page": "--ds-color-page",
+    "color/status/info/background": "--ds-color-status-info-background",
+    "color/status/info/indicator": "--ds-color-status-info-indicator",
+    "color/status/info/stroke": "--ds-color-status-info-stroke",
+    "color/status/info/text": "--ds-color-status-info-text",
+    "color/status/negative/background": "--ds-color-status-negative-background",
+    "color/status/negative/indicator": "--ds-color-status-negative-indicator",
+    "color/status/negative/stroke": "--ds-color-status-negative-stroke",
+    "color/status/negative/text": "--ds-color-status-negative-text",
+    "color/status/positive/background": "--ds-color-status-positive-background",
+    "color/status/positive/indicator": "--ds-color-status-positive-indicator",
+    "color/status/positive/stroke": "--ds-color-status-positive-stroke",
+    "color/status/positive/text": "--ds-color-status-positive-text",
+    "color/status/warning/background": "--ds-color-status-warning-background",
+    "color/status/warning/indicator": "--ds-color-status-warning-indicator",
+    "color/status/warning/stroke": "--ds-color-status-warning-stroke",
+    "color/status/warning/text": "--ds-color-status-warning-text",
+    "color/surface/fresh": "--ds-color-surface-fresh",
+    "color/surface/level0": "--ds-color-surface-level0",
+    "color/surface/level1": "--ds-color-surface-level1",
+    "color/surface/level2": "--ds-color-surface-level2",
+    "color/text/accent": "--ds-color-text-accent",
+    "color/text/highlight": "--ds-color-text-highlight",
+    "color/text/inverted/primary": "--ds-color-text-inverted-primary",
+    "color/text/inverted/secondary": "--ds-color-text-inverted-secondary",
+    "color/text/primary": "--ds-color-text-primary",
+    "color/text/secondary": "--ds-color-text-secondary",
+    "color/text/tertiary": "--ds-color-text-tertiary",
+    "colors/black": "--ds-colors-black",
+    "colors/ember/1": "--ds-colors-ember-1",
+    "colors/ember/10": "--ds-colors-ember-10",
+    "colors/ember/2": "--ds-colors-ember-2",
+    "colors/ember/3": "--ds-colors-ember-3",
+    "colors/ember/4": "--ds-colors-ember-4",
+    "colors/ember/5": "--ds-colors-ember-5",
+    "colors/ember/6": "--ds-colors-ember-6",
+    "colors/ember/7": "--ds-colors-ember-7",
+    "colors/ember/8": "--ds-colors-ember-8",
+    "colors/ember/9": "--ds-colors-ember-9",
+    "colors/moss/0": "--ds-colors-moss-0",
+    "colors/moss/1": "--ds-colors-moss-1",
+    "colors/moss/10": "--ds-colors-moss-10",
+    "colors/moss/2": "--ds-colors-moss-2",
+    "colors/moss/3": "--ds-colors-moss-3",
+    "colors/moss/4": "--ds-colors-moss-4",
+    "colors/moss/5": "--ds-colors-moss-5",
+    "colors/moss/6": "--ds-colors-moss-6",
+    "colors/moss/7": "--ds-colors-moss-7",
+    "colors/moss/8": "--ds-colors-moss-8",
+    "colors/moss/9": "--ds-colors-moss-9",
+    "colors/neutral/1": "--ds-colors-neutral-1",
+    "colors/neutral/10": "--ds-colors-neutral-10",
+    "colors/neutral/2": "--ds-colors-neutral-2",
+    "colors/neutral/3": "--ds-colors-neutral-3",
+    "colors/neutral/4": "--ds-colors-neutral-4",
+    "colors/neutral/5": "--ds-colors-neutral-5",
+    "colors/neutral/6": "--ds-colors-neutral-6",
+    "colors/neutral/7": "--ds-colors-neutral-7",
+    "colors/neutral/8": "--ds-colors-neutral-8",
+    "colors/neutral/9": "--ds-colors-neutral-9",
+    "colors/ocean/1": "--ds-colors-ocean-1",
+    "colors/ocean/10": "--ds-colors-ocean-10",
+    "colors/ocean/11": "--ds-colors-ocean-11",
+    "colors/ocean/2": "--ds-colors-ocean-2",
+    "colors/ocean/3": "--ds-colors-ocean-3",
+    "colors/ocean/4": "--ds-colors-ocean-4",
+    "colors/ocean/5": "--ds-colors-ocean-5",
+    "colors/ocean/6": "--ds-colors-ocean-6",
+    "colors/ocean/7": "--ds-colors-ocean-7",
+    "colors/ocean/8": "--ds-colors-ocean-8",
+    "colors/ocean/9": "--ds-colors-ocean-9",
+    "colors/plum/1": "--ds-colors-plum-1",
+    "colors/plum/10": "--ds-colors-plum-10",
+    "colors/plum/2": "--ds-colors-plum-2",
+    "colors/plum/3": "--ds-colors-plum-3",
+    "colors/plum/4": "--ds-colors-plum-4",
+    "colors/plum/5": "--ds-colors-plum-5",
+    "colors/plum/6": "--ds-colors-plum-6",
+    "colors/plum/7": "--ds-colors-plum-7",
+    "colors/plum/8": "--ds-colors-plum-8",
+    "colors/plum/9": "--ds-colors-plum-9",
+    "colors/sun/0": "--ds-colors-sun-0",
+    "colors/sun/1": "--ds-colors-sun-1",
+    "colors/sun/10": "--ds-colors-sun-10",
+    "colors/sun/2": "--ds-colors-sun-2",
+    "colors/sun/3": "--ds-colors-sun-3",
+    "colors/sun/4": "--ds-colors-sun-4",
+    "colors/sun/5": "--ds-colors-sun-5",
+    "colors/sun/6": "--ds-colors-sun-6",
+    "colors/sun/7": "--ds-colors-sun-7",
+    "colors/sun/8": "--ds-colors-sun-8",
+    "colors/sun/9": "--ds-colors-sun-9",
+    "colors/white": "--ds-colors-white",
+    "content/max-width": "--ds-content-max-width",
+    "content/min-width": "--ds-content-min-width",
+    "controls/height/medium": "--ds-controls-height-medium",
+    "controls/height/small": "--ds-controls-height-small",
+    "controls/minTarget": "--ds-controls-min-target",
+    "deviceName": "--ds-device-name",
+    "dimension/0_25x": "--ds-dimension-0-25x",
+    "dimension/0_5x": "--ds-dimension-0-5x",
+    "dimension/0x": "--ds-dimension-0x",
+    "dimension/10x": "--ds-dimension-10x",
+    "dimension/12x": "--ds-dimension-12x",
+    "dimension/16x": "--ds-dimension-16x",
+    "dimension/1x": "--ds-dimension-1x",
+    "dimension/2x": "--ds-dimension-2x",
+    "dimension/3x": "--ds-dimension-3x",
+    "dimension/4x": "--ds-dimension-4x",
+    "dimension/6x": "--ds-dimension-6x",
+    "dimension/8x": "--ds-dimension-8x",
+    "duration/fast": "--ds-duration-fast",
+    "duration/normal": "--ds-duration-normal",
+    "duration/slow": "--ds-duration-slow",
+    "easing/exit": "--ds-easing-exit",
+    "easing/standard": "--ds-easing-standard",
+    "fontFamilies/base": "--ds-font-families-base",
+    "fontFamilies/mono": "--ds-font-families-mono",
+    "fontSizes/body/base": "--ds-font-sizes-body-base",
+    "fontSizes/body/large": "--ds-font-sizes-body-large",
+    "fontSizes/body/small": "--ds-font-sizes-body-small",
+    "fontSizes/metric/base": "--ds-font-sizes-metric-base",
+    "fontSizes/mono/base": "--ds-font-sizes-mono-base",
+    "fontSizes/title/1": "--ds-font-sizes-title-1",
+    "fontSizes/title/2": "--ds-font-sizes-title-2",
+    "fontWeights/bold": "--ds-font-weights-bold",
+    "fontWeights/medium": "--ds-font-weights-medium",
+    "fontWeights/regular": "--ds-font-weights-regular",
+    "fontWeights/semibold": "--ds-font-weights-semibold",
+    "layout/grid/columns": "--ds-layout-grid-columns",
+    "layout/grid/gutter": "--ds-layout-grid-gutter",
+    "layout/grid/margin": "--ds-layout-grid-margin",
+    "letterSpacings/default": "--ds-letter-spacings-default",
+    "letterSpacings/tight1": "--ds-letter-spacings-tight1",
+    "letterSpacings/tight2": "--ds-letter-spacings-tight2",
+    "letterSpacings/wide1": "--ds-letter-spacings-wide1",
+    "letterSpacings/wide2": "--ds-letter-spacings-wide2",
+    "lineHeights/body/base": "--ds-line-heights-body-base",
+    "lineHeights/body/large": "--ds-line-heights-body-large",
+    "lineHeights/body/small": "--ds-line-heights-body-small",
+    "lineHeights/metric/base": "--ds-line-heights-metric-base",
+    "lineHeights/mono/base": "--ds-line-heights-mono-base",
+    "lineHeights/title/1": "--ds-line-heights-title-1",
+    "lineHeights/title/2": "--ds-line-heights-title-2",
+    "opacity/disabled": "--ds-opacity-disabled",
+    "opacity/full": "--ds-opacity-full",
+    "opacity/hover": "--ds-opacity-hover",
+    "opacity/medium": "--ds-opacity-medium",
+    "opacity/none": "--ds-opacity-none",
+    "opacity/subtle": "--ds-opacity-subtle",
+    "paragraphIndents/none": "--ds-paragraph-indents-none",
+    "paragraphSpacings/m": "--ds-paragraph-spacings-m",
+    "paragraphSpacings/none": "--ds-paragraph-spacings-none",
+    "paragraphSpacings/s": "--ds-paragraph-spacings-s",
+    "radius/full": "--ds-radius-full",
+    "radius/md": "--ds-radius-md",
+    "radius/none": "--ds-radius-none",
+    "radius/sm": "--ds-radius-sm",
+    "radius/xs": "--ds-radius-xs",
+    "shadow/elevation/1": "--ds-shadow-elevation-1",
+    "shadow/elevation/2": "--ds-shadow-elevation-2",
+    "spacing/component/gap": "--ds-spacing-component-gap",
+    "spacing/inset/l": "--ds-spacing-inset-l",
+    "spacing/inset/m": "--ds-spacing-inset-m",
+    "spacing/inset/s": "--ds-spacing-inset-s",
+    "spacing/stack/1x": "--ds-spacing-stack-1x",
+    "spacing/stack/2x": "--ds-spacing-stack-2x",
+    "spacing/stack/4x": "--ds-spacing-stack-4x",
+    "textCase/default": "--ds-text-case-default",
+    "textCase/upper": "--ds-text-case-upper",
+    "textDecorations/default": "--ds-text-decorations-default",
+    "textDecorations/underline": "--ds-text-decorations-underline",
+    "zIndex/base": "--ds-z-index-base",
+    "zIndex/modal": "--ds-z-index-modal",
+    "zIndex/overlay": "--ds-z-index-overlay",
+  },
+  "prefix": "--ds-",
+  "transform": "Each Figma path becomes a CSS variable: kebab-case each segment then join with '-' and prepend '--ds-'.",
+}
+`;
