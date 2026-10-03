@@ -22,7 +22,7 @@ import {
 } from '@formtrieb/tokens-core';
 // Internal module of the resolver: exports the transform list and, on import,
 // registers sd-transforms + the `isSource` filter on the shared StyleDictionary.
-import { TRANSFORMS } from '../../packages/resolver/src/build/style-dictionary.js';
+import { TRANSFORMS, TRANSFORM_GROUP } from '../../packages/resolver/src/build/style-dictionary.js';
 
 export interface TokenSystem {
   dir: string;
@@ -103,7 +103,7 @@ export async function readWithStyleDictionary(
     platforms: {
       css: {
         prefix: 'x-',
-        transformGroup: 'tokens-studio',
+        transformGroup: TRANSFORM_GROUP,
         transforms: TRANSFORMS,
       },
     },

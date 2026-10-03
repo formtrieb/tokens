@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import StyleDictionary from 'style-dictionary';
 import type { DesignTokens } from 'style-dictionary/types';
-import { isPathPrivate, TRANSFORMS } from './style-dictionary.js';
+import { applyColorModifier } from '@formtrieb/tokens-core';
+import { isPathPrivate, TRANSFORMS, TRANSFORM_GROUP } from './style-dictionary.js';
 
 describe('isPathPrivate', () => {
 	it('respects the * default prefix', () => {
@@ -31,12 +32,16 @@ describe('isPathPrivate', () => {
 describe('effective transform list', () => {
 	// Importing the module above ran register(), so the group exists.
 	const effective = () => [
-		...StyleDictionary.hooks.transformGroups['tokens-studio'],
+		...StyleDictionary.hooks.transformGroups[TRANSFORM_GROUP],
 		...TRANSFORMS,
 	];
 
-	it('applies ts/color/modifiers exactly once', () => {
-		expect(effective().filter((t) => t === 'ts/color/modifiers')).toHaveLength(1);
+	it('applies the core colour modifiers exactly once', () => {
+		expect(effective().filter((t) => t === 'formtrieb/color/modifiers')).toHaveLength(1);
+	});
+
+	it('no longer applies sd-transforms colour modifiers', () => {
+		expect(effective()).not.toContain('ts/color/modifiers');
 	});
 
 	it('introduces no duplicate beyond the known, accepted ones', () => {
@@ -73,7 +78,7 @@ describe('size transforms through the whole chain', () => {
 			log: { warnings: 'disabled', verbosity: 'silent' },
 			tokens,
 			preprocessors: ['tokens-studio'],
-			platforms: { css: { transformGroup: 'tokens-studio', transforms: TRANSFORMS } },
+			platforms: { css: { transformGroup: TRANSFORM_GROUP, transforms: TRANSFORMS } },
 		});
 		const dictionary = await sd.getPlatformTokens('css');
 		return Object.fromEntries(
@@ -101,5 +106,48 @@ describe('size transforms through the whole chain', () => {
 		});
 		expect(out['spacing.md']).toBe('1rem');
 		expect(out['fontSizes.body']).toBe('0.875rem');
+	});
+});
+
+/**
+ * Colour is computed in one place: tokens-core. The resolver ships its
+ * `srgb` output, so a modified colour in the CSS is exactly what core says.
+ */
+describe('colour modifiers through the whole chain', () => {
+	async function transformed(tokens: DesignTokens) {
+		const sd = new StyleDictionary({
+			log: { warnings: 'disabled', verbosity: 'silent' },
+			tokens,
+			preprocessors: ['tokens-studio'],
+			platforms: { css: { transformGroup: TRANSFORM_GROUP, transforms: TRANSFORMS } },
+		});
+		const dictionary = await sd.getPlatformTokens('css');
+		return Object.fromEntries(
+			dictionary.allTokens.map((t) => [t.path.join('.'), t.$value ?? t.value]),
+		);
+	}
+	const modify = (m: Record<string, string>) => ({ 'studio.tokens': { modify: m } });
+
+	// Referenced, like every ramp step in a real token set: the modifier is
+	// deferred until the reference resolves and its output ships verbatim.
+	it('ships core\'s value for an out-of-gamut lch base', async () => {
+		const m = { type: 'lighten', value: '0', space: 'lch' };
+		const out = await transformed({
+			l: { $type: 'number', $value: '97' },
+			c: { $type: 'color', $value: 'lch({l}% 84 40)', $extensions: modify(m) },
+		});
+		expect(out.c).toBe(applyColorModifier('lch(97% 84 40)', m, 'srgb'));
+	});
+
+	it('resolves a referenced modifier value before applying it', async () => {
+		const m = { type: 'alpha', value: '{alpha.secondary}', space: 'lch' };
+		const out = await transformed({
+			alpha: { secondary: { $type: 'number', $value: '0.56' } },
+			black: { $type: 'color', $value: '#000000' },
+			text: { $type: 'color', $value: '{black}', $extensions: modify(m) },
+		});
+		expect(out.text).toBe(
+			applyColorModifier('#000000', { ...m, value: '0.56' }, 'srgb'),
+		);
 	});
 });

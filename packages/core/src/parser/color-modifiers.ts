@@ -30,3 +30,28 @@ export function darkenLch(color: LchColor, amount: number): LchColor {
     c: Math.max(0, color.c - amount * color.c),
   };
 }
+
+/**
+ * The other spaces sd-transforms knows. hsl moves lightness like lch does
+ * (without touching saturation); srgb and p3 move every channel by the same
+ * fraction of its distance to 1 (lighten) or 0 (darken).
+ */
+type Channels = { r: number; g: number; b: number };
+
+export function lightenChannels<T extends Channels>(color: T, amount: number): T {
+  const up = (v: number) => Math.min(1, v + amount * (1 - v));
+  return { ...color, r: up(color.r), g: up(color.g), b: up(color.b) };
+}
+
+export function darkenChannels<T extends Channels>(color: T, amount: number): T {
+  const down = (v: number) => Math.max(0, v - amount * v);
+  return { ...color, r: down(color.r), g: down(color.g), b: down(color.b) };
+}
+
+export function lightenHsl<T extends { l: number }>(color: T, amount: number): T {
+  return { ...color, l: Math.min(1, color.l + (1 - color.l) * amount) };
+}
+
+export function darkenHsl<T extends { l: number }>(color: T, amount: number): T {
+  return { ...color, l: Math.max(0, color.l - color.l * amount) };
+}

@@ -6,24 +6,32 @@
  */
 
 import { register, type TransformOptions } from '@tokens-studio/sd-transforms';
+import { applyColorModifier, type ColorModifier } from '@formtrieb/tokens-core';
 import StyleDictionary from 'style-dictionary';
-import { outputReferencesTransformed } from 'style-dictionary/utils';
+import { outputReferencesTransformed, usesReferences } from 'style-dictionary/utils';
 import { transforms } from 'style-dictionary/enums';
 import type { TransformedToken, Dictionary, ValueTransform } from 'style-dictionary/types';
 import type { Theme } from '../shared/types.js';
 import type { Config } from '../types.js';
 
 /**
- * Platform-level transforms, appended by Style Dictionary to whatever the
- * `tokens-studio` transformGroup already provides. Only list transforms the
- * group does NOT provide, or ones that must deliberately run after it —
- * `name/kebab` overrides the group's trailing `name/camel`.
+ * Platform-level transforms, appended by Style Dictionary to whatever
+ * TRANSFORM_GROUP already provides. Only list transforms the group does NOT
+ * provide, or ones that must deliberately run after it — `name/kebab`
+ * overrides the group's trailing `name/camel`.
  *
- * Never list `ts/color/modifiers` here: the group supplies it, already
- * configured with `format: 'srgb'` from TRANSFORM_OPTIONS, and a second entry
+ * Never list COLOR_MODIFIERS here: the group supplies it, and a second entry
  * would apply every darken/lighten twice.
  */
 export const PX_TO_REM = 'formtrieb/size/pxToRem';
+export const COLOR_MODIFIERS = 'formtrieb/color/modifiers';
+
+/**
+ * sd-transforms' `tokens-studio` group with its `ts/color/modifiers` swapped
+ * for COLOR_MODIFIERS. Colour is computed by tokens-core alone; the resolver
+ * carries no colour maths of its own.
+ */
+export const TRANSFORM_GROUP = 'formtrieb/tokens-studio';
 
 export const TRANSFORMS = [
 	'ts/resolveMath',
@@ -44,9 +52,6 @@ const TRANSFORM_OPTIONS: TransformOptions = {
 	name: 'tokens-studio',
 	excludeParentKeys: false,
 	alwaysAddFontStyle: false,
-	['ts/color/modifiers']: {
-		format: 'srgb',
-	},
 };
 
 /**
@@ -79,6 +84,36 @@ StyleDictionary.registerFilter({
 });
 
 register(StyleDictionary, TRANSFORM_OPTIONS);
+
+/**
+ * Tokens Studio's `modify` extension, computed by tokens-core and shipped in
+ * its `srgb` form — `rgb(r% g% b% / a)`, the shape sd-transforms wrote with
+ * `format: 'srgb'`. Same filter and same deferral as `ts/color/modifiers`:
+ * while the modifier still holds a reference, return undefined so Style
+ * Dictionary retries once references are resolved.
+ */
+const sdModifiers = StyleDictionary.hooks.transforms['ts/color/modifiers'] as ValueTransform;
+StyleDictionary.registerTransform({
+	name: COLOR_MODIFIERS,
+	type: 'value',
+	transitive: true,
+	filter: sdModifiers.filter,
+	transform: (token) => {
+		const modifier = token.$extensions?.['studio.tokens']?.modify as ColorModifier;
+		if (usesReferences(modifier) || Object.values(modifier).some((v) => usesReferences(v))) {
+			return undefined;
+		}
+		const value = token.$value ?? token.value;
+		return applyColorModifier(value, modifier, 'srgb') ?? value;
+	},
+});
+
+StyleDictionary.registerTransformGroup({
+	name: TRANSFORM_GROUP,
+	transforms: StyleDictionary.hooks.transformGroups[TRANSFORM_OPTIONS.name!].map((t) =>
+		t === 'ts/color/modifiers' ? COLOR_MODIFIERS : t,
+	),
+});
 
 /**
  * `size/pxToRem`, but only for values that are px or unitless. Style
@@ -141,7 +176,7 @@ export async function buildTheme(
 			platforms: {
 				css: {
 					prefix,
-					transformGroup: 'tokens-studio',
+					transformGroup: TRANSFORM_GROUP,
 					transforms: TRANSFORMS,
 					buildPath: `${buildPath}/`,
 					files: [

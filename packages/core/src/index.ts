@@ -26,7 +26,7 @@ export {
   resolveLchToHexWithGamut,
   formatColor,
 } from "./parser/color-resolver.js";
-export type { ColorFormat } from "./parser/color-resolver.js";
+export type { ColorFormat, ModifierOutput } from "./parser/color-resolver.js";
 export { findColorMatches } from "./parser/color-match.js";
 export type {
   ColorCandidate,

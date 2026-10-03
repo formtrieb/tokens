@@ -147,6 +147,7 @@ export class ReferenceResolver {
    * any reference in the value against the token map before the modifier is
    * applied — otherwise parseFloat sees a `{...}` literal, yields NaN, and the
    * modifier is silently dropped, leaving the base colour as the final value.
+   * The same holds for the target colour of a `mix`.
    */
   private resolveModifierValue(
     modify: ColorModifier,
@@ -154,16 +155,15 @@ export class ReferenceResolver {
     walk: Walk,
     depth: number
   ): ColorModifier {
-    if (typeof modify.value === "string" && modify.value.includes("{")) {
-      const resolved = this.resolveStringValue(
-        modify.value,
-        chain,
-        walk,
-        depth
-      );
-      return { ...modify, value: String(resolved) };
-    }
-    return modify;
+    const resolveField = (field: string | undefined) =>
+      typeof field === "string" && field.includes("{")
+        ? String(this.resolveStringValue(field, chain, walk, depth))
+        : field;
+    return {
+      ...modify,
+      value: resolveField(modify.value)!,
+      ...(modify.color !== undefined && { color: resolveField(modify.color) }),
+    };
   }
 
   private resolveStringValue(
