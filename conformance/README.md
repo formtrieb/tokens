@@ -66,14 +66,13 @@ purpose with `--update-baseline`, never silently.
 
 ## What the synthetic fixture pins
 
-300 match, 4 rounding, 1 divergent, 21 composite not compared.
+304 match, 0 rounding, 1 divergent, 21 composite not compared.
 
 - The divergent case is the mixed-unit max-width above, kept on purpose.
-- The 4 rounding cases are **chained modifiers** (`darken` on an lch ramp
-  step, `srgb` lighten on one): core's reference resolver rounds every
-  intermediate colour to 8-bit hex, the resolver carries the unrounded value
-  into the next modifier. Both use core's maths; they differ in where they
-  quantise.
+- Chained modifiers (`darken` on an lch ramp step, `srgb` lighten on one)
+  used to land one 8-bit step apart: core rounded every intermediate colour
+  to hex, the resolver carried the unrounded value on. *Since FOR-504 core
+  rounds once, for output.*
 
 This instrument is scaffolding. Once core is the only reader and resolver,
 the resolver's own snapshot test guards both sides and this folder can go.

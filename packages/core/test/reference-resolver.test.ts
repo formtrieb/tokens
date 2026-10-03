@@ -184,3 +184,49 @@ describe("ReferenceResolver — mix modifier", () => {
     );
   });
 });
+
+/**
+ * The resolver hands the unrounded value of one modifier to the next (an
+ * lch() string, or the srgb output). core must round only once, for output —
+ * rounding every step to hex lands one 8-bit step off at chain ends.
+ */
+describe("ReferenceResolver — modifier chains round once", () => {
+  const lighten0 = { type: "lighten", value: "0", space: "lch" } as const;
+  const darken = { type: "darken", value: "0.2", space: "lch" } as const;
+  const tokens = () =>
+    buildTokenMap({
+      l: { $type: "number", $value: "62%" },
+      ramp: {
+        $type: "color",
+        $value: "lch({l} 72 250)",
+        $extensions: { "studio.tokens": { modify: { ...lighten0 } } },
+      },
+      hover: {
+        $type: "color",
+        $value: "{ramp}",
+        $extensions: { "studio.tokens": { modify: { ...darken } } },
+      },
+    });
+
+  it("applies the modifier to the lch value, not to its hex", () => {
+    // Out of gamut: rounding to hex first and re-mapping moves red by one.
+    const map = buildTokenMap({
+      teal: {
+        $type: "color",
+        $value: "lch(49% 60 180)",
+        $extensions: { "studio.tokens": { modify: { ...lighten0 } } },
+      },
+    });
+    expect(new ReferenceResolver(map).resolve("teal").finalValue).toBe(
+      applyColorModifier("lch(49% 60 180)", lighten0)
+    );
+  });
+
+  it("chains on the unrounded value of the referenced modifier", () => {
+    const unrounded = applyColorModifier("lch(62% 72 250)", lighten0, "srgb")!;
+    const expected = applyColorModifier(unrounded, darken);
+    // The case is chosen so that rounding in between lands elsewhere.
+    expect(expected).not.toBe(applyColorModifier(applyColorModifier("lch(62% 72 250)", lighten0)!, darken));
+    expect(new ReferenceResolver(tokens()).resolve("hover").finalValue).toBe(expected);
+  });
+});
