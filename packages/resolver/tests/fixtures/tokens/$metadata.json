@@ -1,0 +1,17 @@
+{
+  "tokenSetOrder": [
+    "Foundation/Helpers",
+    "Foundation/Foundation",
+    "Semantic/Helpers",
+    "Semantic/Light",
+    "Semantic/Dark",
+    "Device/Desktop",
+    "Device/Tablet",
+    "Device/Mobile",
+    "Shape/Round",
+    "Shape/Sharp",
+    "Typography/Typography",
+    "Components/Button",
+    "Components/Card"
+  ]
+}

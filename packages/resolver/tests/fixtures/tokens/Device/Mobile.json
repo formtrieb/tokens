@@ -1,0 +1,184 @@
+{
+  "deviceName": {
+    "$type": "text",
+    "$value": "mobile"
+  },
+  "spacing": {
+    "stack": {
+      "1x": {
+        "$type": "dimension",
+        "$value": "{dimension.1x}"
+      },
+      "2x": {
+        "$type": "dimension",
+        "$value": "{dimension.2x}"
+      },
+      "4x": {
+        "$type": "dimension",
+        "$value": "{dimension.3x}"
+      }
+    },
+    "inset": {
+      "s": {
+        "$type": "dimension",
+        "$value": "{dimension.2x}"
+      },
+      "m": {
+        "$type": "dimension",
+        "$value": "{dimension.3x}"
+      },
+      "l": {
+        "$type": "dimension",
+        "$value": "{dimension.4x}"
+      }
+    },
+    "component": {
+      "gap": {
+        "$type": "dimension",
+        "$value": "{dimension.2x}"
+      }
+    }
+  },
+  "layout": {
+    "grid": {
+      "columns": {
+        "$type": "number",
+        "$value": "4"
+      },
+      "margin": {
+        "$type": "dimension",
+        "$value": "{dimension.4x}"
+      },
+      "gutter": {
+        "$type": "dimension",
+        "$value": "{dimension.4x}"
+      }
+    },
+    "*screensize": {
+      "min": {
+        "$type": "dimension",
+        "$value": "{breakpoints.mobile}"
+      },
+      "max": {
+        "$type": "dimension",
+        "$value": "2400px"
+      }
+    }
+  },
+  "content": {
+    "min-width": {
+      "$type": "dimension",
+      "$value": "{breakpoints.mobile}"
+    },
+    "max-width": {
+      "$type": "dimension",
+      "$value": "100%"
+    }
+  },
+  "paragraphSpacings": {
+    "none": {
+      "$type": "paragraphSpacing",
+      "$value": "{dimension.0x}"
+    },
+    "s": {
+      "$type": "paragraphSpacing",
+      "$value": "{dimension.2x}"
+    },
+    "m": {
+      "$type": "paragraphSpacing",
+      "$value": "{dimension.4x}"
+    }
+  },
+  "fontSizes": {
+    "title": {
+      "1": {
+        "$type": "fontSizes",
+        "$value": "{dimension.8x}"
+      },
+      "2": {
+        "$type": "fontSizes",
+        "$value": "{dimension.6x}"
+      }
+    },
+    "body": {
+      "small": {
+        "$type": "fontSizes",
+        "$value": "14"
+      },
+      "base": {
+        "$type": "fontSizes",
+        "$value": "{dimension.4x}"
+      },
+      "large": {
+        "$type": "fontSizes",
+        "$value": "18px"
+      }
+    },
+    "mono": {
+      "base": {
+        "$type": "fontSizes",
+        "$value": "14px"
+      }
+    },
+    "metric": {
+      "base": {
+        "$type": "fontSizes",
+        "$value": "{dimension.8x}"
+      }
+    }
+  },
+  "lineHeights": {
+    "title": {
+      "1": {
+        "$type": "lineHeights",
+        "$value": "{dimension.10x}"
+      },
+      "2": {
+        "$type": "lineHeights",
+        "$value": "{dimension.8x}"
+      }
+    },
+    "body": {
+      "small": {
+        "$type": "lineHeights",
+        "$value": "20px"
+      },
+      "base": {
+        "$type": "lineHeights",
+        "$value": "150%"
+      },
+      "large": {
+        "$type": "lineHeights",
+        "$value": "28px"
+      }
+    },
+    "mono": {
+      "base": {
+        "$type": "lineHeights",
+        "$value": "20px"
+      }
+    },
+    "metric": {
+      "base": {
+        "$type": "lineHeights",
+        "$value": "120%"
+      }
+    }
+  },
+  "controls": {
+    "minTarget": {
+      "$type": "dimension",
+      "$value": "{dimension.12x}"
+    },
+    "height": {
+      "small": {
+        "$type": "dimension",
+        "$value": "{dimension.6x}"
+      },
+      "medium": {
+        "$type": "dimension",
+        "$value": "{dimension.10x}"
+      }
+    }
+  }
+}

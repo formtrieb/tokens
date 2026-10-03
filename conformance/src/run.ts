@@ -23,7 +23,7 @@ import {
 } from './machines.js';
 
 export const REPO_ROOT = fileURLToPath(new URL('../..', import.meta.url));
-export const DEFAULT_TOKENS = join(REPO_ROOT, 'packages/resolver/tokens');
+export const DEFAULT_TOKENS = join(REPO_ROOT, 'packages/resolver/tests/fixtures/tokens');
 export const DEFAULT_BASELINE = join(REPO_ROOT, 'conformance/baseline.json');
 const DEFAULT_OUT = join(REPO_ROOT, 'conformance/out');
 

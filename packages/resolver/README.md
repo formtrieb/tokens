@@ -178,7 +178,7 @@ The CLI auto-discovers `formtrieb-tokens.config.{ts,mjs,js}` by walking from `cw
 
 | Key                          | Type                                  | Default  | Purpose                                                                                                                              |
 | ---------------------------- | ------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `prefix`                     | `string`                              | required | CSS variable + utility-class prefix (e.g. `mp-` → `--ds-color-…`, `.ds-display-1`).                                                  |
+| `prefix`                     | `string`                              | required | CSS variable + utility-class prefix (e.g. `ds-` → `--ds-color-…`, `.ds-display-1`).                                                  |
 | `paths`                      | `{ tokens, output, tokenMap }`        | required | Input tokens dir, CSS output dir, and token-map JSON path.                                                                           |
 | `output.bundle`              | `boolean`                             | `true`   | Whether to emit `bundle.css` (everything inlined). Set `false` if consumers always pull `main.css` and you don't need the bundle.    |
 | `privateTokenPrefixes`       | `string[]`                            | `['*']`  | Path-segment prefixes that mark a token as private — excluded from CSS output **and** from `token-map.json`. Default hides `*foo` segments. |

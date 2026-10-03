@@ -1,0 +1,176 @@
+{
+  "_base": {
+    "$type": "dimension",
+    "$value": "16px"
+  },
+  "number": {
+    "colors": {
+      "lightness": {
+        "1": {
+          "$type": "number",
+          "$value": "97"
+        },
+        "2": {
+          "$type": "number",
+          "$value": "93%"
+        },
+        "3": {
+          "$type": "number",
+          "$value": "86%"
+        },
+        "4": {
+          "$type": "number",
+          "$value": "78%"
+        },
+        "5": {
+          "$type": "number",
+          "$value": "70%"
+        },
+        "6": {
+          "$type": "number",
+          "$value": "62%"
+        },
+        "7": {
+          "$type": "number",
+          "$value": "54%"
+        },
+        "8": {
+          "$type": "number",
+          "$value": "45%"
+        },
+        "9": {
+          "$type": "number",
+          "$value": "36%"
+        },
+        "10": {
+          "$type": "number",
+          "$value": "26%"
+        }
+      },
+      "chroma": {
+        "1": {
+          "$type": "number",
+          "$value": "12"
+        },
+        "2": {
+          "$type": "number",
+          "$value": "24"
+        },
+        "3": {
+          "$type": "number",
+          "$value": "38"
+        },
+        "4": {
+          "$type": "number",
+          "$value": "52"
+        },
+        "5": {
+          "$type": "number",
+          "$value": "64"
+        },
+        "6": {
+          "$type": "number",
+          "$value": "72"
+        },
+        "7": {
+          "$type": "number",
+          "$value": "70"
+        },
+        "8": {
+          "$type": "number",
+          "$value": "62"
+        },
+        "9": {
+          "$type": "number",
+          "$value": "50"
+        },
+        "10": {
+          "$type": "number",
+          "$value": "38"
+        }
+      },
+      "neutral": {
+        "baseChroma": {
+          "$type": "number",
+          "$value": "0%"
+        },
+        "baseHue": {
+          "$type": "number",
+          "$value": "210"
+        }
+      },
+      "ocean": {
+        "baseHue": {
+          "$type": "number",
+          "$value": "250"
+        }
+      },
+      "ember": {
+        "baseHue": {
+          "$type": "number",
+          "$value": "30"
+        }
+      },
+      "moss": {
+        "baseHue": {
+          "$type": "number",
+          "$value": "140"
+        }
+      },
+      "sun": {
+        "baseHue": {
+          "$type": "number",
+          "$value": "92"
+        }
+      },
+      "plum": {
+        "baseHue": {
+          "$type": "number",
+          "$value": "320"
+        },
+        "chroma": {
+          "1": {
+            "$type": "number",
+            "$value": "{number.colors.chroma.1}*0.5"
+          },
+          "2": {
+            "$type": "number",
+            "$value": "{number.colors.chroma.2}*0.5"
+          },
+          "3": {
+            "$type": "number",
+            "$value": "{number.colors.chroma.3}*0.5"
+          },
+          "4": {
+            "$type": "number",
+            "$value": "{number.colors.chroma.4}*0.5"
+          },
+          "5": {
+            "$type": "number",
+            "$value": "{number.colors.chroma.5}*0.5"
+          },
+          "6": {
+            "$type": "number",
+            "$value": "{number.colors.chroma.6}*0.5"
+          },
+          "7": {
+            "$type": "number",
+            "$value": "{number.colors.chroma.7}*0.5"
+          },
+          "8": {
+            "$type": "number",
+            "$value": "{number.colors.chroma.8}*0.5"
+          },
+          "9": {
+            "$type": "number",
+            "$value": "{number.colors.chroma.9}*0.5"
+          },
+          "10": {
+            "$type": "number",
+            "$value": "{number.colors.chroma.10}*0.5"
+          }
+        }
+      }
+    }
+  }
+}

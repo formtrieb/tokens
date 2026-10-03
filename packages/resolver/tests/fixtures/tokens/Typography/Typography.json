@@ -1,0 +1,326 @@
+{
+  "letterSpacings": {
+    "tight2": {
+      "$type": "letterSpacing",
+      "$value": "-3%"
+    },
+    "tight1": {
+      "$type": "letterSpacing",
+      "$value": "-1%"
+    },
+    "default": {
+      "$type": "letterSpacing",
+      "$value": "0%"
+    },
+    "wide1": {
+      "$type": "letterSpacing",
+      "$value": "2%"
+    },
+    "wide2": {
+      "$type": "letterSpacing",
+      "$value": "8%"
+    }
+  },
+  "textCase": {
+    "default": {
+      "$type": "textCase",
+      "$value": "none"
+    },
+    "upper": {
+      "$type": "textCase",
+      "$value": "uppercase"
+    }
+  },
+  "textDecorations": {
+    "default": {
+      "$type": "textDecoration",
+      "$value": "none"
+    },
+    "underline": {
+      "$type": "textDecoration",
+      "$value": "underline"
+    }
+  },
+  "paragraphIndents": {
+    "none": {
+      "$type": "dimension",
+      "$value": "0px"
+    }
+  },
+  "fontFamilies": {
+    "base": {
+      "$type": "fontFamilies",
+      "$value": "Inter"
+    },
+    "mono": {
+      "$type": "fontFamilies",
+      "$value": "JetBrains Mono"
+    }
+  },
+  "fontWeights": {
+    "regular": {
+      "$type": "fontWeights",
+      "$value": "regular"
+    },
+    "medium": {
+      "$type": "fontWeights",
+      "$value": "Medium"
+    },
+    "semibold": {
+      "$type": "fontWeights",
+      "$value": "SemiBold"
+    },
+    "bold": {
+      "$type": "fontWeights",
+      "$value": "bold"
+    }
+  },
+  "Title": {
+    "1": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{fontFamilies.base}",
+        "fontWeight": "{fontWeights.bold}",
+        "lineHeight": "{lineHeights.title.1}",
+        "fontSize": "{fontSizes.title.1}",
+        "letterSpacing": "{letterSpacings.tight2}",
+        "paragraphSpacing": "{paragraphSpacings.none}",
+        "paragraphIndent": "{paragraphIndents.none}",
+        "textCase": "{textCase.default}",
+        "textDecoration": "{textDecorations.default}"
+      }
+    },
+    "2": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{fontFamilies.base}",
+        "fontWeight": "{fontWeights.semibold}",
+        "lineHeight": "{lineHeights.title.2}",
+        "fontSize": "{fontSizes.title.2}",
+        "letterSpacing": "{letterSpacings.tight1}",
+        "paragraphSpacing": "{paragraphSpacings.none}",
+        "paragraphIndent": "{paragraphIndents.none}",
+        "textCase": "{textCase.default}",
+        "textDecoration": "{textDecorations.default}"
+      }
+    }
+  },
+  "Body": {
+    "small": {
+      "default": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{fontFamilies.base}",
+          "fontWeight": "{fontWeights.regular}",
+          "lineHeight": "{lineHeights.body.small}",
+          "fontSize": "{fontSizes.body.small}",
+          "letterSpacing": "{letterSpacings.default}",
+          "paragraphSpacing": "{paragraphSpacings.m}",
+          "paragraphIndent": "{paragraphIndents.none}",
+          "textCase": "{textCase.default}",
+          "textDecoration": "{textDecorations.default}"
+        }
+      },
+      "strong": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{fontFamilies.base}",
+          "fontWeight": "{fontWeights.semibold}",
+          "lineHeight": "{lineHeights.body.small}",
+          "fontSize": "{fontSizes.body.small}",
+          "letterSpacing": "{letterSpacings.default}",
+          "paragraphSpacing": "{paragraphSpacings.m}",
+          "paragraphIndent": "{paragraphIndents.none}",
+          "textCase": "{textCase.default}",
+          "textDecoration": "{textDecorations.default}"
+        }
+      }
+    },
+    "base": {
+      "default": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{fontFamilies.base}",
+          "fontWeight": "{fontWeights.regular}",
+          "lineHeight": "{lineHeights.body.base}",
+          "fontSize": "{fontSizes.body.base}",
+          "letterSpacing": "{letterSpacings.default}",
+          "paragraphSpacing": "{paragraphSpacings.m}",
+          "paragraphIndent": "{paragraphIndents.none}",
+          "textCase": "{textCase.default}",
+          "textDecoration": "{textDecorations.default}"
+        }
+      },
+      "strong": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{fontFamilies.base}",
+          "fontWeight": "{fontWeights.semibold}",
+          "lineHeight": "{lineHeights.body.base}",
+          "fontSize": "{fontSizes.body.base}",
+          "letterSpacing": "{letterSpacings.default}",
+          "paragraphSpacing": "{paragraphSpacings.m}",
+          "paragraphIndent": "{paragraphIndents.none}",
+          "textCase": "{textCase.default}",
+          "textDecoration": "{textDecorations.default}"
+        }
+      }
+    },
+    "large": {
+      "default": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{fontFamilies.base}",
+          "fontWeight": "{fontWeights.regular}",
+          "lineHeight": "{lineHeights.body.large}",
+          "fontSize": "{fontSizes.body.large}",
+          "letterSpacing": "{letterSpacings.default}",
+          "paragraphSpacing": "{paragraphSpacings.m}",
+          "paragraphIndent": "{paragraphIndents.none}",
+          "textCase": "{textCase.default}",
+          "textDecoration": "{textDecorations.default}"
+        }
+      },
+      "strong": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{fontFamilies.base}",
+          "fontWeight": "{fontWeights.semibold}",
+          "lineHeight": "{lineHeights.body.large}",
+          "fontSize": "{fontSizes.body.large}",
+          "letterSpacing": "{letterSpacings.default}",
+          "paragraphSpacing": "{paragraphSpacings.m}",
+          "paragraphIndent": "{paragraphIndents.none}",
+          "textCase": "{textCase.default}",
+          "textDecoration": "{textDecorations.default}"
+        }
+      }
+    }
+  },
+  "Label": {
+    "Base": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{fontFamilies.base}",
+        "fontWeight": "{fontWeights.medium}",
+        "lineHeight": "{lineHeights.body.small}",
+        "fontSize": "{fontSizes.body.small}",
+        "letterSpacing": "{letterSpacings.wide1}",
+        "paragraphSpacing": "{paragraphSpacings.none}",
+        "paragraphIndent": "{paragraphIndents.none}",
+        "textCase": "{textCase.default}",
+        "textDecoration": "{textDecorations.default}"
+      }
+    }
+  },
+  "Overline": {
+    "Base": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{fontFamilies.base}",
+        "fontWeight": "{fontWeights.semibold}",
+        "lineHeight": "{lineHeights.body.small}",
+        "fontSize": "{fontSizes.body.small}",
+        "letterSpacing": "{letterSpacings.wide2}",
+        "paragraphSpacing": "{paragraphSpacings.none}",
+        "paragraphIndent": "{paragraphIndents.none}",
+        "textCase": "{textCase.upper}",
+        "textDecoration": "{textDecorations.default}"
+      }
+    }
+  },
+  "Link": {
+    "Base": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{fontFamilies.base}",
+        "fontWeight": "{fontWeights.regular}",
+        "lineHeight": "{lineHeights.body.base}",
+        "fontSize": "{fontSizes.body.base}",
+        "letterSpacing": "{letterSpacings.default}",
+        "paragraphSpacing": "{paragraphSpacings.none}",
+        "paragraphIndent": "{paragraphIndents.none}",
+        "textCase": "{textCase.default}",
+        "textDecoration": "{textDecorations.underline}"
+      }
+    }
+  },
+  "Mono": {
+    "Base": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{fontFamilies.mono}",
+        "fontWeight": "{fontWeights.regular}",
+        "lineHeight": "{lineHeights.mono.base}",
+        "fontSize": "{fontSizes.mono.base}",
+        "letterSpacing": "{letterSpacings.default}",
+        "paragraphSpacing": "{paragraphSpacings.none}",
+        "paragraphIndent": "{paragraphIndents.none}",
+        "textCase": "{textCase.default}",
+        "textDecoration": "{textDecorations.default}"
+      }
+    }
+  },
+  "Metric": {
+    "Base": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{fontFamilies.base}",
+        "fontWeight": "{fontWeights.bold}",
+        "lineHeight": "{lineHeights.metric.base}",
+        "fontSize": "{fontSizes.metric.base}",
+        "letterSpacing": "{letterSpacings.tight1}",
+        "paragraphSpacing": "{paragraphSpacings.none}",
+        "paragraphIndent": "{paragraphIndents.none}",
+        "textCase": "{textCase.default}",
+        "textDecoration": "{textDecorations.default}"
+      }
+    }
+  },
+  "Table": {
+    "Header": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{fontFamilies.base}",
+        "fontWeight": "{fontWeights.semibold}",
+        "lineHeight": "{lineHeights.body.small}",
+        "fontSize": "{fontSizes.body.small}",
+        "letterSpacing": "{letterSpacings.wide1}",
+        "paragraphSpacing": "{paragraphSpacings.none}",
+        "paragraphIndent": "{paragraphIndents.none}",
+        "textCase": "{textCase.default}",
+        "textDecoration": "{textDecorations.default}"
+      }
+    },
+    "Cell": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{fontFamilies.base}",
+        "fontWeight": "{fontWeights.regular}",
+        "lineHeight": "{lineHeights.body.small}",
+        "fontSize": "{fontSizes.body.small}",
+        "letterSpacing": "{letterSpacings.default}",
+        "paragraphSpacing": "{paragraphSpacings.none}",
+        "paragraphIndent": "{paragraphIndents.none}",
+        "textCase": "{textCase.default}",
+        "textDecoration": "{textDecorations.default}"
+      }
+    },
+    "Numeric": {
+      "Base": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{fontFamilies.mono}",
+          "fontWeight": "{fontWeights.regular}",
+          "lineHeight": "{lineHeights.body.small}",
+          "fontSize": "{fontSizes.body.small}",
+          "letterSpacing": "{letterSpacings.default}",
+          "paragraphSpacing": "{paragraphSpacings.none}",
+          "paragraphIndent": "{paragraphIndents.none}",
+          "textCase": "{textCase.default}",
+          "textDecoration": "{textDecorations.default}"
+        }
+      }
+    }
+  }
+}

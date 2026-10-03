@@ -1,0 +1,20 @@
+{
+  "card": {
+    "background": {
+      "$type": "color",
+      "$value": "{color.surface.level1}"
+    },
+    "shadow": {
+      "$type": "boxShadow",
+      "$value": "{shadow.elevation.1}"
+    },
+    "radius": {
+      "$type": "borderRadius",
+      "$value": "{radius.md}"
+    },
+    "gap": {
+      "$type": "sizing",
+      "$value": "{spacing.stack.2x}"
+    }
+  }
+}
