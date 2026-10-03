@@ -49,6 +49,8 @@ purpose with `--update-baseline`, never silently.
 - **letter-spacing is shipped 16× too small.** `-5%` becomes `-0.003125rem`
   (= −0.05 px) instead of `−0.05em`: sd-transforms turns `%` into `em`, then
   `size/pxToRem` treats the em number as px. core reports `-5%`. Six tokens.
+  *Fixed in FOR-495: the resolver converts only px or unitless values to rem;
+  the six findings left the baseline (now 2436 match, 2 divergent).*
 - **`content.maxWidth` is shipped as invalid CSS.** `{breakpoints.tablet}-1px`
   leaves the pipeline as `var(--…-breakpoints-tablet)-1px` without `calc()`;
   core leaves `1024px-1px`. Neither machine can evaluate mixed-unit math.
