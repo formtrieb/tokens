@@ -9,6 +9,7 @@ model and a single resolution.
 | `packages/core` | `@formtrieb/tokens-core` | Model and resolution: token tree, theme axes, references, colour. Pure functions, no I/O, browser-capable. |
 | `packages/mcp` | `@formtrieb/tokens-mcp` | MCP server exposing a token system to LLM clients. Depends only on core. |
 | `packages/resolver` | `@formtrieb/token-resolver` | CLI `formtrieb-tokens`: Tokens-Studio JSON → CSS, SCSS, utilities, token map. Currently built on Style Dictionary; to be replaced by a renderer on top of core. |
+| `conformance/` | — (private) | Measuring instrument: every token through core and through the resolver, divergences pinned in a baseline. See [conformance/README.md](conformance/README.md). |
 
 ## Development
 
@@ -16,6 +17,7 @@ model and a single resolution.
 pnpm install
 pnpm build
 pnpm test
+pnpm conformance   # core vs resolver, compared with conformance/baseline.json
 ```
 
 ## Provenance

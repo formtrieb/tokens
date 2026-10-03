@@ -6,7 +6,8 @@
   "scripts": {
     "build": "pnpm -r build",
     "test": "pnpm -r exec vitest run",
-    "typecheck": "pnpm -r exec tsc --noEmit"
+    "typecheck": "pnpm -r exec tsc --noEmit",
+    "conformance": "pnpm --filter @formtrieb/tokens-conformance run conformance"
   },
   "engines": {
     "node": ">=20",

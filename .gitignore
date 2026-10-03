@@ -9,3 +9,6 @@ dist/
 .remember/
 .superpowers/
 .mcp.json
+
+# conformance run output (report.md, result.json)
+conformance/out/

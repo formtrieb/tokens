@@ -8,6 +8,34 @@ importers:
 
   .: {}
 
+  conformance:
+    dependencies:
+      '@formtrieb/token-resolver':
+        specifier: workspace:*
+        version: link:../packages/resolver
+      '@formtrieb/tokens-core':
+        specifier: workspace:*
+        version: link:../packages/core
+      culori:
+        specifier: ^4.0.0
+        version: 4.0.2
+      style-dictionary:
+        specifier: ^5.4.0
+        version: 5.5.5
+    devDependencies:
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.19.43
+      tsx:
+        specifier: ^4.0.0
+        version: 4.23.15
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.0
+        version: 3.2.7(@types/node@20.19.43)(tsx@4.23.15)
+
   packages/core:
     dependencies:
       culori:
