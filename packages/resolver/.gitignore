@@ -1,0 +1,14 @@
+node_modules/
+.DS_Store
+cssOutput/
+.claude/
+dist/
+*.log
+
+.mcp.json
+_context/*
+
+# Local recovery / scratch — not part of the package
+memory/
+tokensRadiusTest/
+.remember/
