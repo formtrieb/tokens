@@ -9,7 +9,7 @@ import { register, type TransformOptions } from '@tokens-studio/sd-transforms';
 import StyleDictionary from 'style-dictionary';
 import { outputReferencesTransformed } from 'style-dictionary/utils';
 import { transforms } from 'style-dictionary/enums';
-import type { TransformedToken, Dictionary } from 'style-dictionary/types';
+import type { TransformedToken, Dictionary, ValueTransform } from 'style-dictionary/types';
 import type { Theme } from '../shared/types.js';
 import type { Config } from '../types.js';
 
@@ -23,6 +23,8 @@ import type { Config } from '../types.js';
  * configured with `format: 'srgb'` from TRANSFORM_OPTIONS, and a second entry
  * would apply every darken/lighten twice.
  */
+export const PX_TO_REM = 'formtrieb/size/pxToRem';
+
 export const TRANSFORMS = [
 	'ts/resolveMath',
 	'ts/opacity',
@@ -32,7 +34,7 @@ export const TRANSFORMS = [
 	'ts/color/css/hexrgba',
 	transforms.colorCss,
 	transforms.colorRgb,
-	transforms.sizePxToRem,
+	PX_TO_REM,
 	transforms.nameKebab,
 	transforms.fontFamilyCss,
 ];
@@ -77,6 +79,26 @@ StyleDictionary.registerFilter({
 });
 
 register(StyleDictionary, TRANSFORM_OPTIONS);
+
+/**
+ * `size/pxToRem`, but only for values that are px or unitless. Style
+ * Dictionary's own transform reads the number of every `dimension` as px, and
+ * sd-transforms retypes `letterSpacing` as `dimension` after turning `-5%`
+ * into `-0.05em` — so letter-spacing shipped as `-0.003125rem`. A value that
+ * already carries another unit is left as it is.
+ */
+const PX_OR_UNITLESS = /^-?(\d+\.?\d*|\.\d+)(px)?$/;
+const sizePxToRem = StyleDictionary.hooks.transforms[transforms.sizePxToRem] as ValueTransform;
+StyleDictionary.registerTransform({
+	name: PX_TO_REM,
+	type: 'value',
+	transform: sizePxToRem.transform,
+	filter: (token, options) => {
+		if (!sizePxToRem.filter?.(token, options)) return false;
+		const value = options.usesDtcg ? token.$value : token.value;
+		return typeof value === 'number' || PX_OR_UNITLESS.test(String(value).trim());
+	},
+});
 
 /**
  * Builds CSS for a single theme into a temp file under buildPath.
