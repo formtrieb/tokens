@@ -39,7 +39,7 @@ One tag publishes one package through `.github/workflows/release.yml`
 (npm Trusted Publishing, with provenance):
 
 ```bash
-git tag core-v1.4.0 && git push origin core-v1.4.0          # first: the others depend on it
+git tag core-v1.5.0 && git push origin core-v1.5.0          # first: the others depend on it
 git tag mcp-v2.6.0 resolver-v0.5.0 && git push origin mcp-v2.6.0 resolver-v0.5.0
 ```
 
