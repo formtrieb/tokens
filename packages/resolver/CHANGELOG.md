@@ -5,7 +5,13 @@ All notable changes to `@formtrieb/token-resolver` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.6.0] — 2026-10-04
+
+**Upgrading:** configs stay as they are. Two things can change for you: a
+mixed-unit expression on a reference now ships as `calc(…)`, and a token
+whose value is no valid CSS (for example an easing with an empty bezier,
+`[{}, {}, {}, {}]`) now stops the build and names the token — fix it in
+the source.
 
 ### Changed
 
@@ -19,6 +25,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   longer imported.
 - The `typography()` builder no longer requires a theme group called
   `Typography`.
+- The utility builders (`typography`, `typographyMixin`, `directional`,
+  `single`, `container`) moved to `@formtrieb/tokens-render`;
+  `@formtrieb/token-resolver/builders` re-exports them, so configs stay
+  unchanged. Output is byte-identical (E2E snapshot unchanged).
+  New dependency `@formtrieb/tokens-render`.
 
 ### Added
 
@@ -33,13 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `cubic-bezier([object Object], …)`, an unresolved reference, irreducible
   arithmetic — stops the build with token path, theme and file instead of
   being written (FOR-497).
-
-- The utility builders (`typography`, `typographyMixin`, `directional`,
-  `single`, `container`) moved to `@formtrieb/tokens-render`;
-  `@formtrieb/token-resolver/builders` re-exports them, so configs stay
-  unchanged. Output is byte-identical (E2E snapshot unchanged). New
-  dependency `@formtrieb/tokens-render` — it has to be published before
-  the next release of this package.
 
 ## [0.5.0] — 2026-10-03
 

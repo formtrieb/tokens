@@ -1,6 +1,6 @@
 # @formtrieb/token-resolver
 
-Tokens-Studio JSON → CSS variables, utility classes, SCSS mixins, and Figma↔CSS lookup map. Driven by a project-local config. The CSS comes from [`@formtrieb/tokens-render`](../render) on top of [`@formtrieb/tokens-core`](../core); since 0.6 there is no Style Dictionary inside.
+Tokens-Studio JSON → CSS variables, utility classes, SCSS mixins, and Figma↔CSS lookup map. Driven by a project-local config. The CSS comes from [`@formtrieb/tokens-render`](https://github.com/formtrieb/tokens/tree/main/packages/render) on top of [`@formtrieb/tokens-core`](https://github.com/formtrieb/tokens/tree/main/packages/core); since 0.6 there is no Style Dictionary inside.
 
 ## Install
 
@@ -120,7 +120,6 @@ src/tokens/
 | `y`   | `padding-block`                | both   | both   |
 | `all` | `padding`                      | all    | all    |
 
-For full builder API and design rationale, see [docs/specs/2026-05-08-token-resolver-package-design.md](./docs/specs/2026-05-08-token-resolver-package-design.md).
 
 ## Typography
 
