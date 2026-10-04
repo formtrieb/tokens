@@ -1,20 +1,21 @@
 name: Release
 
-# One tag publishes one package: core-v1.4.0, mcp-v2.6.0, resolver-v0.5.0.
+# One tag publishes one package: core-v1.5.0, mcp-v2.6.0, render-v0.1.0, resolver-v0.6.0.
 # The tag version must equal the package.json version.
 #
 # Publishes via npm Trusted Publishing (OIDC) — no NPM_TOKEN. On npmjs.com,
 # each package's trusted publisher points at this repository, this workflow
 # file (release.yml) and the environment `npm`.
 #
-# `pnpm pack` turns `workspace:^` into a real range (e.g. ^1.4.0), so publish
-# core before the packages that depend on it.
+# `pnpm pack` turns `workspace:^` into a real range (e.g. ^1.5.0), so publish
+# core before render, and render before the resolver.
 
 on:
   push:
     tags:
       - "core-v*"
       - "mcp-v*"
+      - "render-v*"
       - "resolver-v*"
 
 permissions:
@@ -51,6 +52,7 @@ jobs:
           case "$name" in
             core)     build=build ;;
             mcp)      build=build ;;
+            render)   build=build ;;
             resolver) build=build:package ;;
             *) echo "Unknown package in tag $tag"; exit 1 ;;
           esac
