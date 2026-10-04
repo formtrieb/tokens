@@ -5,11 +5,11 @@
  */
 import type { Dictionary, Entry } from "./dictionary.js";
 import { resolveReferences, usesReferences } from "./references.js";
-import { transform } from "./transforms.js";
+import { transform, type Presentation } from "./transforms.js";
 
 export type Values = Map<string, unknown>;
 
-export function finishValues(dict: Dictionary, basePxFontSize: number): Values {
+export function finishValues(dict: Dictionary, presentation: Presentation): Values {
   const done: Values = new Map();
   const visiting = new Set<string>();
 
@@ -32,9 +32,9 @@ export function finishValues(dict: Dictionary, basePxFontSize: number): Values {
     let value: unknown;
     if (usesReferences(entry.original)) {
       const resolved = resolveReferences(entry.original, lookup);
-      value = usesReferences(resolved) ? resolved : transform({ ...base, value: resolved }, true, basePxFontSize);
+      value = usesReferences(resolved) ? resolved : transform({ ...base, value: resolved }, true, presentation);
     } else {
-      value = transform({ ...base, value: entry.original }, false, basePxFontSize);
+      value = transform({ ...base, value: entry.original }, false, presentation);
     }
 
     visiting.delete(entry.key);

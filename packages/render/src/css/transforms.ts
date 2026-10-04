@@ -30,6 +30,8 @@ export interface Working {
 
 interface Step {
   transitive: boolean;
+  /** A presentation step that `units: 'source'` / `color: 'source'` leaves out. */
+  presents?: "units" | "color";
   filter: (t: Working) => boolean;
   apply: (t: Working) => unknown;
 }
@@ -213,8 +215,8 @@ function steps(basePxFontSize: number): Step[] {
     filter: (t) => typeIs("letterSpacing", "typography")(t) || t.originalType === "letterSpacing",
     apply: (t) => letterSpacingFor(t.value, t.type, t.originalType),
   };
-  const hexrgba: Step = { transitive: T, filter: typeIs("color", "shadow", "border"), apply: hexRgbaFor };
-  const color: Step = { transitive: F, filter: isColor, apply: (t) => colorCss(t.value) };
+  const hexrgba: Step = { transitive: T, presents: "color", filter: typeIs("color", "shadow", "border"), apply: hexRgbaFor };
+  const color: Step = { transitive: F, presents: "color", filter: isColor, apply: (t) => colorCss(t.value) };
   const font: Step = { transitive: T, filter: typeIs("fontFamily", "typography"), apply: fontFamilyFor };
 
   return [
@@ -231,7 +233,7 @@ function steps(basePxFontSize: number): Step[] {
     hexrgba,
     letterSpacing,
     { transitive: T, filter: typeIs("shadow"), apply: (t) => innerShadow(t.value) },
-    { transitive: F, filter: typeIs("dimension", "fontSize"), apply: (t) => sizeRem(t.value) },
+    { transitive: F, presents: "units", filter: typeIs("dimension", "fontSize"), apply: (t) => sizeRem(t.value) },
     color,
     font,
     { transitive: T, filter: typeIs("cubicBezier", "transition"), apply: cubicBezier },
@@ -247,9 +249,10 @@ function steps(basePxFontSize: number): Step[] {
     letterSpacing,
     hexrgba,
     color,
-    { transitive: F, filter: isColor, apply: (t) => toRgbString(tinycolor(t.value)) },
+    { transitive: F, presents: "color", filter: isColor, apply: (t) => toRgbString(tinycolor(t.value)) },
     {
       transitive: F,
+      presents: "units",
       filter: (t) => typeIs("dimension", "fontSize")(t) && (typeof t.value === "number" || PX_OR_UNITLESS.test(String(t.value).trim())),
       apply: (t) => pxToRem(basePxFontSize)(t.value),
     },
@@ -257,15 +260,23 @@ function steps(basePxFontSize: number): Step[] {
   ];
 }
 
+/** How values are presented; the defaults write what the resolver always wrote. */
+export interface Presentation {
+  basePxFontSize: number;
+  units: "rem" | "source";
+  color: "rgb" | "source";
+}
+
 const cache = new Map<number, Step[]>();
 
 /** Run the chain on a resolved value; `transitiveOnly` for tokens that used references. */
-export function transform(token: Working, transitiveOnly: boolean, basePxFontSize: number): unknown {
-  let chain = cache.get(basePxFontSize);
-  if (!chain) cache.set(basePxFontSize, (chain = steps(basePxFontSize)));
+export function transform(token: Working, transitiveOnly: boolean, presentation: Presentation): unknown {
+  let chain = cache.get(presentation.basePxFontSize);
+  if (!chain) cache.set(presentation.basePxFontSize, (chain = steps(presentation.basePxFontSize)));
   const t: Working = { ...token, value: structuredClone(token.value) };
   for (const step of chain) {
     if (transitiveOnly && !step.transitive) continue;
+    if (step.presents && presentation[step.presents] === "source") continue;
     if (!step.filter(t)) continue;
     try {
       t.value = step.apply(t);

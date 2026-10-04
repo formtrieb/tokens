@@ -43,7 +43,11 @@ export function renderVariables(
   const problems: InvalidCssError["problems"] = [];
   for (const rule of rules) {
     const dict = buildDictionary(system, findTheme(system, rule.theme));
-    const values = finishValues(dict, options.basePxFontSize);
+    const values = finishValues(dict, {
+      basePxFontSize: options.basePxFontSize,
+      units: options.units ?? "rem",
+      color: options.color ?? "rgb",
+    });
     const block = renderBlock(dict, values, rule, options);
     for (const p of block.invalid) problems.push({ theme: rule.theme, file: rule.file, ...p });
     const list = blocks.get(rule.file) ?? [];
