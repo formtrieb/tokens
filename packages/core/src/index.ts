@@ -34,6 +34,20 @@ export type {
   NearestColorMatch,
 } from "./parser/color-match.js";
 
+// Canonicalize — Tokens Studio semantics of a resolved value
+export {
+  canonicalize,
+  alignType,
+  resolveMath,
+  parseAndReduce,
+  evaluateMathFor,
+  pxFor,
+  opacityFor,
+  lineHeightFor,
+  fontWeightFor,
+  letterSpacingFor,
+} from "./canonicalize/index.js";
+
 // Theme
 export {
   parseThemes,
