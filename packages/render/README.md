@@ -9,13 +9,13 @@ tree. No file system, no console.**
 
 Not published. Under construction (FOR-499): it is being built next to the
 Style-Dictionary resolver and replaces it once both write the same bytes.
-Until then the render functions throw, and `pnpm conformance --css` at the
-repository root shows every file red.
+`pnpm conformance --css` at the repository root compares the two, file by
+file; functions not written yet throw and show their files red.
 
 | Function | Returns | Lands in |
 |---|---|---|
 | `deriveRenderTable(themes, config)` | `RenderRule[]` | done |
-| `renderVariables(system, rules, options)` | `variables/*.css` | 3b |
+| `renderVariables(system, rules, options)` | `variables/*.css` | done |
 | `renderUtilities(system, builders, options)` | `utilities/*` | 3c |
 | `renderImports(files, existing?)` | `main.css` | 3c |
 | `renderBundle(files)` | `bundle.css` | 3c |
@@ -48,6 +48,33 @@ group with one theme goes to `:root`, a group with several to
 render knows no set, group or theme name. Fallback order and special groups
 come from the table or `$themes.json`, never from code;
 `test/guard.test.ts` fails on a set name or a `Group/Name` literal in `src/`.
+
+## How `renderVariables` writes a value
+
+Byte for byte what the resolver wrote with Style Dictionary and
+sd-transforms, because that CSS is in production:
+
+- **Composition.** A theme's `source` sets, then its `enabled` sets, in
+  `$themes.json` order, deep-merged: a later set wins, a key keeps its first
+  position. Only tokens from `enabled` sets are written.
+- **Meaning** comes from core's `canonicalize` steps, **presentation** from
+  `src/css/`: px → rem by `basePxFontSize`, colours as `rgb(r, g, b)` /
+  `rgba(…)` (a port of tinycolor2) or core's computed `rgb(r% g% b% / a)`,
+  quoted font families, `font` / shadow / border shorthands, `cubic-bezier()`.
+- **Literal or reference.** A token without references runs every step. A
+  token with references takes its targets' finished values and runs only
+  the transitive steps. So a line height pointing at a dimension ships in
+  rem, a literal one in px, and a computed colour keeps its percentages.
+- **`references: true`** writes `var(--…)` where the source referenced, in
+  reference-safe order. A computed colour (`modify`) keeps its value.
+- **One deliberate difference** in the output (FOR-496): arithmetic that
+  cannot be reduced, like `{breakpoints.desktop}-1px`, is written as
+  `calc(var(--…) - 1px)` instead of invalid CSS.
+- **One change in how, not what:** typography companions
+  (`-letter-spacing`, `-text-transform`, …, `-fvn`) follow
+  `$type: typography` in the block, where the resolver looked for a group
+  and a set both called `Typography`. Same bytes for every system where
+  typography lives in such a set.
 
 ## License
 

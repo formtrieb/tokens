@@ -5,6 +5,19 @@ All notable changes to `@formtrieb/tokens-core` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `canonicalize(value, $type)` and its single steps (`resolveMath`,
+  `evaluateMathFor`, `pxFor`, `opacityFor`, `lineHeightFor`,
+  `fontWeightFor`, `letterSpacingFor`, `alignType`): the Tokens Studio
+  meaning of a resolved value — math, bare numbers as px, `%` opacity, line
+  height and letter-spacing, named font weights — with the exact rules of
+  `@tokens-studio/sd-transforms` 2, so `@formtrieb/tokens-render` can write
+  the CSS that Style Dictionary wrote. Additive: `ReferenceResolver` and
+  `tokens-mcp` keep returning the raw `finalValue`.
+
 ## [1.4.0] — 2026-10-03
 
 ### Added

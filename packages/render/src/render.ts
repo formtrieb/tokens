@@ -1,9 +1,12 @@
 /**
  * The render functions. Each returns a map of output file → content; the
  * caller decides where the files go. Signatures are fixed, bodies arrive step
- * by step (FOR-499): variables in 3b, the rest in 3c. Until then they throw,
- * and the conformance run's `--css` mode shows them red.
+ * by step (FOR-499): variables since 3b, the rest in 3c. Until then those
+ * throw, and the conformance run's `--css` mode shows their files red.
  */
+import { buildDictionary, findTheme } from "./css/dictionary.js";
+import { finishValues } from "./css/values.js";
+import { FILE_HEADER, renderBlock, type Block } from "./css/variables.js";
 import type {
   RenderedFiles,
   RenderOptions,
@@ -19,13 +22,34 @@ export class NotRenderedYet extends Error {
   }
 }
 
-/** One file per distinct `rule.file`, blocks in rule order. */
+/**
+ * One file per distinct `rule.file`, blocks in rule order. A file with one
+ * block keeps the resolver's quirk of no final newline after typography
+ * companions.
+ */
 export function renderVariables(
   system: TokenSystem,
   rules: readonly RenderRule[],
   options: RenderOptions
 ): RenderedFiles {
-  throw new NotRenderedYet("renderVariables", "3b, FOR-507");
+  const blocks = new Map<string, Block[]>();
+  for (const rule of rules) {
+    const dict = buildDictionary(system, findTheme(system, rule.theme));
+    const values = finishValues(dict, options.basePxFontSize);
+    const list = blocks.get(rule.file) ?? [];
+    list.push(renderBlock(dict, values, rule, options));
+    blocks.set(rule.file, list);
+  }
+
+  const files: RenderedFiles = new Map();
+  for (const [file, list] of blocks) {
+    if (list.length === 1) {
+      files.set(file, FILE_HEADER + list[0].text + (list[0].expanded ? "" : "\n"));
+    } else {
+      files.set(file, (FILE_HEADER + list.map((b) => `${b.text}\n`).join("")).trim() + "\n");
+    }
+  }
+  return files;
 }
 
 /** One file per builder, under `utilities/`. */
