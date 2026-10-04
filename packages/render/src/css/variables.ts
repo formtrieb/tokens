@@ -23,7 +23,7 @@ export interface Block {
   invalid: { path: string; value: string; reason: string }[];
 }
 
-// ── FOR-497: a value that is no CSS is not written ────────────────────────
+// ── a value that is no CSS is not written ─────────────────────────────────
 
 const EASING_KEYWORDS = /^(linear|ease|ease-in|ease-out|ease-in-out|step-start|step-end|steps\([^)]*\))$/;
 const NUMBER = String.raw`-?(?:\d+\.?\d*|\.\d+)`;
@@ -58,7 +58,7 @@ function isPrivate(path: string[], prefixes: string[]): boolean {
 
 const nameOf = (path: string[], prefix: string) => kebab(`${prefix} ${path.join(" ")}`);
 
-// ── FOR-496: arithmetic is written as calc() ──────────────────────────────
+// ── arithmetic is written as calc() ───────────────────────────────────────
 
 const OPERAND = /(?:var\(--[\w-]+\)|-?(?:\d+\.?\d*|\.\d+)[a-zA-Z%]*)/y;
 const OPERATOR = /\s*([-+*/])\s*/y;

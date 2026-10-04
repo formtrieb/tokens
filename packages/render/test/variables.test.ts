@@ -155,7 +155,7 @@ describe("asCalc", () => {
   );
 });
 
-describe("output validation (FOR-497)", () => {
+describe("output validation", () => {
   const sys = (tokens: Record<string, unknown>) =>
     system({ s: tokens }, [{ id: "t", group: "G", name: "G", selectedTokenSets: { s: "enabled" } }]);
   const render = (tokens: Record<string, unknown>) =>
@@ -210,7 +210,7 @@ describe("invalidCss", () => {
   ])("accepts %j", (v, t) => expect(invalidCss(v, t)).toBeUndefined());
 });
 
-describe("presentation options (FOR-514)", () => {
+describe("presentation options", () => {
   const sys = system(
     {
       s: {
@@ -248,9 +248,9 @@ describe("presentation options (FOR-514)", () => {
       "  --x-ink: rgb(51, 102, 153);",
       "  --x-scrim: rgba(0, 0, 0, 0.5);",
       "  --x-system: CanvasText;",
-      // Inherited, FOR-513: core computes rgb(20% 40% 60% / 0.5) for a literal
-      // with an alpha modifier, then the literal colour step reads it as
-      // opaque. Pinned here until FOR-513 decides; color: 'source' avoids it.
+      // Known limitation, kept from the Style-Dictionary output: core computes
+      // rgb(20% 40% 60% / 0.5) for a literal with an alpha modifier, then the
+      // literal colour step reads it as opaque. color: 'source' avoids it.
       "  --x-soft: rgb(51, 102, 153);",
     ]);
   });

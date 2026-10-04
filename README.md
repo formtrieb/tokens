@@ -8,7 +8,7 @@ model and a single resolution.
 |---|---|---|
 | `packages/core` | `@formtrieb/tokens-core` | Model and resolution: token tree, theme axes, references, colour. Pure functions, no I/O, browser-capable. |
 | `packages/mcp` | `@formtrieb/tokens-mcp` | MCP server exposing a token system to LLM clients. Depends only on core. |
-| `packages/render` | `@formtrieb/tokens-render` (not yet published) | Token system + render table → CSS variables, utilities, `main.css`, bundle, token map. Pure functions on core, no file system. |
+| `packages/render` | `@formtrieb/tokens-render` | Token system + render table → CSS variables, utilities, `main.css`, bundle, token map. Pure functions on core, no file system. |
 | `packages/resolver` | `@formtrieb/token-resolver` | CLI `formtrieb-tokens`: config, files, watch — writes what render produces. |
 
 ## Development
@@ -22,11 +22,10 @@ pnpm test
 `packages/resolver/tests/e2e` pins the whole output of the synthetic
 fixture in a snapshot; a change there is a change for every consumer.
 
-Until FOR-509 the CSS came from Style Dictionary. `render` was built next
-to it and measured against it file by file (`conformance/`, removed with
-the switch) until both wrote the same bytes, except two deliberate fixes:
-`calc()` for mixed-unit math (FOR-496) and a refused build for values that
-are no CSS (FOR-497).
+Up to `@formtrieb/token-resolver` 0.5 the CSS came from Style Dictionary.
+Since 0.6 it comes from `packages/render`, byte-compatible except for two
+fixes: `calc()` for mixed-unit math and a refused build for values that are
+no CSS.
 
 ## Provenance
 

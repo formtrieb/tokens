@@ -39,11 +39,11 @@ the source.
 ### Fixed
 
 - Mixed-unit math on a reference (`{breakpoints.tablet}-1px`) is written as
-  `calc(var(--…) - 1px)` instead of invalid CSS (FOR-496).
+  `calc(var(--…) - 1px)` instead of invalid CSS.
 - A value that is no valid CSS — an empty bezier written as
   `cubic-bezier([object Object], …)`, an unresolved reference, irreducible
   arithmetic — stops the build with token path, theme and file instead of
-  being written (FOR-497).
+  being written.
 
 ## [0.5.0] — 2026-10-03
 
