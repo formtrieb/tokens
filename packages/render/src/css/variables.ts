@@ -30,6 +30,32 @@ const NUMBER = String.raw`-?(?:\d+\.?\d*|\.\d+)`;
 const BEZIER = new RegExp(String.raw`^cubic-bezier\(${NUMBER}, ${NUMBER}, ${NUMBER}, ${NUMBER}\)$`);
 /** Types whose value is a single quantity; there, leftover arithmetic is an error. */
 const QUANTITIES = new Set(["dimension", "fontSize", "lineHeight", "number", "opacity", "fontWeight", "duration"]);
+/** CSS math functions. Whatever stands inside their parentheses is arithmetic by design. */
+const MATH_FUNCTION = /\b(calc|clamp|min|max|round|mod|rem|abs|sign|pow|sqrt|hypot|log|exp)\(/;
+
+/**
+ * The value with every math function blanked to `name()`, however deep its
+ * parentheses nest — `calc((var(--a) - var(--b)) / 2)` becomes `calc()`.
+ * A regex cannot do this (it knows one level); a counter can.
+ */
+function withoutMathFunctions(value: string): string {
+  let out = "";
+  let rest = value;
+  for (;;) {
+    const m = MATH_FUNCTION.exec(rest);
+    if (!m) return out + rest;
+    const open = m.index + m[0].length - 1;
+    let depth = 0;
+    let close = open;
+    for (; close < rest.length; close++) {
+      if (rest[close] === "(") depth++;
+      else if (rest[close] === ")" && --depth === 0) break;
+    }
+    out += rest.slice(0, m.index) + m[1] + "()";
+    rest = rest.slice(close + 1);
+  }
+}
+
 const LEFTOVER_MATH = /(?:\d[a-zA-Z%]*|\))(?:\s*[*/+]\s*|-|\s-\s)(?:\d|\.\d|var\()/;
 
 /**
@@ -46,7 +72,7 @@ export function invalidCss(value: string, type: string | undefined): string | un
   }
   if (type && QUANTITIES.has(type)) {
     // Variable names may hold digits and dashes (`--x-0-5x`); only their position counts.
-    const outside = value.replace(/calc\((?:[^()]|\([^()]*\))*\)/g, "calc()").replace(/var\(--[\w-]+\)/g, "(v)");
+    const outside = withoutMathFunctions(value).replace(/var\(--[\w-]+\)/g, "(v)");
     if (LEFTOVER_MATH.test(outside)) return "arithmetic that is neither reduced nor in calc()";
   }
   return undefined;

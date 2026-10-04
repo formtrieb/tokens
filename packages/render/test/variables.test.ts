@@ -198,10 +198,18 @@ describe("invalidCss", () => {
     ["80rem-1px", "dimension"],
     ["var(--a) * 2px", "dimension"],
     ["2 + 3", "number"],
+    ["calc(var(--a)) - 1px", "dimension"],
+    ["clamp(1rem, var(--a), 3rem) * 2", "dimension"],
   ])("finds leftover math in %j", (v, t) => expect(invalidCss(v, t)).toMatch(/arithmetic/));
 
   it.each([
     ["calc(var(--a) - 1px)", "dimension"],
+    ["calc((var(--a) - var(--b)) / 2)", "dimension"],
+    ["calc(calc(var(--a) - var(--b)) / 2)", "dimension"],
+    ["calc((1px + 2px) * 2)", "dimension"],
+    ["clamp(1rem, calc(var(--a) - 1px), 3rem)", "dimension"],
+    ["round(up, calc(var(--a) / 3), 1px)", "dimension"],
+    ["max(var(--a), calc((var(--b) + 2px) * 2))", "dimension"],
     ["var(--ds-dimension-0-5x)", "dimension"],
     ["0 -1px", "dimension"],
     ["-0.05em", "dimension"],
