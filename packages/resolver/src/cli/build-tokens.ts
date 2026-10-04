@@ -1,7 +1,7 @@
-import { processAllThemes } from '../build/theme-processor.js';
+import { runPipeline } from '../pipeline.js';
 import config from '../../formtrieb-tokens.config.js';
 
-processAllThemes(config).catch((err) => {
-	console.error(err);
-	process.exit(1);
+runPipeline(config, { only: ['themes'] }).catch((err) => {
+  console.error(err);
+  process.exit(1);
 });

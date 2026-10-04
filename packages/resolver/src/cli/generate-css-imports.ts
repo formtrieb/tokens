@@ -1,4 +1,7 @@
-import { generateCssImports } from '../generators/css-imports.js';
+import { runPipeline } from '../pipeline.js';
 import config from '../../formtrieb-tokens.config.js';
 
-generateCssImports(config);
+runPipeline(config, { only: ['imports'] }).catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

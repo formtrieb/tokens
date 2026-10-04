@@ -62,7 +62,7 @@ jobs:
           echo "dir=$dir" >> "$GITHUB_OUTPUT"
           echo "build=$build" >> "$GITHUB_OUTPUT"
 
-      # Root test builds core first and runs every package, conformance included.
+      # Root test builds core and render first, then runs every package.
       - name: Test
         run: pnpm test
 

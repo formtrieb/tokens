@@ -18,10 +18,21 @@ import type {
   BuilderFn,
 } from "./types.js";
 
+/** Values that are no valid CSS, each with token path, theme and file. Nothing is written. */
+export class InvalidCssError extends Error {
+  constructor(readonly problems: { theme: string; file: string; path: string; value: string; reason: string }[]) {
+    super(
+      `${problems.length} value(s) are no valid CSS:\n` +
+        problems.map((p) => `  ${p.path} (theme ${p.theme}, ${p.file}): ${p.reason} — ${p.value}`).join("\n")
+    );
+    this.name = "InvalidCssError";
+  }
+}
+
 /**
  * One file per distinct `rule.file`, blocks in rule order. A file with one
  * block keeps the resolver's quirk of no final newline after typography
- * companions.
+ * companions. Throws {@link InvalidCssError} when any value is no valid CSS.
  */
 export function renderVariables(
   system: TokenSystem,
@@ -29,13 +40,17 @@ export function renderVariables(
   options: RenderOptions
 ): RenderedFiles {
   const blocks = new Map<string, Block[]>();
+  const problems: InvalidCssError["problems"] = [];
   for (const rule of rules) {
     const dict = buildDictionary(system, findTheme(system, rule.theme));
     const values = finishValues(dict, options.basePxFontSize);
+    const block = renderBlock(dict, values, rule, options);
+    for (const p of block.invalid) problems.push({ theme: rule.theme, file: rule.file, ...p });
     const list = blocks.get(rule.file) ?? [];
-    list.push(renderBlock(dict, values, rule, options));
+    list.push(block);
     blocks.set(rule.file, list);
   }
+  if (problems.length > 0) throw new InvalidCssError(problems);
 
   const files: RenderedFiles = new Map();
   for (const [file, list] of blocks) {

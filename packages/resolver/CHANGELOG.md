@@ -9,6 +9,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **No Style Dictionary any more.** `runPipeline` writes what
+  `@formtrieb/tokens-render` produces; `style-dictionary`,
+  `@tokens-studio/sd-transforms` and `change-case` are gone from the
+  dependencies. The output is byte-identical except for the two fixes
+  below (E2E snapshot: two lines).
+- `main.css` imports what this run rendered, no longer every `.css` file
+  found in `variables/` — a stale file left by a removed theme group is no
+  longer imported.
+- The `typography()` builder no longer requires a theme group called
+  `Typography`.
+
+### Added
+
+- `render` config option: the render table (rules, or a path to a JSON file
+  of rules). Default derived from `$themes.json` as before.
+
+### Fixed
+
+- Mixed-unit math on a reference (`{breakpoints.tablet}-1px`) is written as
+  `calc(var(--…) - 1px)` instead of invalid CSS (FOR-496).
+- A value that is no valid CSS — an empty bezier written as
+  `cubic-bezier([object Object], …)`, an unresolved reference, irreducible
+  arithmetic — stops the build with token path, theme and file instead of
+  being written (FOR-497).
+
 - The utility builders (`typography`, `typographyMixin`, `directional`,
   `single`, `container`) moved to `@formtrieb/tokens-render`;
   `@formtrieb/token-resolver/builders` re-exports them, so configs stay

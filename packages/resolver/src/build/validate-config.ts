@@ -1,5 +1,3 @@
-import { readFile } from 'node:fs/promises';
-import { join } from 'node:path';
 import type { Config } from '../types.js';
 
 export async function validateConfig(config: Config): Promise<void> {
@@ -11,30 +9,19 @@ export async function validateConfig(config: Config): Promise<void> {
       'Config error: paths.tokens, paths.output, paths.tokenMap are required.'
     );
   }
-
-  const usesTypography = config.utilities?.some(
-    (b) => b.builderName === 'typography'
-  );
-
-  if (usesTypography) {
-    const themesPath = join(config.paths.tokens, '$themes.json');
-    let themes: unknown;
-    try {
-      themes = JSON.parse(await readFile(themesPath, 'utf-8'));
-    } catch (err) {
-      throw new Error(
-        `Config error: cannot read $themes.json at ${themesPath}: ${
-          err instanceof Error ? err.message : String(err)
-        }`
-      );
+  if (config.render !== undefined && typeof config.render !== 'string') {
+    if (!Array.isArray(config.render)) {
+      throw new Error('Config error: render must be a list of rules or a path to a JSON file of rules.');
     }
-    const hasTypographyGroup =
-      Array.isArray(themes) &&
-      (themes as Array<{ group?: string }>).some((t) => t.group === 'Typography');
-    if (!hasTypographyGroup) {
-      throw new Error(
-        'Config error: typography() builder requires a "Typography" theme group in $themes.json.'
-      );
-    }
+    config.render.forEach((rule, i) => {
+      for (const key of ['theme', 'selector', 'file'] as const) {
+        if (typeof rule?.[key] !== 'string' || !rule[key]) {
+          throw new Error(`Config error: render[${i}].${key} must be a non-empty string.`);
+        }
+      }
+      if (typeof rule.references !== 'boolean') {
+        throw new Error(`Config error: render[${i}].references must be true or false.`);
+      }
+    });
   }
 }

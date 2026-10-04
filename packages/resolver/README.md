@@ -1,6 +1,6 @@
 # @formtrieb/token-resolver
 
-Tokens-Studio JSON → CSS variables, utility classes, SCSS mixins, and Figma↔CSS lookup map. Driven by a project-local config.
+Tokens-Studio JSON → CSS variables, utility classes, SCSS mixins, and Figma↔CSS lookup map. Driven by a project-local config. The CSS comes from [`@formtrieb/tokens-render`](../render) on top of [`@formtrieb/tokens-core`](../core); since 0.6 there is no Style Dictionary inside.
 
 ## Install
 
@@ -161,6 +161,23 @@ Multi-theme groups in `$themes.json` produce `[data-{group}="{name}"]` selectors
 <html data-mode="dark" data-device="mobile">
 ```
 
+That default is a derived **render table**: one rule per theme, a group with one theme goes to `:root`, a group with several to `[data-{group}="{name}"]`, one file per group, references per group from `themeGroups` / `defaultGroupBehavior`. How an app switches themes is the app's decision, so the table can be set in the config instead:
+
+```ts
+render: [
+  { theme: 'Foundation/Foundation', selector: ':root', references: false, file: 'variables/foundation.css' },
+  { theme: 'Mode/Light', selector: ':root', references: true, file: 'variables/mode.css' },
+  { theme: 'Mode/Dark', selector: '.dark', references: true, file: 'variables/mode.css' },
+  { theme: 'Mode/Dark', selector: ':root', media: '(prefers-color-scheme: dark)', references: true, file: 'variables/mode.css' },
+],
+```
+
+`theme` is `{group}/{name}` from `$themes.json`. Rules writing to the same file become blocks of that file, in table order. Which set overrides which comes from the theme in `$themes.json`, never from the table.
+
+## Invalid values
+
+A value that would be no valid CSS stops the build, and nothing is written. The error lists every such token with path, theme and file — for example an easing token with an empty bezier (`[{}, {}, {}, {}]`), a reference to a token that does not exist, or arithmetic that cannot be reduced and is not in `calc()`. Mixed-unit math on a reference, like `{breakpoints.tablet}-1px`, is written as `calc(var(--…) - 1px)`.
+
 ## CLI Reference
 
 ```
@@ -186,6 +203,7 @@ The CLI auto-discovers `formtrieb-tokens.config.{ts,mjs,js}` by walking from `cw
 | `defaultGroupBehavior`       | `{ useReferences }`                   | —        | Fallback for any group not listed in `themeGroups`.                                                                                  |
 | `typography.fontVariantNumeric.tabular` | `string[][]`               | `[]`     | Token-path prefixes whose typography tokens get a `tabular-nums` font-variant. See [Typography](#typography).                       |
 | `utilities`                  | `BuilderFn[]`                         | `[]`     | Builders that emit utility CSS / SCSS files. Order matters for output filenames only.                                                |
+| `render`                     | `RenderRule[] \| string`             | derived  | The render table: which theme goes to which file under which selector. Rules, or a path (from `cwd`) to a JSON file of rules. See [Theme Switching](#theme-switching). |
 
 ## Programmatic API
 

@@ -90,7 +90,7 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-layout-grid-margin: var(--ds-dimension-8x);
   --ds-layout-grid-gutter: var(--ds-dimension-6x);
   --ds-content-min-width: var(--ds-breakpoints-tablet);
-  --ds-content-max-width: var(--ds-breakpoints-desktop)-1px;
+  --ds-content-max-width: calc(var(--ds-breakpoints-desktop) - 1px);
   --ds-paragraph-spacings-none: var(--ds-dimension-0x);
   --ds-paragraph-spacings-s: var(--ds-dimension-2x);
   --ds-paragraph-spacings-m: var(--ds-dimension-4x);
@@ -711,6 +711,26 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
 @import './utilities/stack.css';
 @import './utilities/typography.css';
 ",
+  "cssOutput/css/utilities/_typography.scss": "/// Typography mixins — auto-generated.
+/// Apply a typography token to any selector via @include.
+///
+/// Usage:
+///   @include typography('display-1');
+///   @include typography-paragraph('body-base-default');
+
+@mixin typography($token) {
+  font: var(--ds-#{$token});
+  letter-spacing: var(--ds-#{$token}-letter-spacing);
+  text-transform: var(--ds-#{$token}-text-transform);
+  text-decoration: var(--ds-#{$token}-text-decoration);
+  font-variant-numeric: var(--ds-#{$token}-fvn, normal);
+}
+
+@mixin typography-paragraph($token) {
+  text-indent: var(--ds-#{$token}-text-indent);
+  margin-block-end: var(--ds-#{$token}-margin-block-end);
+}
+",
   "cssOutput/css/utilities/content.css": ".ds-content {
   width: 100%;
   max-width: var(--ds-content-max-width);
@@ -1019,7 +1039,7 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-layout-grid-margin: var(--ds-dimension-8x);
   --ds-layout-grid-gutter: var(--ds-dimension-6x);
   --ds-content-min-width: var(--ds-breakpoints-tablet);
-  --ds-content-max-width: var(--ds-breakpoints-desktop)-1px;
+  --ds-content-max-width: calc(var(--ds-breakpoints-desktop) - 1px);
   --ds-paragraph-spacings-none: var(--ds-dimension-0x);
   --ds-paragraph-spacings-s: var(--ds-dimension-2x);
   --ds-paragraph-spacings-m: var(--ds-dimension-4x);

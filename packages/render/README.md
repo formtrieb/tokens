@@ -7,9 +7,10 @@ tree. No file system, no console.**
 
 ## Status
 
-Not published. Built next to the Style-Dictionary resolver (FOR-499) and
-writing the same bytes: `pnpm conformance --css` at the repository root
-compares the two, file by file. The resolver switches over in step 3d.
+Not published yet. `@formtrieb/token-resolver` writes what render
+produces. Render was built next to the former Style-Dictionary pipeline
+(FOR-499) and writes the same bytes, except `calc()` for mixed-unit math
+and a refused build for values that are no CSS (see below).
 
 | Function | Returns | Lands in |
 |---|---|---|
@@ -83,6 +84,14 @@ sd-transforms, because that CSS is in production:
   `$type: typography` in the block, where the resolver looked for a group
   and a set both called `Typography`. Same bytes for every system where
   typography lives in such a set.
+
+## Values that are no CSS
+
+`renderVariables` throws `InvalidCssError` instead of writing a value that
+is no valid CSS: an object where text belongs (`cubic-bezier([object
+Object], …)`), a reference that never resolved, a bezier without four
+numbers, arithmetic that is neither reduced nor in `calc()`. Every problem
+is listed with token path, theme and file; nothing is written.
 
 ## License
 
