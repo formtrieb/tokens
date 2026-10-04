@@ -47,6 +47,18 @@ export interface RenderOptions {
   prefix: string;
   /** Root font size that px values are divided by for rem. Default 16. */
   basePxFontSize: number;
+  /**
+   * `'rem'` (default): px and bare numbers become rem by `basePxFontSize`.
+   * `'source'`: lengths stay as the canonical value has them — `8px`,
+   * `0.05em`, `60ch` — for producers that write their units on purpose.
+   */
+  units?: "rem" | "source";
+  /**
+   * `'rgb'` (default): colour literals are rewritten to `rgb(r, g, b)` /
+   * `rgba(…)`. `'source'`: literals stay as written (`#336699`, `Canvas`,
+   * `rgba(0,0,0,0.5)`). Computed colours (modifiers) come from core either way.
+   */
+  color?: "rgb" | "source";
   /** A path segment starting with one of these is private and never emitted. */
   privateTokenPrefixes: string[];
   typography: TypographyOptions;

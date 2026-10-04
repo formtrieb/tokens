@@ -85,6 +85,22 @@ sd-transforms, because that CSS is in production:
   and a set both called `Typography`. Same bytes for every system where
   typography lives in such a set.
 
+## Units and colours as written
+
+The defaults present values the way the resolver always did: lengths in
+rem (`basePxFontSize`), colour literals as `rgb(r, g, b)` / `rgba(…)`. A
+producer that writes its units and colours on purpose sets
+
+```ts
+renderVariables(system, rules, { ...options, units: "source", color: "source" });
+```
+
+- `units: "source"` keeps lengths as the canonical value has them: `1024px`,
+  `-0.05em`, `60ch`; a bare number is px.
+- `color: "source"` keeps colour literals as written: `#336699`,
+  `rgba(0,0,0,0.5)`, system colours like `CanvasText`. Computed colours
+  (`modify`) still come from core as `rgb(r% g% b% / a)`.
+
 ## Values that are no CSS
 
 `renderVariables` throws `InvalidCssError` instead of writing a value that

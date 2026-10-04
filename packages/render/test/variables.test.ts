@@ -209,3 +209,72 @@ describe("invalidCss", () => {
     ["700 1rem/1.5 Inter", "typography"],
   ])("accepts %j", (v, t) => expect(invalidCss(v, t)).toBeUndefined());
 });
+
+describe("presentation options (FOR-514)", () => {
+  const sys = system(
+    {
+      s: {
+        bp: { $value: "1024px", $type: "dimension" },
+        gap: { $value: "8", $type: "spacing" },
+        measure: { $value: "60ch", $type: "dimension" },
+        track: { $value: "-5%", $type: "letterSpacing" },
+        lh: { $value: "{gap}", $type: "lineHeights" },
+        ink: { $value: "#336699", $type: "color" },
+        scrim: { $value: "rgba(0,0,0,0.5)", $type: "color" },
+        system: { $value: "CanvasText", $type: "color" },
+        soft: {
+          $value: "#336699",
+          $type: "color",
+          $extensions: { "studio.tokens": { modify: { type: "alpha", value: "0.5", space: "srgb" } } },
+        },
+      },
+    },
+    [{ id: "t", group: "G", name: "G", selectedTokenSets: { s: "enabled" } }]
+  );
+  const render = (extra: Partial<RenderOptions>) =>
+    renderVariables(sys, [{ theme: "G/G", selector: ":root", references: false, file: "g.css" }], { ...OPTIONS, ...extra })
+      .get("g.css")!
+      .split("\n")
+      .filter((l) => l.startsWith("  --"));
+
+  it("defaults write what the resolver wrote", () => {
+    expect(render({})).toEqual(render({ units: "rem", color: "rgb" }));
+    expect(render({})).toEqual([
+      "  --x-bp: 64rem;",
+      "  --x-gap: 0.5rem;",
+      "  --x-measure: 60ch;",
+      "  --x-track: -0.05em;",
+      "  --x-lh: 0.5rem;",
+      "  --x-ink: rgb(51, 102, 153);",
+      "  --x-scrim: rgba(0, 0, 0, 0.5);",
+      "  --x-system: CanvasText;",
+      // Inherited, FOR-513: core computes rgb(20% 40% 60% / 0.5) for a literal
+      // with an alpha modifier, then the literal colour step reads it as
+      // opaque. Pinned here until FOR-513 decides; color: 'source' avoids it.
+      "  --x-soft: rgb(51, 102, 153);",
+    ]);
+  });
+
+  it("units: 'source' keeps lengths as the canonical value has them", () => {
+    expect(render({ units: "source" })).toEqual([
+      "  --x-bp: 1024px;",
+      "  --x-gap: 8px;",
+      "  --x-measure: 60ch;",
+      "  --x-track: -0.05em;",
+      "  --x-lh: 8px;",
+      "  --x-ink: rgb(51, 102, 153);",
+      "  --x-scrim: rgba(0, 0, 0, 0.5);",
+      "  --x-system: CanvasText;",
+      "  --x-soft: rgb(51, 102, 153);",
+    ]);
+  });
+
+  it("color: 'source' keeps colour literals, computed colours still come from core", () => {
+    expect(render({ color: "source" }).slice(5)).toEqual([
+      "  --x-ink: #336699;",
+      "  --x-scrim: rgba(0,0,0,0.5);",
+      "  --x-system: CanvasText;",
+      "  --x-soft: rgb(20% 40% 60% / 0.5);",
+    ]);
+  });
+});
