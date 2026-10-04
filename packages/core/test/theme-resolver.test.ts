@@ -32,7 +32,7 @@ const FOREIGN: RawTheme[] = [
   },
 ];
 
-/** Themes without a `group` key — the `"undefined"` axis reported in FOR-369. */
+/** Themes without a `group` key — they used to end up on an `"undefined"` axis. */
 const UNGROUPED: RawTheme[] = [
   { id: "t-light", name: "Light", selectedTokenSets: { light: "enabled" } },
   { id: "t-dark", name: "Dark", selectedTokenSets: { dark: "enabled" } },

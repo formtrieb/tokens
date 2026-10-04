@@ -1,5 +1,5 @@
 /**
- * Guard against a recipe leaking into render (FOR-499): no set, group or
+ * Guard against a token recipe leaking into render: no set, group or
  * theme name in render's code. Which theme falls back to which, and which
  * group is special, comes from the render table or `$themes.json` — never
  * from a string literal here.

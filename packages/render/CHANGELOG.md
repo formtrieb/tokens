@@ -5,6 +5,13 @@ All notable changes to `@formtrieb/tokens-render` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] — 2026-10-04
+
+### Changed
+
+- README rewritten for users of the package: install, an example, the
+  render table, how values are written, options and errors.
+
 ## [0.1.0] — 2026-10-04
 
 First release. Renders a Tokens-Studio-shaped token system to CSS with
