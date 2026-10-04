@@ -1,3 +1,5 @@
+import type { RenderRule } from '@formtrieb/tokens-render';
+
 export interface ThemeGroupBehavior {
   useReferences: boolean;
 }
@@ -41,6 +43,12 @@ export interface Config {
   defaultGroupBehavior?: ThemeGroupBehavior;
   utilities?: BuilderFn[];
   typography?: TypographyConfig;
+  /**
+   * The render table: which theme is written to which file under which
+   * selector. Rules, or a path to a JSON file of rules. Default: derived
+   * from `$themes.json`, `themeGroups` and `defaultGroupBehavior`.
+   */
+  render?: RenderRule[] | string;
 }
 
 export interface Token {

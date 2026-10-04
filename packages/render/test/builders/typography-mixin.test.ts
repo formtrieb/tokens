@@ -6,6 +6,14 @@ const cfg: Config = { prefix: 'ds-' };
 const tokens: Token[] = [];
 
 describe('typographyMixin', () => {
+  it('starts with the usage header', async () => {
+    const out = await typographyMixin()({ tokens, config: cfg });
+    expect(out.content.startsWith(
+      "/// Typography mixins — auto-generated.\n/// Apply a typography token to any selector via @include.\n///\n/// Usage:\n" +
+        "///   @include typography('display-1');\n///   @include typography-paragraph('body-base-default');\n\n@mixin typography($token) {"
+    )).toBe(true);
+  });
+
   it('emits a SCSS partial with two mixins', async () => {
     const out = await typographyMixin()({ tokens, config: cfg });
     expect(out.filename).toBe('_typography.scss');

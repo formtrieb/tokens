@@ -16,7 +16,6 @@
   "keywords": [
     "design-tokens",
     "tokens-studio",
-    "style-dictionary",
     "css-variables",
     "design-system"
   ],
@@ -68,10 +67,7 @@
   "dependencies": {
     "@formtrieb/tokens-core": "workspace:^",
     "@formtrieb/tokens-render": "workspace:^",
-    "@tokens-studio/sd-transforms": "^2.0.3",
-    "change-case": "^5.4.4",
     "chokidar": "^5.0.0",
-    "style-dictionary": "^5.4.0",
     "tsx": "^4.21.0"
   }
 }

@@ -20,6 +20,7 @@ export {
   renderImports,
   renderBundle,
   renderTokenMap,
+  InvalidCssError,
 } from "./render.js";
 export { kebab } from "./kebab.js";
 export { typography, typographyMixin, directional, single, container, type Side } from "./builders/index.js";

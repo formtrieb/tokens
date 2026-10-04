@@ -1,6 +1,12 @@
 import type { BuilderFn } from "../types.js";
 
-const HEADER = "/// Typography mixins — auto-generated.\n";
+const HEADER = `/// Typography mixins — auto-generated.
+/// Apply a typography token to any selector via @include.
+///
+/// Usage:
+///   @include typography('display-1');
+///   @include typography-paragraph('body-base-default');
+`;
 
 /** SCSS mixins doing what the typography classes do, for a token name. */
 export function typographyMixin(): BuilderFn {

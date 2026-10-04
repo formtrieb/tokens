@@ -19,6 +19,37 @@ export interface Block {
   text: string;
   /** typography companions were appended; the resolver wrote such a file without final newline */
   expanded: boolean;
+  /** values that are no valid CSS, by token path */
+  invalid: { path: string; value: string; reason: string }[];
+}
+
+// ── FOR-497: a value that is no CSS is not written ────────────────────────
+
+const EASING_KEYWORDS = /^(linear|ease|ease-in|ease-out|ease-in-out|step-start|step-end|steps\([^)]*\))$/;
+const NUMBER = String.raw`-?(?:\d+\.?\d*|\.\d+)`;
+const BEZIER = new RegExp(String.raw`^cubic-bezier\(${NUMBER}, ${NUMBER}, ${NUMBER}, ${NUMBER}\)$`);
+/** Types whose value is a single quantity; there, leftover arithmetic is an error. */
+const QUANTITIES = new Set(["dimension", "fontSize", "lineHeight", "number", "opacity", "fontWeight", "duration"]);
+const LEFTOVER_MATH = /(?:\d[a-zA-Z%]*|\))(?:\s*[*/+]\s*|-|\s-\s)(?:\d|\.\d|var\()/;
+
+/**
+ * Why a written value is no valid CSS, or undefined. Checks what the source
+ * can get wrong: an object where text belongs, a reference that never
+ * resolved, a bezier without four numbers, arithmetic not in calc().
+ */
+export function invalidCss(value: string, type: string | undefined): string | undefined {
+  if (value.includes("[object Object]")) return "an object where CSS needs a value";
+  const ref = value.match(/\{[^}]+\}/);
+  if (ref) return `unresolved reference ${ref[0]}`;
+  if (type === "cubicBezier" && !value.startsWith("var(") && !BEZIER.test(value) && !EASING_KEYWORDS.test(value)) {
+    return "cubic-bezier needs four numbers";
+  }
+  if (type && QUANTITIES.has(type)) {
+    // Variable names may hold digits and dashes (`--x-0-5x`); only their position counts.
+    const outside = value.replace(/calc\((?:[^()]|\([^()]*\))*\)/g, "calc()").replace(/var\(--[\w-]+\)/g, "(v)");
+    if (LEFTOVER_MATH.test(outside)) return "arithmetic that is neither reduced nor in calc()";
+  }
+  return undefined;
 }
 
 function isPrivate(path: string[], prefixes: string[]): boolean {
@@ -98,7 +129,14 @@ function withComment(line: string, description: string | undefined): string {
   return `${comment}\n${line}`;
 }
 
-function declaration(entry: Entry, dict: Dictionary, values: Values, rule: RenderRule, prefix: string): string {
+function declaration(
+  entry: Entry,
+  dict: Dictionary,
+  values: Values,
+  rule: RenderRule,
+  prefix: string,
+  invalid: Block["invalid"]
+): string {
   const value = values.get(entry.key);
   const original = entry.original;
   const finished = (key: string) => values.get(key);
@@ -128,6 +166,9 @@ function declaration(entry: Entry, dict: Dictionary, values: Values, rule: Rende
     }
   }
   if (typeof out === "string") out = asCalc(out);
+  const text = `${out}`;
+  const reason = invalidCss(text, entry.type);
+  if (reason) invalid.push({ path: entry.key, value: text, reason });
   return withComment(`  --${nameOf(entry.path, prefix)}: ${out};`, entry.description);
 }
 
@@ -185,11 +226,12 @@ function companions(entries: Entry[], options: RenderOptions): string[] {
 export function renderBlock(dict: Dictionary, values: Values, rule: RenderRule, options: RenderOptions): Block {
   const emitted = dict.entries.filter((e) => e.isSource && !isPrivate(e.path, options.privateTokenPrefixes));
   const ordered = rule.references ? [...emitted].sort(referenceOrder(dict, options.prefix)) : emitted;
-  const lines = ordered.map((e) => declaration(e, dict, values, rule, options.prefix));
+  const invalid: Block["invalid"] = [];
+  const lines = ordered.map((e) => declaration(e, dict, values, rule, options.prefix, invalid));
   const extra = companions(emitted, options);
 
   const body = extra.length > 0 ? `${lines.join("\n")}\n${extra.join("\n")}\n` : lines.join("\n");
   let text = `${rule.selector} {\n${body}\n}`;
   if (rule.media) text = `@media ${rule.media} {\n${text}\n}`;
-  return { text, expanded: extra.length > 0 };
+  return { text, expanded: extra.length > 0, invalid };
 }

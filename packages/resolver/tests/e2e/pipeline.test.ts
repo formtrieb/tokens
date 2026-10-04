@@ -20,7 +20,7 @@ function readDirRecursive(dir: string): Record<string, string> {
     const rel = full.slice(ROOT.length + 1);
     if (statSync(full).isDirectory()) {
       Object.assign(result, readDirRecursive(full));
-    } else if (entry.endsWith('.css') || entry.endsWith('.json')) {
+    } else if (entry.endsWith('.css') || entry.endsWith('.scss') || entry.endsWith('.json')) {
       result[rel] = readFileSync(full, 'utf-8');
     }
   }

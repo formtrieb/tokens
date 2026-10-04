@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { validateConfig } from './validate-config.js';
-import { typography } from '../builders/index.js';
 import type { Config } from '../types.js';
 
 const minimal: Config = {
@@ -19,12 +18,12 @@ describe('validateConfig', () => {
     ).rejects.toThrow(/prefix/i);
   });
 
-  it('throws when typography() is configured but tokens dir has no Typography group', async () => {
-    const cfg: Config = {
-      ...minimal,
-      paths: { ...minimal.paths, tokens: '/nonexistent' },
-      utilities: [typography()],
-    };
-    await expect(validateConfig(cfg)).rejects.toThrow();
+  it('accepts a render table and names the broken rule', async () => {
+    const rule = { theme: 'Mode/Dark', selector: '.dark', references: true, file: 'variables/mode.css' };
+    await expect(validateConfig({ ...minimal, render: [rule] })).resolves.toBeUndefined();
+    await expect(validateConfig({ ...minimal, render: 'render.json' })).resolves.toBeUndefined();
+    await expect(
+      validateConfig({ ...minimal, render: [rule, { ...rule, selector: '' }] })
+    ).rejects.toThrow(/render\[1\]\.selector/);
   });
 });

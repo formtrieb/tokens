@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { asCalc } from "../src/css/variables.js";
-import { deriveRenderTable, renderVariables, type RenderOptions, type TokenSystem } from "../src/index.js";
+import { asCalc, invalidCss } from "../src/css/variables.js";
+import { deriveRenderTable, InvalidCssError, renderVariables, type RenderOptions, type TokenSystem } from "../src/index.js";
 
 const OPTIONS: RenderOptions = {
   prefix: "x-",
@@ -153,4 +153,59 @@ describe("asCalc", () => {
     "leaves %j alone",
     (input) => expect(asCalc(input)).toBe(input)
   );
+});
+
+describe("output validation (FOR-497)", () => {
+  const sys = (tokens: Record<string, unknown>) =>
+    system({ s: tokens }, [{ id: "t", group: "G", name: "G", selectedTokenSets: { s: "enabled" } }]);
+  const render = (tokens: Record<string, unknown>) =>
+    renderVariables(sys(tokens), [{ theme: "G/G", selector: ":root", references: false, file: "g.css" }], OPTIONS);
+
+  it("refuses a bezier without four numbers, naming path, theme and file", () => {
+    expect(() => render({ easing: { in: { $value: [{}, {}, {}, {}], $type: "cubicBezier" } } })).toThrow(
+      /easing\.in \(theme G\/G, g\.css\): an object where CSS needs a value/
+    );
+    expect(() => render({ easing: { in: { $value: [0.4, 0, 1], $type: "cubicBezier" } } })).toThrow(/cubic-bezier needs four numbers/);
+  });
+
+  it("refuses an unresolved reference", () => {
+    expect(() => render({ a: { $value: "{nowhere}", $type: "dimension" } })).toThrow(/unresolved reference \{nowhere\}/);
+  });
+
+  it("collects every problem before it throws", () => {
+    try {
+      render({ a: { $value: "{x}", $type: "number" }, b: { $value: "{y}", $type: "number" } });
+      expect.unreachable();
+    } catch (e) {
+      expect((e as InvalidCssError).problems.map((p) => p.path)).toEqual(["a", "b"]);
+    }
+  });
+
+  it("lets valid values through", () => {
+    expect(() =>
+      render({
+        e: { $value: [0.2, 0, 0, 1], $type: "cubicBezier" },
+        k: { $value: "ease-in-out", $type: "cubicBezier" },
+        c: { $value: "rgba(0,0,0,0.5)", $type: "color" },
+        n: { $value: "-0.5", $type: "number" },
+      })
+    ).not.toThrow();
+  });
+});
+
+describe("invalidCss", () => {
+  it.each([
+    ["80rem-1px", "dimension"],
+    ["var(--a) * 2px", "dimension"],
+    ["2 + 3", "number"],
+  ])("finds leftover math in %j", (v, t) => expect(invalidCss(v, t)).toMatch(/arithmetic/));
+
+  it.each([
+    ["calc(var(--a) - 1px)", "dimension"],
+    ["var(--ds-dimension-0-5x)", "dimension"],
+    ["0 -1px", "dimension"],
+    ["-0.05em", "dimension"],
+    ["rgb(0% 0% 0% / 0.6)", "color"],
+    ["700 1rem/1.5 Inter", "typography"],
+  ])("accepts %j", (v, t) => expect(invalidCss(v, t)).toBeUndefined());
 });
