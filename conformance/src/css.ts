@@ -27,7 +27,6 @@ import {
   renderUtilities,
   renderVariables,
   type RenderOptions,
-  type UtilityBuilder,
 } from '../../packages/render/src/index.js';
 import { compareTrees, isGreen, type AllowRule, type FileVerdict } from './css-diff.js';
 import { loadTokenSystem } from './machines.js';
@@ -155,11 +154,9 @@ async function buildWithRender(
 
   const rules = deriveRenderTable(system.themes, config);
   await step('variables', () => renderVariables(system, rules, options));
-  // The resolver's builders still take `{ tokens, config }`; they move into
-  // render with 3c (FOR-508). Until then render rejects them anyway.
-  await step('utilities', () =>
-    renderUtilities(system, (config.utilities ?? []) as unknown as UtilityBuilder[], options)
-  );
+  // The config's builders are render's own (re-exported by the resolver);
+  // they get the whole config, as the resolver hands it to them.
+  await step('utilities', () => renderUtilities(system, config.utilities ?? [], options, config));
   await step('imports', () => renderImports(files.keys(), seed.get('main.css')));
   await step('bundle', () => {
     const input = new Map(seed);

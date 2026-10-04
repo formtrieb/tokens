@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { directional } from './directional.js';
-import type { Config, Token } from '../types.js';
+import { directional } from '../../src/builders/directional.js';
+import type { BuilderConfig as Config, BuilderToken as Token } from '../../src/types.js';
 
-const cfg: Config = { prefix: 'ds-', paths: { tokens: '', output: '', tokenMap: '' } };
+const cfg: Config = { prefix: 'ds-' };
 const tokens: Token[] = [
   { path: ['spacing', 'component', 'md'], value: '16px', $type: 'dimension', raw: {} },
 ];

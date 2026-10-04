@@ -6,10 +6,11 @@ export type {
   TypographyOptions,
   GroupBehavior,
   RenderTableConfig,
-  RenderToken,
-  UtilityBuilder,
-  UtilityContext,
-  UtilityOutput,
+  BuilderToken,
+  BuilderConfig,
+  BuilderContext,
+  BuilderOutput,
+  BuilderFn,
 } from "./types.js";
 
 export { deriveRenderTable } from "./render-table.js";
@@ -19,6 +20,6 @@ export {
   renderImports,
   renderBundle,
   renderTokenMap,
-  NotRenderedYet,
 } from "./render.js";
 export { kebab } from "./kebab.js";
+export { typography, typographyMixin, directional, single, container, type Side } from "./builders/index.js";

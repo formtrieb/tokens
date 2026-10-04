@@ -1,13 +1,8 @@
-import type { BuilderFn } from '../types.js';
+import type { BuilderFn } from "../types.js";
 
-const HEADER = `/// Typography mixins — auto-generated.
-/// Apply a typography token to any selector via @include.
-///
-/// Usage:
-///   @include typography('display-1');
-///   @include typography-paragraph('body-base-default');
-`;
+const HEADER = "/// Typography mixins — auto-generated.\n";
 
+/** SCSS mixins doing what the typography classes do, for a token name. */
 export function typographyMixin(): BuilderFn {
   return ({ config }) => {
     const p = config.prefix;
@@ -24,6 +19,6 @@ export function typographyMixin(): BuilderFn {
       `  text-indent: var(--${p}#{$token}-text-indent);\n` +
       `  margin-block-end: var(--${p}#{$token}-margin-block-end);\n` +
       `}\n`;
-    return { filename: '_typography.scss', content };
+    return { filename: "_typography.scss", content };
   };
 }

@@ -1,11 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { single } from './single.js';
-import type { Config, Token } from '../types.js';
+import { single } from '../../src/builders/single.js';
+import type { BuilderConfig as Config, BuilderToken as Token } from '../../src/types.js';
 
-const baseConfig: Config = {
-  prefix: 'ds-',
-  paths: { tokens: '', output: '', tokenMap: '' },
-};
+const baseConfig: Config = { prefix: 'ds-' };
 
 const tokens: Token[] = [
   { path: ['colors', 'semantic', 'brand'], value: '#fff', $type: 'color', raw: {} },

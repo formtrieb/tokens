@@ -7,22 +7,30 @@ tree. No file system, no console.**
 
 ## Status
 
-Not published. Under construction (FOR-499): it is being built next to the
-Style-Dictionary resolver and replaces it once both write the same bytes.
-`pnpm conformance --css` at the repository root compares the two, file by
-file; functions not written yet throw and show their files red.
+Not published. Built next to the Style-Dictionary resolver (FOR-499) and
+writing the same bytes: `pnpm conformance --css` at the repository root
+compares the two, file by file. The resolver switches over in step 3d.
 
 | Function | Returns | Lands in |
 |---|---|---|
 | `deriveRenderTable(themes, config)` | `RenderRule[]` | done |
 | `renderVariables(system, rules, options)` | `variables/*.css` | done |
-| `renderUtilities(system, builders, options)` | `utilities/*` | 3c |
-| `renderImports(files, existing?)` | `main.css` | 3c |
-| `renderBundle(files)` | `bundle.css` | 3c |
-| `renderTokenMap(system, options)` | `token-map.json` | 3c |
+| `renderUtilities(system, builders, options, config?)` | `utilities/*` | done |
+| `renderImports(files, existing?)` | `main.css` | done |
+| `renderBundle(files)` | `bundle.css` | done |
+| `renderTokenMap(system, options)` | `token-map.json` | done |
 
 Every render function returns a `Map` of output file (relative to the CSS
 output root) to content. Writing it is the caller's job.
+
+## Builders
+
+`typography`, `typographyMixin`, `directional`, `single`, `container` live
+here; `@formtrieb/token-resolver/builders` re-exports them, so existing
+configs stay as they are. A builder gets `{ tokens, config }`: every token
+of the system (sets in `$metadata.json` order, first definition of a path
+wins) and the caller's config. Custom builders written against the
+resolver's `BuilderFn` keep working.
 
 ## The render table
 

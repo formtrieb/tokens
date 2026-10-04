@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { container } from './container.js';
-import type { Config } from '../types.js';
+import { container } from '../../src/builders/container.js';
+import type { BuilderConfig as Config } from '../../src/types.js';
 
-const cfg: Config = { prefix: 'ds-', paths: { tokens: '', output: '', tokenMap: '' } };
+const cfg: Config = { prefix: 'ds-' };
 
 describe('container', () => {
   it('resolves {token.path} references to var(--prefix-token-path)', async () => {
