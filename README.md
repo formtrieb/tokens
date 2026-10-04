@@ -41,7 +41,7 @@ One tag publishes one package through `.github/workflows/release.yml`
 ```bash
 git tag core-v1.5.0 && git push origin core-v1.5.0          # first: the others depend on it
 git tag render-v0.1.0 && git push origin render-v0.1.0      # before the resolver, which depends on it
-git tag mcp-v2.6.0 resolver-v0.5.0 && git push origin mcp-v2.6.0 resolver-v0.5.0
+git tag resolver-v0.6.0 && git push origin resolver-v0.6.0
 ```
 
 The tag version must equal the package's `package.json`. `pnpm pack`
