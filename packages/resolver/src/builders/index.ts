@@ -1,5 +1,4 @@
-export { single } from './single.js';
-export { directional, type Side } from './directional.js';
-export { container } from './container.js';
-export { typography } from './typography.js';
-export { typographyMixin } from './typography-mixin.js';
+// The builders live in @formtrieb/tokens-render; this path stays so existing
+// configs (`import { typography } from '@formtrieb/token-resolver/builders'`)
+// keep working unchanged.
+export { single, directional, container, typography, typographyMixin, type Side } from '@formtrieb/tokens-render';

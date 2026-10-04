@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "pnpm -r build",
-    "test": "pnpm --filter @formtrieb/tokens-core build && pnpm -r exec vitest run",
+    "test": "pnpm --filter @formtrieb/tokens-core --filter @formtrieb/tokens-render build && pnpm -r exec vitest run",
     "typecheck": "pnpm -r exec tsc --noEmit",
     "conformance": "pnpm --filter @formtrieb/tokens-conformance run conformance"
   },

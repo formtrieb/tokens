@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { typographyMixin } from './typography-mixin.js';
-import type { Config, Token } from '../types.js';
+import { typographyMixin } from '../../src/builders/typography-mixin.js';
+import type { BuilderConfig as Config, BuilderToken as Token } from '../../src/types.js';
 
-const cfg: Config = { prefix: 'ds-', paths: { tokens: '', output: '', tokenMap: '' } };
+const cfg: Config = { prefix: 'ds-' };
 const tokens: Token[] = [];
 
 describe('typographyMixin', () => {

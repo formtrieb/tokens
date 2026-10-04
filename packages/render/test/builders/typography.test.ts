@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { typography } from './typography.js';
-import type { Config, Token } from '../types.js';
+import { typography } from '../../src/builders/typography.js';
+import type { BuilderConfig as Config, BuilderToken as Token } from '../../src/types.js';
 
-const cfg: Config = { prefix: 'ds-', paths: { tokens: '', output: '', tokenMap: '' } };
+const cfg: Config = { prefix: 'ds-' };
 
 const typographyTokens: Token[] = [
   {

@@ -1,26 +1,22 @@
 /**
  * The render functions. Each returns a map of output file → content; the
- * caller decides where the files go. Signatures are fixed, bodies arrive step
- * by step (FOR-499): variables since 3b, the rest in 3c. Until then those
- * throw, and the conformance run's `--css` mode shows their files red.
+ * caller decides where the files go.
  */
 import { buildDictionary, findTheme } from "./css/dictionary.js";
 import { finishValues } from "./css/values.js";
 import { FILE_HEADER, renderBlock, type Block } from "./css/variables.js";
+import { builderTokens } from "./builders/tokens.js";
+import { bundleCss } from "./bundle.js";
+import { mainCss } from "./imports.js";
+import { tokenMap } from "./token-map.js";
 import type {
   RenderedFiles,
   RenderOptions,
   RenderRule,
   TokenSystem,
-  UtilityBuilder,
+  BuilderConfig,
+  BuilderFn,
 } from "./types.js";
-
-export class NotRenderedYet extends Error {
-  constructor(fn: string, step: string) {
-    super(`${fn} is not implemented yet (${step})`);
-    this.name = "NotRenderedYet";
-  }
-}
 
 /**
  * One file per distinct `rule.file`, blocks in rule order. A file with one
@@ -52,13 +48,31 @@ export function renderVariables(
   return files;
 }
 
-/** One file per builder, under `utilities/`. */
-export async function renderUtilities(
+/**
+ * One file per builder, under `utilities/`. Builders get every token of the
+ * system and `config` — the resolver passes its whole config, so custom
+ * builders keep reading what they always read.
+ */
+export async function renderUtilities<C extends BuilderConfig = BuilderConfig>(
   system: TokenSystem,
-  builders: readonly UtilityBuilder[],
-  options: RenderOptions
+  builders: readonly BuilderFn<C>[],
+  options: RenderOptions,
+  config: C = { prefix: options.prefix } as C
 ): Promise<RenderedFiles> {
-  throw new NotRenderedYet("renderUtilities", "3c, FOR-508");
+  const files: RenderedFiles = new Map();
+  if (builders.length === 0) return files;
+  const tokens = builderTokens(system.sets, system.order);
+  for (const builder of builders) {
+    const out = await builder({ tokens, config });
+    const file = `utilities/${out.filename}`;
+    if (files.has(file)) {
+      throw new Error(
+        `Duplicate utility filename: ${out.filename} — two builders produced the same file. Rename one.`
+      );
+    }
+    files.set(file, out.content);
+  }
+  return files;
 }
 
 /**
@@ -66,15 +80,15 @@ export async function renderUtilities(
  * `files`. Lines of `existing` that are not generated imports are kept on top.
  */
 export function renderImports(files: Iterable<string>, existing?: string): RenderedFiles {
-  throw new NotRenderedYet("renderImports", "3c, FOR-508");
+  return new Map([["main.css", mainCss(files, existing)]]);
 }
 
 /** `bundle.css`: `main.css` with every local `@import` inlined from `files`. */
 export function renderBundle(files: ReadonlyMap<string, string>): RenderedFiles {
-  throw new NotRenderedYet("renderBundle", "3c, FOR-508");
+  return new Map([["bundle.css", bundleCss(files)]]);
 }
 
 /** `token-map.json`: Figma path ↔ CSS variable lookup. */
 export function renderTokenMap(system: TokenSystem, options: RenderOptions): RenderedFiles {
-  throw new NotRenderedYet("renderTokenMap", "3c, FOR-508");
+  return new Map([["token-map.json", tokenMap(system, options)]]);
 }

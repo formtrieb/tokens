@@ -68,24 +68,34 @@ export interface RenderTableConfig {
   defaultGroupBehavior?: GroupBehavior;
 }
 
-/** A token as a utility builder sees it. Settled in 3c (FOR-508). */
-export interface RenderToken {
+/**
+ * A token as a utility builder sees it: path, raw `$value`, raw `$type`.
+ * The shape `@formtrieb/token-resolver` builders have always received.
+ */
+export interface BuilderToken {
   path: string[];
   value: unknown;
   $type?: string;
+  /** The token node as written ($value, $type, $extensions). */
+  raw: Record<string, unknown>;
 }
 
-export interface UtilityContext {
-  tokens: RenderToken[];
-  options: RenderOptions;
+/** What a builder may read from the configuration. The resolver passes its whole config. */
+export interface BuilderConfig {
+  prefix: string;
 }
 
-export interface UtilityOutput {
+export interface BuilderContext<C extends BuilderConfig = BuilderConfig> {
+  tokens: BuilderToken[];
+  config: C;
+}
+
+export interface BuilderOutput {
   filename: string;
   content: string;
 }
 
-/** A utility builder: tokens in, one CSS file out. */
-export type UtilityBuilder = ((ctx: UtilityContext) => UtilityOutput | Promise<UtilityOutput>) & {
+/** A utility builder: tokens in, one file out. */
+export type BuilderFn<C extends BuilderConfig = BuilderConfig> = ((ctx: BuilderContext<C>) => BuilderOutput | Promise<BuilderOutput>) & {
   builderName?: string;
 };

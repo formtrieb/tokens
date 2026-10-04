@@ -5,6 +5,17 @@ All notable changes to `@formtrieb/token-resolver` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- The utility builders (`typography`, `typographyMixin`, `directional`,
+  `single`, `container`) moved to `@formtrieb/tokens-render`;
+  `@formtrieb/token-resolver/builders` re-exports them, so configs stay
+  unchanged. Output is byte-identical (E2E snapshot unchanged). New
+  dependency `@formtrieb/tokens-render` — it has to be published before
+  the next release of this package.
+
 ## [0.5.0] — 2026-10-03
 
 ### Changed
