@@ -1,6 +1,6 @@
 {
   "name": "@formtrieb/tokens-render",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Renders a Tokens-Studio-shaped token system to CSS — variables per render table, utilities, imports, bundle, token map. Pure functions over the tokens-core tree; no file system.",
   "license": "Apache-2.0",
   "type": "module",
