@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parse, formatHex } from "culori";
+import { converter, parse, formatHex } from "culori";
 import { mapToSrgbGamut } from "../src/parser/gamut.js";
 
 describe("mapToSrgbGamut", () => {
@@ -21,5 +21,20 @@ describe("mapToSrgbGamut", () => {
   it("handles an achromatic colour without producing NaN", () => {
     expect(formatHex(mapToSrgbGamut(parse("#ffffff")))).toBe("#ffffff");
     expect(formatHex(mapToSrgbGamut(parse("#000000")))).toBe("#000000");
+  });
+
+  it("returns a colour inside sRGB unchanged: corners, white and black", () => {
+    const rgb = converter("rgb");
+    for (const hex of ["#ff0000", "#00ff00", "#0000ff", "#00ffff", "#ff00ff", "#ffff00", "#ffffff", "#000000"]) {
+      const out = mapToSrgbGamut(parse(hex)) as { mode: string; r: number; g: number; b: number };
+      const exact = rgb(parse(hex))!;
+      expect(out.mode, hex).toBe("rgb");
+      expect([out.r, out.g, out.b], hex).toEqual([exact.r, exact.g, exact.b]);
+    }
+  });
+
+  it("still maps a colour outside sRGB", () => {
+    const out = mapToSrgbGamut(parse("oklch(0.7 0.4 30)")) as { r: number; g: number; b: number };
+    for (const v of [out.r, out.g, out.b]) expect(v).toBeGreaterThanOrEqual(0), expect(v).toBeLessThanOrEqual(1);
   });
 });

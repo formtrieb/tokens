@@ -5,6 +5,16 @@ All notable changes to `@formtrieb/tokens-core` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.1] — 2026-10-06
+
+### Fixed
+
+- `mapToSrgbGamut` returns a colour inside sRGB unchanged instead of
+  round-tripping it through OKLCH, which nudged colours on the gamut edge
+  (`#ff0000` came back with r ≈ 0.9999) and could tip a value on a
+  rounding boundary in colour modifiers and `lch()`. Only colours outside
+  sRGB are mapped.
+
 ## [1.7.0] — 2026-10-06
 
 ### Added
