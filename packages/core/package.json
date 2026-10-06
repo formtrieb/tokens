@@ -1,6 +1,6 @@
 {
   "name": "@formtrieb/tokens-core",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Core library for Tokens-Studio-shaped design token systems — loaders, theme composition, reference resolution, and DTCG-aware analysis primitives. Pure functions, framework-agnostic.",
   "license": "Apache-2.0",
   "type": "module",
