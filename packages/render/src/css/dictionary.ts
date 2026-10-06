@@ -25,8 +25,12 @@ export interface Entry {
   /** `$extensions['studio.tokens'].modify`, before resolution */
   modify?: Json;
   description?: string;
-  /** from an `enabled` set, i.e. written to this theme's block */
-  isSource: boolean;
+  /**
+   * from an `enabled` set, i.e. written to this theme's block. (A `source`
+   * set in Tokens Studio — `RawToken.isSource` in core — is the opposite:
+   * loaded to resolve references, never written.)
+   */
+  emitted: boolean;
 }
 
 export interface Dictionary {
@@ -41,11 +45,11 @@ const isPlain = (v: unknown): v is Json =>
 
 const isToken = (v: unknown): v is Json => isPlain(v) && Object.hasOwn(v, "$value");
 
-/** Tag every token of a set with where it came from. */
-function tag(node: Json, isSource: boolean): void {
+/** Tag every token of a set with whether this theme writes it. */
+function tag(node: Json, emitted: boolean): void {
   for (const value of Object.values(node)) {
-    if (isToken(value)) value.isSource = isSource;
-    else if (isPlain(value)) tag(value, isSource);
+    if (isToken(value)) value.emitted = emitted;
+    else if (isPlain(value)) tag(value, emitted);
   }
 }
 
@@ -114,7 +118,7 @@ function flatten(node: Json, path: string[], out: Entry[]): void {
         original: structuredClone(value.$value),
         ...(studio?.modify !== undefined && { modify: structuredClone(studio.modify as Json) }),
         ...(typeof value.$description === "string" && { description: value.$description }),
-        isSource: value.isSource === true,
+        emitted: value.emitted === true,
       });
     } else {
       flatten(value, [...path, key], out);
@@ -130,16 +134,17 @@ export function findTheme(system: TokenSystem, id: string): ThemeDefinition {
 
 export function buildDictionary(system: TokenSystem, theme: ThemeDefinition): Dictionary {
   const entries = Object.entries(theme.selectedTokenSets);
-  const include = entries.filter(([, state]) => state === "source").map(([set]) => set);
-  const source = entries.filter(([, state]) => state === "enabled").map(([set]) => set);
+  // Tokens Studio's words: `source` sets resolve references, `enabled` sets are written
+  const resolveOnly = entries.filter(([, state]) => state === "source").map(([set]) => set);
+  const enabled = entries.filter(([, state]) => state === "enabled").map(([set]) => set);
 
   const tree: Json = {};
-  for (const [sets, isSource] of [[include, false], [source, true]] as const) {
+  for (const [sets, emitted] of [[resolveOnly, false], [enabled, true]] as const) {
     for (const set of sets) {
       const content = system.sets.get(set);
       if (!content) continue;
       const copy = structuredClone(content);
-      tag(copy, isSource);
+      tag(copy, emitted);
       extend(tree, copy);
     }
   }

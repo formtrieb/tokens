@@ -292,7 +292,7 @@ export function renderBlock(
   options: ResolvedRenderOptions,
   presentation: Presentation
 ): Block {
-  const emitted = dict.entries.filter((e) => e.isSource && !isPrivate(e.path, options.privateTokenPrefixes));
+  const emitted = dict.entries.filter((e) => e.emitted && !isPrivate(e.path, options.privateTokenPrefixes));
   // A custom property may use one declared after it: var() resolves at computed-value time. The
   // 'canonical' dialect keeps source order; 'style-dictionary' sorts as Style Dictionary did, with a
   // comparator that is not transitive, so its order follows the engine's sort algorithm.
