@@ -156,6 +156,8 @@ function withComment(line: string, description: string | undefined): string {
   return `${comment}\n${line}`;
 }
 
+// The marker's length encodes the index (n × `x` is reference n): no digits,
+// so the math and unit steps of the value chain cannot read it as a number.
 const MARK = /\u0001(x+)\u0001/g;
 
 /**
