@@ -1,7 +1,7 @@
 /**
  * `token-map.json`: Figma path → CSS variable, for everything a theme
  * writes (sets that are `enabled` somewhere), typography companions
- * included. The Figma path keeps source casing (`zIndex/base`); the
+ * included in the `'style-dictionary'` dialect. The Figma path keeps source casing (`zIndex/base`); the
  * variable kebab-cases each segment (`--ds-z-index-base`).
  */
 import { kebab } from "./kebab.js";
@@ -31,7 +31,7 @@ function collect(node: unknown, path: string[], options: ResolvedRenderOptions, 
     if (isPrivate(path, options.privateTokenPrefixes)) return;
     out[path.join("/")] = cssVar(path);
     const value = obj.$value;
-    if (obj.$type === "typography" && value !== null && typeof value === "object" && !Array.isArray(value)) {
+    if (options.dialect === "style-dictionary" && obj.$type === "typography" && value !== null && typeof value === "object" && !Array.isArray(value)) {
       for (const [field, segment] of TYPOGRAPHY_COMPANIONS) {
         if (!(value as Record<string, unknown>)[field]) continue;
         const p = [...path, segment];

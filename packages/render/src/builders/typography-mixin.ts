@@ -1,4 +1,5 @@
 import type { BuilderFn } from "../types.js";
+import { requireCompanions } from "./companions.js";
 
 const HEADER = `/// Typography mixins — auto-generated.
 /// Apply a typography token to any selector via @include.
@@ -10,7 +11,8 @@ const HEADER = `/// Typography mixins — auto-generated.
 
 /** SCSS mixins doing what the typography classes do, for a token name. */
 export function typographyMixin(): BuilderFn {
-  return ({ config }) => {
+  return ({ config, dialect }) => {
+    requireCompanions("typographyMixin()", dialect);
     const p = config.prefix;
     const content =
       HEADER +

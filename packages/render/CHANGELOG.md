@@ -5,6 +5,20 @@ All notable changes to `@formtrieb/tokens-render` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `dialect` option: `"style-dictionary"` (default, unchanged output) or
+  `"canonical"`. `canonical` writes values as core canonicalizes them —
+  lengths with their own units, colour literals as written — and no
+  typography companions, in the variables or the token map; a file always
+  ends with a newline. The dialect sets the defaults of `units` and
+  `color`, which can still be set on their own.
+- Builders receive the run's `dialect` in their context. The
+  `typography` and `typographyMixin` builders throw in the `canonical`
+  dialect, since the companion variables they read are not written there.
+
 ## [0.1.3] — 2026-10-06
 
 ### Changed

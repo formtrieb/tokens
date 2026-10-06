@@ -1,0 +1,651 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`dialect 'canonical' > renders the fixture as committed 1`] = `
+{
+  "variables/components-button.css": "/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --ds-button-border: var(--ds-border-width-thin);
+  --ds-button-text: var(--ds-color-text-inverted-primary);
+  --ds-button-radius: var(--ds-radius-sm);
+  --ds-button-height: var(--ds-controls-height-medium);
+  --ds-button-padding: var(--ds-spacing-inset-m);
+  --ds-button-background: var(--ds-color-brand-primary);
+  --ds-button-background-hover: var(--ds-color-brand-hover);
+}
+",
+  "variables/components-card.css": "/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --ds-card-shadow: var(--ds-shadow-elevation-1);
+  --ds-card-radius: var(--ds-radius-md);
+  --ds-card-gap: var(--ds-spacing-stack-2x);
+  --ds-card-background: var(--ds-color-surface-level1);
+}
+",
+  "variables/device.css": "/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+[data-device="Desktop"] {
+  --ds-device-name: desktop;
+  --ds-layout-grid-columns: 12;
+  --ds-content-max-width: 1200px;
+  --ds-font-sizes-body-small: 14px;
+  --ds-font-sizes-body-large: 18px;
+  --ds-font-sizes-mono-base: 14px;
+  --ds-line-heights-body-small: 20px;
+  --ds-line-heights-body-base: 1.5;
+  --ds-line-heights-body-large: 28px;
+  --ds-line-heights-mono-base: 20px;
+  --ds-line-heights-metric-base: 1.2;
+  --ds-spacing-stack-1x: var(--ds-dimension-1x);
+  --ds-spacing-stack-2x: var(--ds-dimension-2x);
+  --ds-spacing-stack-4x: var(--ds-dimension-4x);
+  --ds-spacing-inset-s: var(--ds-dimension-2x);
+  --ds-spacing-inset-m: var(--ds-dimension-4x);
+  --ds-spacing-inset-l: var(--ds-dimension-6x);
+  --ds-spacing-component-gap: var(--ds-dimension-2x);
+  --ds-layout-grid-margin: var(--ds-dimension-8x);
+  --ds-layout-grid-gutter: var(--ds-dimension-6x);
+  --ds-content-min-width: var(--ds-breakpoints-desktop);
+  --ds-paragraph-spacings-none: var(--ds-dimension-0x);
+  --ds-paragraph-spacings-s: var(--ds-dimension-2x);
+  --ds-paragraph-spacings-m: var(--ds-dimension-4x);
+  --ds-font-sizes-title-1: var(--ds-dimension-12x);
+  --ds-font-sizes-title-2: var(--ds-dimension-8x);
+  --ds-font-sizes-body-base: var(--ds-dimension-4x);
+  --ds-font-sizes-metric-base: var(--ds-dimension-10x);
+  --ds-line-heights-title-1: var(--ds-dimension-16x);
+  --ds-line-heights-title-2: var(--ds-dimension-10x);
+  --ds-controls-min-target: var(--ds-dimension-10x);
+  --ds-controls-height-small: var(--ds-dimension-6x);
+  --ds-controls-height-medium: var(--ds-dimension-8x);
+}
+[data-device="Tablet"] {
+  --ds-device-name: tablet;
+  --ds-layout-grid-columns: 12;
+  --ds-font-sizes-body-small: 14px;
+  --ds-font-sizes-body-large: 18px;
+  --ds-font-sizes-mono-base: 14px;
+  --ds-line-heights-body-small: 20px;
+  --ds-line-heights-body-base: 1.5;
+  --ds-line-heights-body-large: 28px;
+  --ds-line-heights-mono-base: 20px;
+  --ds-line-heights-metric-base: 1.2;
+  --ds-spacing-stack-1x: var(--ds-dimension-1x);
+  --ds-spacing-stack-2x: var(--ds-dimension-2x);
+  --ds-spacing-stack-4x: var(--ds-dimension-4x);
+  --ds-spacing-inset-s: var(--ds-dimension-2x);
+  --ds-spacing-inset-m: var(--ds-dimension-4x);
+  --ds-spacing-inset-l: var(--ds-dimension-6x);
+  --ds-spacing-component-gap: var(--ds-dimension-2x);
+  --ds-layout-grid-margin: var(--ds-dimension-8x);
+  --ds-layout-grid-gutter: var(--ds-dimension-6x);
+  --ds-content-min-width: var(--ds-breakpoints-tablet);
+  --ds-content-max-width: calc(var(--ds-breakpoints-desktop) - 1px);
+  --ds-paragraph-spacings-none: var(--ds-dimension-0x);
+  --ds-paragraph-spacings-s: var(--ds-dimension-2x);
+  --ds-paragraph-spacings-m: var(--ds-dimension-4x);
+  --ds-font-sizes-title-1: var(--ds-dimension-12x);
+  --ds-font-sizes-title-2: var(--ds-dimension-8x);
+  --ds-font-sizes-body-base: var(--ds-dimension-4x);
+  --ds-font-sizes-metric-base: var(--ds-dimension-10x);
+  --ds-line-heights-title-1: var(--ds-dimension-16x);
+  --ds-line-heights-title-2: var(--ds-dimension-10x);
+  --ds-controls-min-target: var(--ds-dimension-10x);
+  --ds-controls-height-small: var(--ds-dimension-6x);
+  --ds-controls-height-medium: var(--ds-dimension-8x);
+}
+[data-device="Mobile"] {
+  --ds-device-name: mobile;
+  --ds-layout-grid-columns: 4;
+  --ds-content-max-width: 100%;
+  --ds-font-sizes-body-small: 14px;
+  --ds-font-sizes-body-large: 18px;
+  --ds-font-sizes-mono-base: 14px;
+  --ds-line-heights-body-small: 20px;
+  --ds-line-heights-body-base: 1.5;
+  --ds-line-heights-body-large: 28px;
+  --ds-line-heights-mono-base: 20px;
+  --ds-line-heights-metric-base: 1.2;
+  --ds-spacing-stack-1x: var(--ds-dimension-1x);
+  --ds-spacing-stack-2x: var(--ds-dimension-2x);
+  --ds-spacing-stack-4x: var(--ds-dimension-3x);
+  --ds-spacing-inset-s: var(--ds-dimension-2x);
+  --ds-spacing-inset-m: var(--ds-dimension-3x);
+  --ds-spacing-inset-l: var(--ds-dimension-4x);
+  --ds-spacing-component-gap: var(--ds-dimension-2x);
+  --ds-layout-grid-margin: var(--ds-dimension-4x);
+  --ds-layout-grid-gutter: var(--ds-dimension-4x);
+  --ds-content-min-width: var(--ds-breakpoints-mobile);
+  --ds-paragraph-spacings-none: var(--ds-dimension-0x);
+  --ds-paragraph-spacings-s: var(--ds-dimension-2x);
+  --ds-paragraph-spacings-m: var(--ds-dimension-4x);
+  --ds-font-sizes-title-1: var(--ds-dimension-8x);
+  --ds-font-sizes-title-2: var(--ds-dimension-6x);
+  --ds-font-sizes-body-base: var(--ds-dimension-4x);
+  --ds-font-sizes-metric-base: var(--ds-dimension-8x);
+  --ds-line-heights-title-1: var(--ds-dimension-10x);
+  --ds-line-heights-title-2: var(--ds-dimension-8x);
+  --ds-controls-min-target: var(--ds-dimension-12x);
+  --ds-controls-height-small: var(--ds-dimension-6x);
+  --ds-controls-height-medium: var(--ds-dimension-10x);
+}
+",
+  "variables/foundation.css": "/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --ds-colors-white: rgb(100% 100% 100%);
+  --ds-colors-black: rgb(0% 0% 0%);
+  --ds-dimension-0x: 0px;
+  --ds-dimension-0-25x: 1px;
+  --ds-dimension-0-5x: 2px;
+  --ds-dimension-1x: 4px;
+  --ds-dimension-2x: 8px;
+  --ds-dimension-3x: 12px;
+  --ds-dimension-4x: 16px;
+  --ds-dimension-6x: 24px;
+  --ds-dimension-8x: 32px;
+  --ds-dimension-10x: 40px;
+  --ds-dimension-12x: 48px;
+  --ds-dimension-16x: 64px;
+  --ds-breakpoints-mobile: 0px;
+  --ds-breakpoints-tablet: 768px;
+  --ds-breakpoints-desktop: 1280px;
+  --ds-border-width-thin: 1px;
+  --ds-border-width-thick: 2px;
+  --ds-z-index-base: 0;
+  --ds-z-index-overlay: 100;
+  --ds-z-index-modal: 200;
+  --ds-opacity-none: 0;
+  --ds-opacity-subtle: 0.08;
+  --ds-opacity-medium: 0.4;
+  --ds-opacity-full: 1;
+  --ds-duration-fast: 100ms;
+  --ds-duration-normal: 200ms;
+  --ds-duration-slow: 400ms;
+  --ds-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ds-colors-neutral-1: rgb(96.601% 96.601% 96.601%);
+  --ds-colors-neutral-2: rgb(92.103% 92.103% 92.103%);
+  --ds-colors-neutral-3: rgb(84.332% 84.332% 84.332%);
+  --ds-colors-neutral-4: rgb(75.613% 75.613% 75.613%);
+  --ds-colors-neutral-5: rgb(67.078% 67.078% 67.078%);
+  --ds-colors-neutral-6: rgb(58.739% 58.739% 58.739%);
+  --ds-colors-neutral-7: rgb(50.612% 50.612% 50.612%);
+  --ds-colors-neutral-8: rgb(41.744% 41.744% 41.744%);
+  --ds-colors-neutral-9: rgb(33.198% 33.198% 33.198%);
+  --ds-colors-neutral-10: rgb(24.131% 24.131% 24.131%);
+  --ds-colors-ocean-1: rgb(89.92% 97.811% 100%);
+  --ds-colors-ocean-2: rgb(80.742% 94.087% 100%);
+  --ds-colors-ocean-3: rgb(64.367% 87.493% 100%);
+  --ds-colors-ocean-4: rgb(40.982% 80.101% 100%);
+  --ds-colors-ocean-5: rgb(0% 72.737% 100%);
+  --ds-colors-ocean-6: rgb(0% 64.576% 91.321%);
+  --ds-colors-ocean-7: rgb(0% 56% 78.476%);
+  --ds-colors-ocean-8: rgb(0% 46.379% 65.56%);
+  --ds-colors-ocean-9: rgb(0% 36.92% 53.852%);
+  --ds-colors-ocean-10: rgb(0% 26.921% 41.167%);
+  --ds-colors-ember-1: rgb(100% 93.913% 92.384%);
+  --ds-colors-ember-2: rgb(100% 88.2% 86.05%);
+  --ds-colors-ember-3: rgb(100% 77.597% 74.497%);
+  --ds-colors-ember-4: rgb(100% 64.564% 60.91%);
+  --ds-colors-ember-5: rgb(100% 49.715% 46.771%);
+  --ds-colors-ember-6: rgb(99.589% 36.209% 35.582%);
+  --ds-colors-ember-7: rgb(88.754% 28.069% 28.769%);
+  --ds-colors-ember-8: rgb(74.295% 22.203% 23.065%);
+  --ds-colors-ember-9: rgb(58.658% 18.672% 18.69%);
+  --ds-colors-ember-10: rgb(42.66% 14.07% 13.653%);
+  --ds-colors-moss-1: rgb(91.227% 98.668% 90.558%);
+  --ds-colors-moss-2: rgb(81.109% 96.067% 80.079%);
+  --ds-colors-moss-3: rgb(66.343% 90.246% 65.467%);
+  --ds-colors-moss-4: rgb(49.625% 83.163% 49.976%);
+  --ds-colors-moss-5: rgb(31.968% 75.72% 35.49%);
+  --ds-colors-moss-6: rgb(10.18% 67.802% 22.705%);
+  --ds-colors-moss-7: rgb(0% 59.02% 15.634%);
+  --ds-colors-moss-8: rgb(0% 48.909% 11.604%);
+  --ds-colors-moss-9: rgb(0% 38.827% 10.33%);
+  --ds-colors-moss-10: rgb(3.1271% 28.247% 7.9228%);
+  --ds-colors-sun-1: rgb(99.211% 96.5% 87.467%);
+  --ds-colors-sun-2: rgb(96.82% 91.931% 73.93%);
+  --ds-colors-sun-3: rgb(90.829% 84.115% 55.739%);
+  --ds-colors-sun-4: rgb(83.144% 75.399% 36.243%);
+  --ds-colors-sun-5: rgb(74.838% 66.909% 15.737%);
+  --ds-colors-sun-6: rgb(66.084% 58.637% 0%);
+  --ds-colors-sun-7: rgb(57.129% 50.547% 0%);
+  --ds-colors-sun-8: rgb(47.245% 41.693% 0%);
+  --ds-colors-sun-9: rgb(37.661% 33.144% 0%);
+  --ds-colors-sun-10: rgb(27.564% 24.076% 0%);
+  --ds-colors-plum-1: rgb(99.186% 95.516% 99.611%);
+  --ds-colors-plum-2: rgb(97.163% 89.915% 98.063%);
+  --ds-colors-plum-3: rgb(92.087% 80.842% 93.604%);
+  --ds-colors-plum-4: rgb(85.829% 70.794% 88.035%);
+  --ds-colors-plum-5: rgb(79.161% 61.088% 82.022%);
+  --ds-colors-plum-6: rgb(71.802% 51.955% 75.143%);
+  --ds-colors-plum-7: rgb(62.895% 44.103% 66.134%);
+  --ds-colors-plum-8: rgb(52.241% 36.157% 55.027%);
+  --ds-colors-plum-9: rgb(41.369% 28.911% 43.491%);
+  --ds-colors-plum-10: rgb(30.046% 21.073% 31.547%);
+  --ds-colors-ocean-11: rgb(4.351% 21.776% 32.779%);
+  --ds-colors-moss-0: rgb(92.982% 98.934% 92.446%);
+  --ds-colors-sun-0: rgb(99.448% 97.55% 91.227%);
+}
+",
+  "variables/semantic.css": "/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+[data-semantic="Light"] {
+  --ds-opacity-disabled: var(--ds-opacity-medium);
+  --ds-opacity-hover: var(--ds-opacity-subtle);
+  --ds-color-text-primary: var(--ds-colors-black);
+  --ds-color-text-inverted-primary: var(--ds-colors-white);
+  --ds-color-page: var(--ds-colors-white);
+  --ds-color-backdrop: rgb(0% 0% 0% / 0.6);
+  --ds-color-surface-level0: var(--ds-colors-white);
+  --ds-color-interaction-stroke-neutral-primary: rgb(0% 0% 0% / 0.12);
+  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0,0,0,0.08);
+  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0,0,0,0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0,0,0,0.10);
+  --ds-color-text-secondary: rgb(0% 0% 0% / 0.6);
+  --ds-color-text-tertiary: rgb(0% 0% 0% / 0.4);
+  --ds-color-text-inverted-secondary: rgb(100% 100% 100% / 0.6);
+  --ds-color-text-accent: var(--ds-colors-plum-7);
+  --ds-color-brand-primary: var(--ds-colors-ocean-6);
+  --ds-color-brand-hover: rgb(10.15% 50.714% 71.176%);
+  --ds-color-brand-pressed: rgb(38.437% 71.461% 93.202%);
+  --ds-color-surface-level1: var(--ds-colors-neutral-1);
+  --ds-color-surface-level2: var(--ds-colors-neutral-2);
+  --ds-color-divider: var(--ds-colors-neutral-3);
+  --ds-color-interaction-stroke-neutral-secondary: var(--ds-colors-neutral-4);
+  --ds-color-status-positive-background: var(--ds-colors-moss-1);
+  --ds-color-status-positive-text: var(--ds-colors-moss-9);
+  --ds-color-status-positive-stroke: var(--ds-colors-moss-4);
+  --ds-color-status-positive-indicator: var(--ds-colors-moss-6);
+  --ds-color-status-negative-background: var(--ds-colors-ember-1);
+  --ds-color-status-negative-text: var(--ds-colors-ember-9);
+  --ds-color-status-negative-stroke: var(--ds-colors-ember-4);
+  --ds-color-status-negative-indicator: var(--ds-colors-ember-6);
+  --ds-color-status-warning-background: var(--ds-colors-sun-1);
+  --ds-color-status-warning-text: var(--ds-colors-sun-9);
+  --ds-color-status-warning-stroke: var(--ds-colors-sun-4);
+  --ds-color-status-warning-indicator: var(--ds-colors-sun-6);
+  --ds-color-status-info-background: var(--ds-colors-ocean-1);
+  --ds-color-status-info-text: var(--ds-colors-ocean-9);
+  --ds-color-status-info-stroke: var(--ds-colors-ocean-4);
+  --ds-color-status-info-indicator: var(--ds-colors-ocean-6);
+  --ds-color-text-highlight: var(--ds-colors-sun-0);
+  --ds-color-brand-deep: var(--ds-colors-ocean-11);
+  --ds-color-surface-fresh: var(--ds-colors-moss-0);
+}
+[data-semantic="Dark"] {
+  --ds-opacity-disabled: var(--ds-opacity-medium);
+  --ds-opacity-hover: var(--ds-opacity-subtle);
+  --ds-color-text-primary: var(--ds-colors-white);
+  --ds-color-text-inverted-primary: var(--ds-colors-black);
+  --ds-color-page: var(--ds-colors-black);
+  --ds-color-backdrop: rgb(0% 0% 0% / 0.6);
+  --ds-color-surface-level0: var(--ds-colors-black);
+  --ds-color-interaction-stroke-neutral-primary: rgb(100% 100% 100% / 0.12);
+  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0,0,0,0.08);
+  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0,0,0,0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0,0,0,0.10);
+  --ds-color-text-secondary: rgb(100% 100% 100% / 0.6);
+  --ds-color-text-tertiary: rgb(100% 100% 100% / 0.4);
+  --ds-color-text-inverted-secondary: rgb(0% 0% 0% / 0.6);
+  --ds-color-text-accent: var(--ds-colors-plum-4);
+  --ds-color-brand-primary: var(--ds-colors-ocean-5);
+  --ds-color-brand-hover: rgb(11.098% 56.962% 77.798%);
+  --ds-color-brand-pressed: rgb(40.539% 78.117% 100%);
+  --ds-color-surface-level1: var(--ds-colors-neutral-10);
+  --ds-color-surface-level2: var(--ds-colors-neutral-9);
+  --ds-color-divider: var(--ds-colors-neutral-8);
+  --ds-color-interaction-stroke-neutral-secondary: var(--ds-colors-neutral-7);
+  --ds-color-status-positive-background: var(--ds-colors-moss-10);
+  --ds-color-status-positive-text: var(--ds-colors-moss-2);
+  --ds-color-status-positive-stroke: var(--ds-colors-moss-7);
+  --ds-color-status-positive-indicator: var(--ds-colors-moss-5);
+  --ds-color-status-negative-background: var(--ds-colors-ember-10);
+  --ds-color-status-negative-text: var(--ds-colors-ember-2);
+  --ds-color-status-negative-stroke: var(--ds-colors-ember-7);
+  --ds-color-status-negative-indicator: var(--ds-colors-ember-5);
+  --ds-color-status-warning-background: var(--ds-colors-sun-10);
+  --ds-color-status-warning-text: var(--ds-colors-sun-2);
+  --ds-color-status-warning-stroke: var(--ds-colors-sun-7);
+  --ds-color-status-warning-indicator: var(--ds-colors-sun-5);
+  --ds-color-status-info-background: var(--ds-colors-ocean-10);
+  --ds-color-status-info-text: var(--ds-colors-ocean-2);
+  --ds-color-status-info-stroke: var(--ds-colors-ocean-7);
+  --ds-color-status-info-indicator: var(--ds-colors-ocean-5);
+  --ds-color-text-highlight: var(--ds-colors-sun-0);
+  --ds-color-brand-deep: var(--ds-colors-ocean-11);
+  --ds-color-surface-fresh: var(--ds-colors-moss-0);
+}
+",
+  "variables/shape.css": "/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+[data-shape="Round"] {
+  --ds-radius-full: 99999px;
+  --ds-radius-none: var(--ds-dimension-0x);
+  --ds-radius-xs: var(--ds-dimension-0-5x);
+  --ds-radius-sm: var(--ds-dimension-1x);
+  --ds-radius-md: var(--ds-dimension-2x);
+}
+[data-shape="Sharp"] {
+  --ds-radius-full: 0;
+  --ds-radius-none: var(--ds-dimension-0x);
+  --ds-radius-xs: var(--ds-dimension-0x);
+  --ds-radius-sm: var(--ds-dimension-0-5x);
+  --ds-radius-md: var(--ds-dimension-1x);
+}
+",
+  "variables/typography.css": "/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --ds-letter-spacings-tight2: -0.03em;
+  --ds-letter-spacings-tight1: -0.01em;
+  --ds-letter-spacings-default: 0em;
+  --ds-letter-spacings-wide1: 0.02em;
+  --ds-letter-spacings-wide2: 0.08em;
+  --ds-text-case-default: none;
+  --ds-text-case-upper: uppercase;
+  --ds-text-decorations-default: none;
+  --ds-text-decorations-underline: underline;
+  --ds-paragraph-indents-none: 0px;
+  --ds-font-families-base: Inter;
+  --ds-font-families-mono: 'JetBrains Mono';
+  --ds-font-weights-regular: 400;
+  --ds-font-weights-medium: 500;
+  --ds-font-weights-semibold: 600;
+  --ds-font-weights-bold: 700;
+  --ds-title-1: var(--ds-font-weights-bold) var(--ds-font-sizes-title-1)/var(--ds-line-heights-title-1) var(--ds-font-families-base);
+  --ds-title-2: var(--ds-font-weights-semibold) var(--ds-font-sizes-title-2)/var(--ds-line-heights-title-2) var(--ds-font-families-base);
+  --ds-body-small-default: var(--ds-font-weights-regular) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-body-small-strong: var(--ds-font-weights-semibold) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-body-base-default: var(--ds-font-weights-regular) var(--ds-font-sizes-body-base)/var(--ds-line-heights-body-base) var(--ds-font-families-base);
+  --ds-body-base-strong: var(--ds-font-weights-semibold) var(--ds-font-sizes-body-base)/var(--ds-line-heights-body-base) var(--ds-font-families-base);
+  --ds-body-large-default: var(--ds-font-weights-regular) var(--ds-font-sizes-body-large)/var(--ds-line-heights-body-large) var(--ds-font-families-base);
+  --ds-body-large-strong: var(--ds-font-weights-semibold) var(--ds-font-sizes-body-large)/var(--ds-line-heights-body-large) var(--ds-font-families-base);
+  --ds-label-base: var(--ds-font-weights-medium) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-overline-base: var(--ds-font-weights-semibold) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-link-base: var(--ds-font-weights-regular) var(--ds-font-sizes-body-base)/var(--ds-line-heights-body-base) var(--ds-font-families-base);
+  --ds-mono-base: var(--ds-font-weights-regular) var(--ds-font-sizes-mono-base)/var(--ds-line-heights-mono-base) var(--ds-font-families-mono);
+  --ds-metric-base: var(--ds-font-weights-bold) var(--ds-font-sizes-metric-base)/var(--ds-line-heights-metric-base) var(--ds-font-families-base);
+  --ds-table-header: var(--ds-font-weights-semibold) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-table-cell: var(--ds-font-weights-regular) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-base);
+  --ds-table-numeric-base: var(--ds-font-weights-regular) var(--ds-font-sizes-body-small)/var(--ds-line-heights-body-small) var(--ds-font-families-mono);
+}
+",
+}
+`;
+
+exports[`dialect 'canonical' > renders the fixture as committed 2`] = `
+{
+  "categories": {
+    "Body": 6,
+    "Label": 1,
+    "Link": 1,
+    "Metric": 1,
+    "Mono": 1,
+    "Overline": 1,
+    "Table": 3,
+    "Title": 2,
+    "borderWidth": 2,
+    "breakpoints": 3,
+    "button": 7,
+    "card": 4,
+    "color": 36,
+    "colors": 65,
+    "content": 2,
+    "controls": 3,
+    "deviceName": 1,
+    "dimension": 12,
+    "duration": 3,
+    "easing": 2,
+    "fontFamilies": 2,
+    "fontSizes": 7,
+    "fontWeights": 4,
+    "layout": 3,
+    "letterSpacings": 5,
+    "lineHeights": 7,
+    "opacity": 6,
+    "paragraphIndents": 1,
+    "paragraphSpacings": 3,
+    "radius": 5,
+    "shadow": 2,
+    "spacing": 7,
+    "textCase": 2,
+    "textDecorations": 2,
+    "zIndex": 3,
+  },
+  "count": 215,
+  "figmaToCSS": {
+    "Body/base/default": "--ds-body-base-default",
+    "Body/base/strong": "--ds-body-base-strong",
+    "Body/large/default": "--ds-body-large-default",
+    "Body/large/strong": "--ds-body-large-strong",
+    "Body/small/default": "--ds-body-small-default",
+    "Body/small/strong": "--ds-body-small-strong",
+    "Label/Base": "--ds-label-base",
+    "Link/Base": "--ds-link-base",
+    "Metric/Base": "--ds-metric-base",
+    "Mono/Base": "--ds-mono-base",
+    "Overline/Base": "--ds-overline-base",
+    "Table/Cell": "--ds-table-cell",
+    "Table/Header": "--ds-table-header",
+    "Table/Numeric/Base": "--ds-table-numeric-base",
+    "Title/1": "--ds-title-1",
+    "Title/2": "--ds-title-2",
+    "borderWidth/thick": "--ds-border-width-thick",
+    "borderWidth/thin": "--ds-border-width-thin",
+    "breakpoints/desktop": "--ds-breakpoints-desktop",
+    "breakpoints/mobile": "--ds-breakpoints-mobile",
+    "breakpoints/tablet": "--ds-breakpoints-tablet",
+    "button/background": "--ds-button-background",
+    "button/background-hover": "--ds-button-background-hover",
+    "button/border": "--ds-button-border",
+    "button/height": "--ds-button-height",
+    "button/padding": "--ds-button-padding",
+    "button/radius": "--ds-button-radius",
+    "button/text": "--ds-button-text",
+    "card/background": "--ds-card-background",
+    "card/gap": "--ds-card-gap",
+    "card/radius": "--ds-card-radius",
+    "card/shadow": "--ds-card-shadow",
+    "color/backdrop": "--ds-color-backdrop",
+    "color/brand/deep": "--ds-color-brand-deep",
+    "color/brand/hover": "--ds-color-brand-hover",
+    "color/brand/pressed": "--ds-color-brand-pressed",
+    "color/brand/primary": "--ds-color-brand-primary",
+    "color/divider": "--ds-color-divider",
+    "color/interaction/stroke/neutral/primary": "--ds-color-interaction-stroke-neutral-primary",
+    "color/interaction/stroke/neutral/secondary": "--ds-color-interaction-stroke-neutral-secondary",
+    "color/page": "--ds-color-page",
+    "color/status/info/background": "--ds-color-status-info-background",
+    "color/status/info/indicator": "--ds-color-status-info-indicator",
+    "color/status/info/stroke": "--ds-color-status-info-stroke",
+    "color/status/info/text": "--ds-color-status-info-text",
+    "color/status/negative/background": "--ds-color-status-negative-background",
+    "color/status/negative/indicator": "--ds-color-status-negative-indicator",
+    "color/status/negative/stroke": "--ds-color-status-negative-stroke",
+    "color/status/negative/text": "--ds-color-status-negative-text",
+    "color/status/positive/background": "--ds-color-status-positive-background",
+    "color/status/positive/indicator": "--ds-color-status-positive-indicator",
+    "color/status/positive/stroke": "--ds-color-status-positive-stroke",
+    "color/status/positive/text": "--ds-color-status-positive-text",
+    "color/status/warning/background": "--ds-color-status-warning-background",
+    "color/status/warning/indicator": "--ds-color-status-warning-indicator",
+    "color/status/warning/stroke": "--ds-color-status-warning-stroke",
+    "color/status/warning/text": "--ds-color-status-warning-text",
+    "color/surface/fresh": "--ds-color-surface-fresh",
+    "color/surface/level0": "--ds-color-surface-level0",
+    "color/surface/level1": "--ds-color-surface-level1",
+    "color/surface/level2": "--ds-color-surface-level2",
+    "color/text/accent": "--ds-color-text-accent",
+    "color/text/highlight": "--ds-color-text-highlight",
+    "color/text/inverted/primary": "--ds-color-text-inverted-primary",
+    "color/text/inverted/secondary": "--ds-color-text-inverted-secondary",
+    "color/text/primary": "--ds-color-text-primary",
+    "color/text/secondary": "--ds-color-text-secondary",
+    "color/text/tertiary": "--ds-color-text-tertiary",
+    "colors/black": "--ds-colors-black",
+    "colors/ember/1": "--ds-colors-ember-1",
+    "colors/ember/10": "--ds-colors-ember-10",
+    "colors/ember/2": "--ds-colors-ember-2",
+    "colors/ember/3": "--ds-colors-ember-3",
+    "colors/ember/4": "--ds-colors-ember-4",
+    "colors/ember/5": "--ds-colors-ember-5",
+    "colors/ember/6": "--ds-colors-ember-6",
+    "colors/ember/7": "--ds-colors-ember-7",
+    "colors/ember/8": "--ds-colors-ember-8",
+    "colors/ember/9": "--ds-colors-ember-9",
+    "colors/moss/0": "--ds-colors-moss-0",
+    "colors/moss/1": "--ds-colors-moss-1",
+    "colors/moss/10": "--ds-colors-moss-10",
+    "colors/moss/2": "--ds-colors-moss-2",
+    "colors/moss/3": "--ds-colors-moss-3",
+    "colors/moss/4": "--ds-colors-moss-4",
+    "colors/moss/5": "--ds-colors-moss-5",
+    "colors/moss/6": "--ds-colors-moss-6",
+    "colors/moss/7": "--ds-colors-moss-7",
+    "colors/moss/8": "--ds-colors-moss-8",
+    "colors/moss/9": "--ds-colors-moss-9",
+    "colors/neutral/1": "--ds-colors-neutral-1",
+    "colors/neutral/10": "--ds-colors-neutral-10",
+    "colors/neutral/2": "--ds-colors-neutral-2",
+    "colors/neutral/3": "--ds-colors-neutral-3",
+    "colors/neutral/4": "--ds-colors-neutral-4",
+    "colors/neutral/5": "--ds-colors-neutral-5",
+    "colors/neutral/6": "--ds-colors-neutral-6",
+    "colors/neutral/7": "--ds-colors-neutral-7",
+    "colors/neutral/8": "--ds-colors-neutral-8",
+    "colors/neutral/9": "--ds-colors-neutral-9",
+    "colors/ocean/1": "--ds-colors-ocean-1",
+    "colors/ocean/10": "--ds-colors-ocean-10",
+    "colors/ocean/11": "--ds-colors-ocean-11",
+    "colors/ocean/2": "--ds-colors-ocean-2",
+    "colors/ocean/3": "--ds-colors-ocean-3",
+    "colors/ocean/4": "--ds-colors-ocean-4",
+    "colors/ocean/5": "--ds-colors-ocean-5",
+    "colors/ocean/6": "--ds-colors-ocean-6",
+    "colors/ocean/7": "--ds-colors-ocean-7",
+    "colors/ocean/8": "--ds-colors-ocean-8",
+    "colors/ocean/9": "--ds-colors-ocean-9",
+    "colors/plum/1": "--ds-colors-plum-1",
+    "colors/plum/10": "--ds-colors-plum-10",
+    "colors/plum/2": "--ds-colors-plum-2",
+    "colors/plum/3": "--ds-colors-plum-3",
+    "colors/plum/4": "--ds-colors-plum-4",
+    "colors/plum/5": "--ds-colors-plum-5",
+    "colors/plum/6": "--ds-colors-plum-6",
+    "colors/plum/7": "--ds-colors-plum-7",
+    "colors/plum/8": "--ds-colors-plum-8",
+    "colors/plum/9": "--ds-colors-plum-9",
+    "colors/sun/0": "--ds-colors-sun-0",
+    "colors/sun/1": "--ds-colors-sun-1",
+    "colors/sun/10": "--ds-colors-sun-10",
+    "colors/sun/2": "--ds-colors-sun-2",
+    "colors/sun/3": "--ds-colors-sun-3",
+    "colors/sun/4": "--ds-colors-sun-4",
+    "colors/sun/5": "--ds-colors-sun-5",
+    "colors/sun/6": "--ds-colors-sun-6",
+    "colors/sun/7": "--ds-colors-sun-7",
+    "colors/sun/8": "--ds-colors-sun-8",
+    "colors/sun/9": "--ds-colors-sun-9",
+    "colors/white": "--ds-colors-white",
+    "content/max-width": "--ds-content-max-width",
+    "content/min-width": "--ds-content-min-width",
+    "controls/height/medium": "--ds-controls-height-medium",
+    "controls/height/small": "--ds-controls-height-small",
+    "controls/minTarget": "--ds-controls-min-target",
+    "deviceName": "--ds-device-name",
+    "dimension/0_25x": "--ds-dimension-0-25x",
+    "dimension/0_5x": "--ds-dimension-0-5x",
+    "dimension/0x": "--ds-dimension-0x",
+    "dimension/10x": "--ds-dimension-10x",
+    "dimension/12x": "--ds-dimension-12x",
+    "dimension/16x": "--ds-dimension-16x",
+    "dimension/1x": "--ds-dimension-1x",
+    "dimension/2x": "--ds-dimension-2x",
+    "dimension/3x": "--ds-dimension-3x",
+    "dimension/4x": "--ds-dimension-4x",
+    "dimension/6x": "--ds-dimension-6x",
+    "dimension/8x": "--ds-dimension-8x",
+    "duration/fast": "--ds-duration-fast",
+    "duration/normal": "--ds-duration-normal",
+    "duration/slow": "--ds-duration-slow",
+    "easing/exit": "--ds-easing-exit",
+    "easing/standard": "--ds-easing-standard",
+    "fontFamilies/base": "--ds-font-families-base",
+    "fontFamilies/mono": "--ds-font-families-mono",
+    "fontSizes/body/base": "--ds-font-sizes-body-base",
+    "fontSizes/body/large": "--ds-font-sizes-body-large",
+    "fontSizes/body/small": "--ds-font-sizes-body-small",
+    "fontSizes/metric/base": "--ds-font-sizes-metric-base",
+    "fontSizes/mono/base": "--ds-font-sizes-mono-base",
+    "fontSizes/title/1": "--ds-font-sizes-title-1",
+    "fontSizes/title/2": "--ds-font-sizes-title-2",
+    "fontWeights/bold": "--ds-font-weights-bold",
+    "fontWeights/medium": "--ds-font-weights-medium",
+    "fontWeights/regular": "--ds-font-weights-regular",
+    "fontWeights/semibold": "--ds-font-weights-semibold",
+    "layout/grid/columns": "--ds-layout-grid-columns",
+    "layout/grid/gutter": "--ds-layout-grid-gutter",
+    "layout/grid/margin": "--ds-layout-grid-margin",
+    "letterSpacings/default": "--ds-letter-spacings-default",
+    "letterSpacings/tight1": "--ds-letter-spacings-tight1",
+    "letterSpacings/tight2": "--ds-letter-spacings-tight2",
+    "letterSpacings/wide1": "--ds-letter-spacings-wide1",
+    "letterSpacings/wide2": "--ds-letter-spacings-wide2",
+    "lineHeights/body/base": "--ds-line-heights-body-base",
+    "lineHeights/body/large": "--ds-line-heights-body-large",
+    "lineHeights/body/small": "--ds-line-heights-body-small",
+    "lineHeights/metric/base": "--ds-line-heights-metric-base",
+    "lineHeights/mono/base": "--ds-line-heights-mono-base",
+    "lineHeights/title/1": "--ds-line-heights-title-1",
+    "lineHeights/title/2": "--ds-line-heights-title-2",
+    "opacity/disabled": "--ds-opacity-disabled",
+    "opacity/full": "--ds-opacity-full",
+    "opacity/hover": "--ds-opacity-hover",
+    "opacity/medium": "--ds-opacity-medium",
+    "opacity/none": "--ds-opacity-none",
+    "opacity/subtle": "--ds-opacity-subtle",
+    "paragraphIndents/none": "--ds-paragraph-indents-none",
+    "paragraphSpacings/m": "--ds-paragraph-spacings-m",
+    "paragraphSpacings/none": "--ds-paragraph-spacings-none",
+    "paragraphSpacings/s": "--ds-paragraph-spacings-s",
+    "radius/full": "--ds-radius-full",
+    "radius/md": "--ds-radius-md",
+    "radius/none": "--ds-radius-none",
+    "radius/sm": "--ds-radius-sm",
+    "radius/xs": "--ds-radius-xs",
+    "shadow/elevation/1": "--ds-shadow-elevation-1",
+    "shadow/elevation/2": "--ds-shadow-elevation-2",
+    "spacing/component/gap": "--ds-spacing-component-gap",
+    "spacing/inset/l": "--ds-spacing-inset-l",
+    "spacing/inset/m": "--ds-spacing-inset-m",
+    "spacing/inset/s": "--ds-spacing-inset-s",
+    "spacing/stack/1x": "--ds-spacing-stack-1x",
+    "spacing/stack/2x": "--ds-spacing-stack-2x",
+    "spacing/stack/4x": "--ds-spacing-stack-4x",
+    "textCase/default": "--ds-text-case-default",
+    "textCase/upper": "--ds-text-case-upper",
+    "textDecorations/default": "--ds-text-decorations-default",
+    "textDecorations/underline": "--ds-text-decorations-underline",
+    "zIndex/base": "--ds-z-index-base",
+    "zIndex/modal": "--ds-z-index-modal",
+    "zIndex/overlay": "--ds-z-index-overlay",
+  },
+  "prefix": "--ds-",
+  "transform": "Each Figma path becomes a CSS variable: kebab-case each segment then join with '-' and prepend '--ds-'.",
+}
+`;

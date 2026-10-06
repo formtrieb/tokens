@@ -1,5 +1,6 @@
 import { kebab } from "../kebab.js";
 import type { BuilderFn } from "../types.js";
+import { requireCompanions } from "./companions.js";
 import { findByType } from "./tokens.js";
 
 /**
@@ -7,7 +8,8 @@ import { findByType } from "./tokens.js";
  * properties the variables carry, and a `--paragraph` class for spacing.
  */
 export function typography(): BuilderFn {
-  const fn: BuilderFn = ({ tokens, config }) => {
+  const fn: BuilderFn = ({ tokens, config, dialect }) => {
+    requireCompanions("typography()", dialect);
     const blocks: string[] = [];
     for (const token of findByType(tokens, "typography")) {
       const slug = kebab(token.path);

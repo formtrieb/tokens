@@ -254,7 +254,7 @@ export function renderBlock(dict: Dictionary, values: Values, rule: RenderRule, 
   const ordered = rule.references ? [...emitted].sort(referenceOrder(dict, options.prefix)) : emitted;
   const invalid: Block["invalid"] = [];
   const lines = ordered.map((e) => declaration(e, dict, values, rule, options.prefix, invalid));
-  const extra = companions(emitted, options);
+  const extra = options.dialect === "style-dictionary" ? companions(emitted, options) : [];
 
   const body = extra.length > 0 ? `${lines.join("\n")}\n${extra.join("\n")}\n` : lines.join("\n");
   let text = `${rule.selector} {\n${body}\n}`;
