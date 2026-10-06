@@ -5,6 +5,17 @@ All notable changes to `@formtrieb/tokens-core` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- General colour functions for code that generates or checks colours:
+  `oklchToHex(l, c, h)` (gamut-mapped like every other colour path here),
+  `hexToOklch(color)`, `contrastWcag(a, b)`, `deltaE2000(a, b)`,
+  `deltaEOK(a, b)`, `composite(layer, base)` (source-over in sRGB) and
+  `withAlpha(color, alpha)`. New exported type `Oklch`. An unparseable colour
+  throws a `TypeError`.
+
 ## [1.5.0] — 2026-10-04
 
 ### Added

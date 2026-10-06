@@ -27,6 +27,16 @@ export {
   formatColor,
 } from "./parser/color-resolver.js";
 export type { ColorFormat, ModifierOutput } from "./parser/color-resolver.js";
+export {
+  oklchToHex,
+  hexToOklch,
+  contrastWcag,
+  deltaE2000,
+  deltaEOK,
+  composite,
+  withAlpha,
+} from "./parser/color-functions.js";
+export type { Oklch } from "./parser/color-functions.js";
 export { findColorMatches } from "./parser/color-match.js";
 export type {
   ColorCandidate,
