@@ -8,7 +8,7 @@
  *   - typography composites get their companion properties appended
  */
 import { kebab } from "../kebab.js";
-import type { ResolvedRenderOptions, RenderRule } from "../types.js";
+import { writesCompanions, type ResolvedRenderOptions, type RenderRule } from "../types.js";
 import type { Dictionary, Entry } from "./dictionary.js";
 import { referencesIn, resolveReferences, usesReferences } from "./references.js";
 import type { Values } from "./values.js";
@@ -254,7 +254,7 @@ export function renderBlock(dict: Dictionary, values: Values, rule: RenderRule, 
   const ordered = rule.references ? [...emitted].sort(referenceOrder(dict, options.prefix)) : emitted;
   const invalid: Block["invalid"] = [];
   const lines = ordered.map((e) => declaration(e, dict, values, rule, options.prefix, invalid));
-  const extra = options.dialect === "style-dictionary" ? companions(emitted, options) : [];
+  const extra = writesCompanions(options) ? companions(emitted, options) : [];
 
   const body = extra.length > 0 ? `${lines.join("\n")}\n${extra.join("\n")}\n` : lines.join("\n");
   let text = `${rule.selector} {\n${body}\n}`;

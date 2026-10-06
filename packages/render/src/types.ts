@@ -84,6 +84,9 @@ export interface RenderOptions {
 /** {@link RenderOptions} with every default filled in; what the render internals read. */
 export type ResolvedRenderOptions = Required<RenderOptions>;
 
+/** Whether the run writes typography companions (only the 'style-dictionary' dialect does). */
+export const writesCompanions = (options: ResolvedRenderOptions): boolean => options.dialect === "style-dictionary";
+
 /** Output file (relative to the CSS output root) → file content. */
 export type RenderedFiles = Map<string, string>;
 
