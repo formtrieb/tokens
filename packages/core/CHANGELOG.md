@@ -5,6 +5,16 @@ All notable changes to `@formtrieb/tokens-core` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] — 2026-10-06
+
+### Added
+
+- `composite()` and `withAlpha()` take `{ format: "srgb" }` and then return
+  `color(srgb r g b / a)` at full precision instead of 8-bit hex. For code
+  that chains several steps and measures the result; the default output is
+  unchanged.
+- `alphaOf(color)`: a colour's alpha, 0..1.
+
 ## [1.6.0] — 2026-10-06
 
 ### Added

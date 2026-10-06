@@ -35,8 +35,9 @@ export {
   deltaEOK,
   composite,
   withAlpha,
+  alphaOf,
 } from "./parser/color-functions.js";
-export type { Oklch } from "./parser/color-functions.js";
+export type { Oklch, ColorOutput } from "./parser/color-functions.js";
 export { findColorMatches } from "./parser/color-match.js";
 export type {
   ColorCandidate,
