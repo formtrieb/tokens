@@ -4,6 +4,7 @@
  */
 import { buildDictionary, findTheme } from "./css/dictionary.js";
 import { finishValues } from "./css/values.js";
+import type { Presentation } from "./css/transforms.js";
 import { FILE_HEADER, renderBlock, type Block } from "./css/variables.js";
 import { builderTokens } from "./builders/tokens.js";
 import { bundleCss } from "./bundle.js";
@@ -57,14 +58,16 @@ export function renderVariables(
   const options = withDefaults(renderOptions);
   const blocks = new Map<string, Block[]>();
   const problems: InvalidCssError["problems"] = [];
+  const presentation: Presentation = {
+    basePxFontSize: options.basePxFontSize,
+    units: options.units,
+    color: options.color,
+    dialect: options.dialect,
+  };
   for (const rule of rules) {
     const dict = buildDictionary(system, findTheme(system, rule.theme));
-    const values = finishValues(dict, {
-      basePxFontSize: options.basePxFontSize,
-      units: options.units,
-      color: options.color,
-    });
-    const block = renderBlock(dict, values, rule, options);
+    const values = finishValues(dict, presentation);
+    const block = renderBlock(dict, values, rule, options, presentation);
     for (const p of block.invalid) problems.push({ theme: rule.theme, file: rule.file, ...p });
     const list = blocks.get(rule.file) ?? [];
     list.push(block);

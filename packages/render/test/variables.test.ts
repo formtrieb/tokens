@@ -261,9 +261,9 @@ describe("presentation options", () => {
       "  --x-ink: rgb(51, 102, 153);",
       "  --x-scrim: rgba(0, 0, 0, 0.5);",
       "  --x-system: CanvasText;",
-      // Known limitation, kept from the Style-Dictionary output: core computes
+      // Kept from the Style-Dictionary output, in this dialect only: core computes
       // rgb(20% 40% 60% / 0.5) for a literal with an alpha modifier, then the
-      // literal colour step reads it as opaque. color: 'source' avoids it.
+      // literal colour step reads it as opaque. 'canonical' does not.
       "  --x-soft: rgb(51, 102, 153);",
     ]);
   });
@@ -289,5 +289,55 @@ describe("presentation options", () => {
       "  --x-system: CanvasText;",
       "  --x-soft: rgb(20% 40% 60% / 0.5);",
     ]);
+  });
+});
+
+describe("dialect 'canonical' leaves what the 'style-dictionary' dialect inherited", () => {
+  const sys = (sets: Record<string, unknown>) =>
+    system({ s: sets as Record<string, unknown> }, [{ id: "t", group: "G", name: "G", selectedTokenSets: { s: "enabled" } }]);
+  const lines = (s: TokenSystem, extra: Partial<RenderOptions>, references = true) =>
+    renderVariables(s, [{ theme: "G/G", selector: ":root", references, file: "g.css" }], { ...OPTIONS, ...extra })
+      .get("g.css")!
+      .split("\n")
+      .filter((l) => l.startsWith("  --"));
+
+  it("keeps a colour a modifier computed, also with color: 'rgb'", () => {
+    const s = sys({
+      soft: {
+        $value: "#336699",
+        $type: "color",
+        $extensions: { "studio.tokens": { modify: { type: "alpha", value: "0.5", space: "srgb" } } },
+      },
+    });
+    expect(lines(s, { color: "rgb" }, false)).toEqual(["  --x-soft: rgb(51, 102, 153);"]);
+    expect(lines(s, { dialect: "canonical", color: "rgb" }, false)).toEqual(["  --x-soft: rgb(20% 40% 60% / 0.5);"]);
+  });
+
+  it("writes each reference of a composite in its own property's place", () => {
+    const s = sys({
+      lh: { $value: "16px", $type: "lineHeights" },
+      blur: { $value: "4px", $type: "dimension" },
+      body: { $value: { fontFamily: "Inter", fontWeight: "400", fontSize: "16px", lineHeight: "{lh}" }, $type: "typography" },
+      lift: { $value: { offsetX: "4px", offsetY: "4px", blur: "{blur}", spread: "0", color: "#000000" }, $type: "boxShadow" },
+    });
+    // by value, the line height's variable takes the font size's place (the blur only
+    // escapes because this dialect writes it as 0.25rem, which the offsets do not match)
+    expect(lines(s, {}).slice(2)).toEqual([
+      "  --x-body: 400 var(--x-lh)/16px Inter;",
+      "  --x-lift: 4px 4px var(--x-blur) 0 #000000;",
+    ]);
+    expect(lines(s, { dialect: "canonical" }).slice(2)).toEqual([
+      "  --x-body: 400 16px/var(--x-lh) Inter;",
+      "  --x-lift: 4px 4px var(--x-blur) 0 #000000;",
+    ]);
+  });
+
+  it("keeps source order: var() resolves at computed-value time, no definition-before-use sort", () => {
+    const s = sys({
+      alias: { $value: "{base}", $type: "dimension" },
+      base: { $value: "8px", $type: "dimension" },
+    });
+    expect(lines(s, {})).toEqual(["  --x-base: 0.5rem;", "  --x-alias: var(--x-base);"]);
+    expect(lines(s, { dialect: "canonical" })).toEqual(["  --x-alias: var(--x-base);", "  --x-base: 8px;"]);
   });
 });

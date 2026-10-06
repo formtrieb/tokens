@@ -44,15 +44,16 @@ export interface TypographyOptions {
 
 /**
  * How the output is written. Both read the same Tokens-Studio tree and write
- * the same names, render table and block order; they differ in values and
- * typography companions.
+ * the same names, render table and blocks; they differ in values, typography
+ * companions and the order within a block.
  *
  * - `'style-dictionary'` (default): what the Style-Dictionary pipeline wrote
  *   — px as rem, colours as `rgb()`, typography companions. Frozen, so
  *   existing systems keep their exact CSS.
  * - `'canonical'`: each value as core canonicalizes it — lengths with their
- *   own units, colours as written, no companions. For producers that write
- *   their tokens on purpose.
+ *   own units, colours as written, no companions, source order, references
+ *   in a composite by position, computed colours as core wrote them. For
+ *   producers that write their tokens on purpose.
  */
 export type Dialect = "style-dictionary" | "canonical";
 

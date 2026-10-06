@@ -117,7 +117,8 @@ refused values below.
 ## Dialects
 
 Both dialects read the same tree and write the same variable names, render
-table, files and block order. They differ in values and companions.
+table, files and blocks. They differ in values, companions and the order
+within a block.
 
 - **`style-dictionary`** (default) writes what the Style-Dictionary pipeline
   wrote, as described above: rem, `rgb()`, typography companions. It does
@@ -126,7 +127,17 @@ table, files and block order. They differ in values and companions.
   with their own units, colour literals as written — and no typography
   companions, in the variables or in the token map. It is meant for
   producers that write their tokens on purpose and carry letter-spacing,
-  text case and the like as tokens of their own.
+  text case and the like as tokens of their own. It also leaves three habits
+  the Style-Dictionary output had:
+  - Variables keep source order. `var()` resolves at computed-value time, so
+    no definition-before-use sort is needed; the old sort compared
+    non-transitively and its order followed the engine's sort algorithm.
+  - A reference inside a composite (typography, shadow, border, transition)
+    is written in its own property's place. Replaced by value, a line height
+    equal to the font size took the font size's place.
+  - A colour a modifier computed stays as core wrote it, also with
+    `color: "rgb"`. The literal colour step read core's
+    `rgb(r% g% b% / a)` as opaque.
 
 ```ts
 renderVariables(system, rules, { prefix: "ds-", dialect: "canonical" });

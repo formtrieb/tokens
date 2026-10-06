@@ -5,6 +5,17 @@ All notable changes to `@formtrieb/tokens-render` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- `canonical` dialect: variables keep source order instead of the
+  definition-before-use sort; a reference inside a composite is written in
+  its own property's place instead of where its value first occurs; a
+  colour a colour modifier computed stays as core wrote it, also with
+  `color: "rgb"`. Same values; the order within a block changes. The
+  `style-dictionary` dialect is unchanged.
+
 ## [0.2.0] — 2026-10-06
 
 ### Added
