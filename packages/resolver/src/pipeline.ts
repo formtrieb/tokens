@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs';
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import {
   deriveRenderTable,
@@ -43,6 +43,23 @@ async function write(file: string, content: string): Promise<void> {
   await writeFile(file, content, 'utf-8');
 }
 
+/**
+ * `.css` files directly in `variables/` and `utilities/` that this run did not
+ * render. `main.css` imports only what was rendered, so nothing imports them.
+ */
+async function leftovers(out: string, rendered: Iterable<string>): Promise<string[]> {
+  const known = new Set(rendered);
+  const found: string[] = [];
+  for (const dir of ['variables', 'utilities']) {
+    const entries = await readdir(join(out, dir), { withFileTypes: true }).catch(() => []);
+    for (const entry of entries) {
+      const file = `${dir}/${entry.name}`;
+      if (entry.isFile() && entry.name.endsWith('.css') && !known.has(file)) found.push(file);
+    }
+  }
+  return found.sort();
+}
+
 const LOCAL_IMPORT = /^@import\s+['"](.+?)['"];/;
 
 /**
@@ -83,6 +100,14 @@ export async function runPipeline(config: Config, options: RunOptions = {}): Pro
   if (steps.includes('imports')) {
     await write(mainPath, main);
     console.log('✓ main.css (hand-written imports kept)');
+    const stale = await leftovers(out, [...variables.keys(), ...utilities.keys()]);
+    if (stale.length > 0) {
+      console.warn(
+        `⚠ ${stale.length} file(s) in ${out} not rendered and not imported by main.css — ` +
+          'check that nothing still reads from them, then delete them:\n' +
+          stale.map((f) => `  ${f}`).join('\n')
+      );
+    }
   }
 
   if (steps.includes('token-map')) {

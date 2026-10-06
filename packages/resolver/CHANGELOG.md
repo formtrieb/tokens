@@ -5,6 +5,14 @@ All notable changes to `@formtrieb/token-resolver` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- After writing `main.css`, the build names every `.css` file in
+  `variables/` and `utilities/` that it did not render. Since 0.6.0 nothing
+  imports such a file. The build only warns and deletes nothing.
+
 ## [0.6.0] — 2026-10-04
 
 **Upgrading:** configs stay as they are. Two things can change for you: a
@@ -12,6 +20,15 @@ mixed-unit expression on a reference now ships as `calc(…)`, and a token
 whose value is no valid CSS (for example an easing with an empty bezier,
 `[{}, {}, {}, {}]`) now stops the build and names the token — fix it in
 the source.
+
+**Breaking for output folders with leftovers** (added after release):
+`main.css` and `bundle.css` no longer pick up `.css` files in `variables/`
+that the build did not render. If such a file is still there, for example
+from a removed theme group or an older setup, and your code reads custom
+properties from it, those properties are gone after the upgrade. Before
+upgrading, list `variables/`, compare it with what the build writes, and
+check each extra file for variables still in use. Move them to real
+tokens, then delete the file.
 
 ### Changed
 

@@ -98,6 +98,24 @@ src/tokens/
 
 `bundle.css` is only emitted when `output.bundle !== false` (default `true`).
 
+### What the resolver owns in the output folder
+
+- **`variables/`**: the build writes and overwrites the files the render
+  table names. It deletes nothing. Any other `.css` file there is neither
+  rendered nor imported, and the build names it in a warning: check that
+  nothing still reads from it, then delete it.
+- **`utilities/`**: when `utilities` builders are configured, the folder is
+  emptied and rewritten on every build. Do not keep your own files in it.
+  Without builders it is left alone, and its `.css` files get the same
+  warning.
+- **`main.css`**: the comment lines and every `@import` of `./variables/` or
+  `./utilities/` are regenerated. All other lines, such as
+  `@import './reset.css';`, are kept on top.
+- **`bundle.css`** and **`token-map.json`** are overwritten. Hand-written
+  imports in `main.css` are inlined into `bundle.css` from disk.
+
+Everything else in the output folder belongs to you.
+
 ## Builders
 
 | Builder            | Purpose                                                         |
