@@ -42,31 +42,50 @@ export interface TypographyOptions {
   };
 }
 
+/**
+ * How the output is written. Both read the same Tokens-Studio tree and write
+ * the same names, render table and block order; they differ in values and
+ * typography companions.
+ *
+ * - `'style-dictionary'` (default): what the Style-Dictionary pipeline wrote
+ *   — px as rem, colours as `rgb()`, typography companions. Frozen, so
+ *   existing systems keep their exact CSS.
+ * - `'canonical'`: each value as core canonicalizes it — lengths with their
+ *   own units, colours as written, no companions. For producers that write
+ *   their tokens on purpose.
+ */
+export type Dialect = "style-dictionary" | "canonical";
+
 export interface RenderOptions {
   /** Prefix of every custom property and utility class, e.g. `ds-`. */
   prefix: string;
+  /** Output dialect; sets the defaults of `units` and `color`. Default `'style-dictionary'`. */
+  dialect?: Dialect;
   /** Root font size that px values are divided by for rem. Default 16. */
   basePxFontSize?: number;
   /**
-   * `'rem'` (default): px and bare numbers become rem by `basePxFontSize`.
-   * `'source'`: lengths stay as the canonical value has them — `8px`,
+   * `'rem'` (default in `'style-dictionary'`): px and bare numbers become rem by `basePxFontSize`.
+   * `'source'` (default in `'canonical'`): lengths stay as the canonical value has them — `8px`,
    * `0.05em`, `60ch` — for producers that write their units on purpose.
    */
   units?: "rem" | "source";
   /**
-   * `'rgb'` (default): colour literals are rewritten to `rgb(r, g, b)` /
-   * `rgba(…)`. `'source'`: literals stay as written (`#336699`, `Canvas`,
+   * `'rgb'` (default in `'style-dictionary'`): colour literals are rewritten to `rgb(r, g, b)` /
+   * `rgba(…)`. `'source'` (default in `'canonical'`): literals stay as written (`#336699`, `Canvas`,
    * `rgba(0,0,0,0.5)`). Computed colours (modifiers) come from core either way.
    */
   color?: "rgb" | "source";
   /** A path segment starting with one of these is private and never emitted. Default `["*"]`. */
   privateTokenPrefixes?: string[];
-  /** Typography companions. Default `{}`. */
+  /** Typography companions (`'style-dictionary'` only). Default `{}`. */
   typography?: TypographyOptions;
 }
 
 /** {@link RenderOptions} with every default filled in; what the render internals read. */
 export type ResolvedRenderOptions = Required<RenderOptions>;
+
+/** Whether the run writes typography companions (only the 'style-dictionary' dialect does). */
+export const writesCompanions = (options: ResolvedRenderOptions): boolean => options.dialect === "style-dictionary";
 
 /** Output file (relative to the CSS output root) → file content. */
 export type RenderedFiles = Map<string, string>;
@@ -104,6 +123,8 @@ export interface BuilderConfig {
 export interface BuilderContext<C extends BuilderConfig = BuilderConfig> {
   tokens: BuilderToken[];
   config: C;
+  /** The dialect the variables are written in; builders that read companions need `'style-dictionary'`. */
+  dialect?: Dialect;
 }
 
 export interface BuilderOutput {

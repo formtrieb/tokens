@@ -31,11 +31,14 @@ export class InvalidCssError extends Error {
 }
 
 function withDefaults(options: RenderOptions): ResolvedRenderOptions {
+  const dialect = options.dialect ?? "style-dictionary";
+  const canonical = dialect === "canonical";
   return {
     prefix: options.prefix,
+    dialect,
     basePxFontSize: options.basePxFontSize ?? 16,
-    units: options.units ?? "rem",
-    color: options.color ?? "rgb",
+    units: options.units ?? (canonical ? "source" : "rem"),
+    color: options.color ?? (canonical ? "source" : "rgb"),
     privateTokenPrefixes: options.privateTokenPrefixes ?? ["*"],
     typography: options.typography ?? {},
   };
@@ -94,8 +97,9 @@ export async function renderUtilities<C extends BuilderConfig = BuilderConfig>(
   const files: RenderedFiles = new Map();
   if (builders.length === 0) return files;
   const tokens = builderTokens(system.sets, system.order);
+  const { dialect } = withDefaults(options);
   for (const builder of builders) {
-    const out = await builder({ tokens, config });
+    const out = await builder({ tokens, config, dialect });
     const file = `utilities/${out.filename}`;
     if (files.has(file)) {
       throw new Error(

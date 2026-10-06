@@ -2,6 +2,7 @@ export type {
   TokenSystem,
   RenderRule,
   RenderOptions,
+  Dialect,
   RenderedFiles,
   TypographyOptions,
   GroupBehavior,

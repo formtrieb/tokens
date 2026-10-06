@@ -50,11 +50,12 @@ Only `prefix` is required. The other options and their defaults:
 
 | Option | Default | |
 |---|---|---|
+| `dialect` | `"style-dictionary"` | `"canonical"` for producers that write on purpose, see below |
 | `basePxFontSize` | `16` | root font size for rem |
-| `units` | `"rem"` | `"source"` keeps lengths as written, see below |
-| `color` | `"rgb"` | `"source"` keeps colour literals as written, see below |
+| `units` | `"rem"` (`"source"` in `canonical`) | `"source"` keeps lengths as written, see below |
+| `color` | `"rgb"` (`"source"` in `canonical`) | `"source"` keeps colour literals as written, see below |
 | `privateTokenPrefixes` | `["*"]` | path segments starting with one of these are left out |
-| `typography` | `{}` | `fontVariantNumeric.tabular`: paths that get `tabular-nums` |
+| `typography` | `{}` | `fontVariantNumeric.tabular`: paths that get `tabular-nums` (`style-dictionary` only) |
 
 ## The render table
 
@@ -113,13 +114,33 @@ The output is byte-compatible with `@formtrieb/token-resolver` up to 0.5,
 which used Style Dictionary, apart from the `calc()` form above and the
 refused values below.
 
-## Units and colours as written
+## Dialects
 
-A producer that writes its units and colours on purpose sets
+Both dialects read the same tree and write the same variable names, render
+table, files and block order. They differ in values and companions.
+
+- **`style-dictionary`** (default) writes what the Style-Dictionary pipeline
+  wrote, as described above: rem, `rgb()`, typography companions. It does
+  not change, so existing systems keep their exact CSS.
+- **`canonical`** writes each value as core canonicalizes it — lengths
+  with their own units, colour literals as written — and no typography
+  companions, in the variables or in the token map. It is meant for
+  producers that write their tokens on purpose and carry letter-spacing,
+  text case and the like as tokens of their own.
 
 ```ts
-renderVariables(system, rules, { ...options, units: "source", color: "source" });
+renderVariables(system, rules, { prefix: "ds-", dialect: "canonical" });
 ```
+
+The dialect only sets the defaults of `units` and `color`; either can
+still be set on its own. Pass the same options to `renderVariables`,
+`renderUtilities` and `renderTokenMap`. The `typography` and
+`typographyMixin` builders read the companions and throw in the
+`canonical` dialect.
+
+## Units and colours as written
+
+`units` and `color` switch single parts of the presentation:
 
 - `units: "source"` keeps lengths as the canonical value has them: `1024px`,
   `-0.05em`, `60ch`; a bare number is px.
@@ -138,9 +159,9 @@ is listed with token path, theme and file; nothing is written.
 ## Builders
 
 `typography`, `typographyMixin`, `directional`, `single` and `container`
-build utility classes. A builder gets `{ tokens, config }`: every token of
-the system (sets in `$metadata.json` order, first definition of a path
-wins) and the caller's config. See the
+build utility classes. A builder gets `{ tokens, config, dialect }`: every
+token of the system (sets in `$metadata.json` order, first definition of a
+path wins), the caller's config and the dialect of the run. See the
 [token-resolver README](https://github.com/formtrieb/tokens/tree/main/packages/resolver#builders)
 for their options.
 
