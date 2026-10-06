@@ -1,6 +1,5 @@
-import { parse, formatHex8, differenceCiede2000 } from "culori";
-
-const ciede2000 = differenceCiede2000();
+import { parse, formatHex8 } from "culori";
+import { deltaE2000 } from "./color-functions.js";
 
 export interface ColorCandidate {
   path: string;
@@ -60,7 +59,7 @@ export function findColorMatches(
     }
 
     if (opts.nearest) {
-      const deltaE = ciede2000(parsedQuery, parsed);
+      const deltaE = deltaE2000(query, value);
       if (!nearest || deltaE < nearest.deltaE) {
         nearest = { path, value, deltaE };
       }
