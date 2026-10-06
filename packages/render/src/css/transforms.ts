@@ -20,6 +20,7 @@ import {
   pxFor,
 } from "@formtrieb/tokens-core";
 import { tinycolor, toHexString, toRgb, toRgbString } from "./tinycolor.js";
+import type { Dialect } from "../types.js";
 
 export interface Working {
   value: unknown;
@@ -32,6 +33,8 @@ interface Step {
   transitive: boolean;
   /** A presentation step that `units: 'source'` / `color: 'source'` leaves out. */
   presents?: "units" | "color";
+  /** The step computes the value (colour modifier); presentation steps may then leave it alone. */
+  computes?: boolean;
   filter: (t: Working) => boolean;
   apply: (t: Working) => unknown;
 }
@@ -228,6 +231,7 @@ function steps(basePxFontSize: number): Step[] {
     {
       transitive: T,
       filter: (t) => typeof t.value === "string" && t.type === "color" && !!t.modify,
+      computes: true,
       apply: modifier,
     },
     hexrgba,
@@ -265,6 +269,12 @@ export interface Presentation {
   basePxFontSize: number;
   units: "rem" | "source";
   color: "rgb" | "source";
+  /**
+   * `'canonical'` leaves a colour that a modifier just computed as core wrote it.
+   * The literal colour steps (tinycolor) read core's `rgb(r% g% b% / a)` as
+   * opaque; `'style-dictionary'` keeps that, as Style Dictionary wrote it.
+   */
+  dialect: Dialect;
 }
 
 const cache = new Map<number, Step[]>();
@@ -274,12 +284,15 @@ export function transform(token: Working, transitiveOnly: boolean, presentation:
   let chain = cache.get(presentation.basePxFontSize);
   if (!chain) cache.set(presentation.basePxFontSize, (chain = steps(presentation.basePxFontSize)));
   const t: Working = { ...token, value: structuredClone(token.value) };
+  let computed = false;
   for (const step of chain) {
     if (transitiveOnly && !step.transitive) continue;
     if (step.presents && presentation[step.presents] === "source") continue;
+    if (step.presents === "color" && computed && presentation.dialect === "canonical") continue;
     if (!step.filter(t)) continue;
     try {
       t.value = step.apply(t);
+      if (step.computes) computed = true;
     } catch {
       // Style Dictionary keeps the value when a transform throws.
     }

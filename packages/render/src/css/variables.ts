@@ -11,6 +11,7 @@ import { kebab } from "../kebab.js";
 import { writesCompanions, type ResolvedRenderOptions, type RenderRule } from "../types.js";
 import type { Dictionary, Entry } from "./dictionary.js";
 import { referencesIn, resolveReferences, usesReferences } from "./references.js";
+import { transform, type Presentation } from "./transforms.js";
 import type { Values } from "./values.js";
 
 export const FILE_HEADER = "/**\n * Do not edit directly, this file was auto-generated.\n */\n\n";
@@ -155,14 +156,44 @@ function withComment(line: string, description: string | undefined): string {
   return `${comment}\n${line}`;
 }
 
+const MARK = /\u0001(x+)\u0001/g;
+
+/**
+ * A composite (typography, shadow, border, transition) with references, each
+ * reference written in the place of its own property. A property that is
+ * exactly one reference rides through the value chain as a marker, which then
+ * becomes its `var(--…)`. The 'style-dictionary' dialect replaces by value
+ * instead: a variable lands where its value first occurs, so a line height
+ * equal to the font size takes the font size's place.
+ */
+function compositeInPlace(entry: Entry, dict: Dictionary, values: Values, presentation: Presentation, prefix: string): unknown {
+  const vars: string[] = [];
+  const mark = (v: unknown): unknown => {
+    if (typeof v === "string") {
+      const ref = /^\{[^}]+\}$/.test(v) ? referencesIn(v, dict)[0] : undefined;
+      if (!ref?.entry || !values.has(ref.key)) return resolveReferences(v, (key) => values.get(key));
+      vars.push(`var(--${nameOf(ref.entry.path, prefix)})`);
+      return `\u0001${"x".repeat(vars.length)}\u0001`;
+    }
+    if (Array.isArray(v)) return v.map(mark);
+    if (typeof v === "object" && v !== null) return Object.fromEntries(Object.entries(v).map(([k, p]) => [k, mark(p)]));
+    return v;
+  };
+  const marked = mark(entry.original);
+  const out = transform({ type: entry.type, originalType: entry.originalType, value: marked }, true, presentation);
+  return typeof out === "string" ? out.replace(MARK, (_, x: string) => vars[x.length - 1]) : values.get(entry.key);
+}
+
 function declaration(
   entry: Entry,
   dict: Dictionary,
   values: Values,
   rule: RenderRule,
-  prefix: string,
+  options: ResolvedRenderOptions,
+  presentation: Presentation,
   invalid: Block["invalid"]
 ): string {
+  const prefix = options.prefix;
   const value = values.get(entry.key);
   const original = entry.original;
   const finished = (key: string) => values.get(key);
@@ -183,6 +214,8 @@ function declaration(
         text = text.replace(pattern, () => `var(--${nameOf(r.entry!.path, prefix)})`);
       }
       out = text;
+    } else if (options.dialect === "canonical") {
+      out = compositeInPlace(entry, dict, values, presentation, prefix);
     } else {
       let text = `${value}`;
       for (const r of refs) {
@@ -201,7 +234,8 @@ function declaration(
 /**
  * Replacing references in a typography shorthand by value can land the line
  * height's variable before the font size's when both had the same value. The
- * resolver swapped them back afterwards; so does this.
+ * resolver swapped them back afterwards; so does this ('style-dictionary' only,
+ * 'canonical' places references by position and needs no repair).
  */
 function fontOrder(text: string, original: Record<string, unknown>, dict: Dictionary, prefix: string): string {
   const varOf = (prop: string) => {
@@ -249,11 +283,21 @@ function companions(entries: Entry[], options: ResolvedRenderOptions): string[] 
 
 // ── block ─────────────────────────────────────────────────────────────────
 
-export function renderBlock(dict: Dictionary, values: Values, rule: RenderRule, options: ResolvedRenderOptions): Block {
+export function renderBlock(
+  dict: Dictionary,
+  values: Values,
+  rule: RenderRule,
+  options: ResolvedRenderOptions,
+  presentation: Presentation
+): Block {
   const emitted = dict.entries.filter((e) => e.isSource && !isPrivate(e.path, options.privateTokenPrefixes));
-  const ordered = rule.references ? [...emitted].sort(referenceOrder(dict, options.prefix)) : emitted;
+  // A custom property may use one declared after it: var() resolves at computed-value time. The
+  // 'canonical' dialect keeps source order; 'style-dictionary' sorts as Style Dictionary did, with a
+  // comparator that is not transitive, so its order follows the engine's sort algorithm.
+  const sorted = rule.references && options.dialect === "style-dictionary";
+  const ordered = sorted ? [...emitted].sort(referenceOrder(dict, options.prefix)) : emitted;
   const invalid: Block["invalid"] = [];
-  const lines = ordered.map((e) => declaration(e, dict, values, rule, options.prefix, invalid));
+  const lines = ordered.map((e) => declaration(e, dict, values, rule, options, presentation, invalid));
   const extra = writesCompanions(options) ? companions(emitted, options) : [];
 
   const body = extra.length > 0 ? `${lines.join("\n")}\n${extra.join("\n")}\n` : lines.join("\n");
