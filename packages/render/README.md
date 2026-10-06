@@ -42,14 +42,19 @@ const system = {
   themes: parseThemes(themesJson),               // $themes.json
 };
 const rules = deriveRenderTable(system.themes);
-const files = renderVariables(system, rules, {
-  prefix: "ds-",
-  basePxFontSize: 16,
-  privateTokenPrefixes: ["*"],
-  typography: {},
-});
+const files = renderVariables(system, rules, { prefix: "ds-" });
 // files.get("variables/mode.css") → "[data-mode=\"Dark\"] { … }"
 ```
+
+Only `prefix` is required. The other options and their defaults:
+
+| Option | Default | |
+|---|---|---|
+| `basePxFontSize` | `16` | root font size for rem |
+| `units` | `"rem"` | `"source"` keeps lengths as written, see below |
+| `color` | `"rgb"` | `"source"` keeps colour literals as written, see below |
+| `privateTokenPrefixes` | `["*"]` | path segments starting with one of these are left out |
+| `typography` | `{}` | `fontVariantNumeric.tabular`: paths that get `tabular-nums` |
 
 ## The render table
 

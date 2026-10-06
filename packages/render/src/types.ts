@@ -46,7 +46,7 @@ export interface RenderOptions {
   /** Prefix of every custom property and utility class, e.g. `ds-`. */
   prefix: string;
   /** Root font size that px values are divided by for rem. Default 16. */
-  basePxFontSize: number;
+  basePxFontSize?: number;
   /**
    * `'rem'` (default): px and bare numbers become rem by `basePxFontSize`.
    * `'source'`: lengths stay as the canonical value has them — `8px`,
@@ -59,10 +59,14 @@ export interface RenderOptions {
    * `rgba(0,0,0,0.5)`). Computed colours (modifiers) come from core either way.
    */
   color?: "rgb" | "source";
-  /** A path segment starting with one of these is private and never emitted. */
-  privateTokenPrefixes: string[];
-  typography: TypographyOptions;
+  /** A path segment starting with one of these is private and never emitted. Default `["*"]`. */
+  privateTokenPrefixes?: string[];
+  /** Typography companions. Default `{}`. */
+  typography?: TypographyOptions;
 }
+
+/** {@link RenderOptions} with every default filled in; what the render internals read. */
+export type ResolvedRenderOptions = Required<RenderOptions>;
 
 /** Output file (relative to the CSS output root) → file content. */
 export type RenderedFiles = Map<string, string>;

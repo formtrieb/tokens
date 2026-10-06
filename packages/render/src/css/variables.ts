@@ -8,7 +8,7 @@
  *   - typography composites get their companion properties appended
  */
 import { kebab } from "../kebab.js";
-import type { RenderOptions, RenderRule } from "../types.js";
+import type { ResolvedRenderOptions, RenderRule } from "../types.js";
 import type { Dictionary, Entry } from "./dictionary.js";
 import { referencesIn, resolveReferences, usesReferences } from "./references.js";
 import type { Values } from "./values.js";
@@ -229,7 +229,7 @@ const COMPANIONS: [string, string][] = [
  * rest; each typography token gets them as companion properties pointing at
  * the referenced tokens, plus `-fvn: tabular-nums` where configured.
  */
-function companions(entries: Entry[], options: RenderOptions): string[] {
+function companions(entries: Entry[], options: ResolvedRenderOptions): string[] {
   const prefix = options.prefix;
   const tabular = (options.typography.fontVariantNumeric?.tabular ?? []).map((p) => p.map((s) => s.toLowerCase()));
   const out: string[] = [];
@@ -249,7 +249,7 @@ function companions(entries: Entry[], options: RenderOptions): string[] {
 
 // ── block ─────────────────────────────────────────────────────────────────
 
-export function renderBlock(dict: Dictionary, values: Values, rule: RenderRule, options: RenderOptions): Block {
+export function renderBlock(dict: Dictionary, values: Values, rule: RenderRule, options: ResolvedRenderOptions): Block {
   const emitted = dict.entries.filter((e) => e.isSource && !isPrivate(e.path, options.privateTokenPrefixes));
   const ordered = rule.references ? [...emitted].sort(referenceOrder(dict, options.prefix)) : emitted;
   const invalid: Block["invalid"] = [];

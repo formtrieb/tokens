@@ -5,7 +5,7 @@
  * variable kebab-cases each segment (`--ds-z-index-base`).
  */
 import { kebab } from "./kebab.js";
-import type { RenderOptions, TokenSystem } from "./types.js";
+import type { ResolvedRenderOptions, TokenSystem } from "./types.js";
 
 const TYPOGRAPHY_COMPANIONS: [string, string][] = [
   ["letterSpacing", "letterSpacing"],
@@ -22,7 +22,7 @@ function isPrivate(path: string[], prefixes: string[]): boolean {
   return path.some((segment) => prefixes.some((p) => segment.startsWith(p)));
 }
 
-function collect(node: unknown, path: string[], options: RenderOptions, out: Record<string, string>): void {
+function collect(node: unknown, path: string[], options: ResolvedRenderOptions, out: Record<string, string>): void {
   if (node === null || typeof node !== "object") return;
   const obj = node as Record<string, unknown>;
   const cssVar = (p: string[]) => `--${options.prefix}${p.map((seg) => kebab(seg)).join("-")}`;
@@ -57,7 +57,7 @@ function categories(paths: string[], depth: number, out: Record<string, number>)
   }
 }
 
-export function tokenMap(system: TokenSystem, options: RenderOptions): string {
+export function tokenMap(system: TokenSystem, options: ResolvedRenderOptions): string {
   const enabled = new Set<string>();
   for (const theme of system.themes) {
     for (const [set, state] of Object.entries(theme.selectedTokenSets)) if (state === "enabled") enabled.add(set);

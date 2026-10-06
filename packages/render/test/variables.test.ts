@@ -134,6 +134,11 @@ describe("renderVariables", () => {
     );
   });
 
+  it("needs only a prefix: the other options default to what the resolver passes", () => {
+    const rules = deriveRenderTable(SYSTEM.themes, { themeGroups: { Base: { useReferences: false } } });
+    expect(renderVariables(SYSTEM, rules, { prefix: "x-" })).toEqual(files);
+  });
+
   it("names an unknown theme", () => {
     expect(() => renderVariables(SYSTEM, [{ theme: "Nope/Nope", selector: ":root", references: true, file: "n.css" }], OPTIONS)).toThrow(
       /Nope\/Nope/
