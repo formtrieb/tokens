@@ -12,6 +12,7 @@ import { tokenMap } from "./token-map.js";
 import type {
   RenderedFiles,
   RenderOptions,
+  ResolvedRenderOptions,
   RenderRule,
   TokenSystem,
   BuilderConfig,
@@ -29,6 +30,17 @@ export class InvalidCssError extends Error {
   }
 }
 
+function withDefaults(options: RenderOptions): ResolvedRenderOptions {
+  return {
+    prefix: options.prefix,
+    basePxFontSize: options.basePxFontSize ?? 16,
+    units: options.units ?? "rem",
+    color: options.color ?? "rgb",
+    privateTokenPrefixes: options.privateTokenPrefixes ?? ["*"],
+    typography: options.typography ?? {},
+  };
+}
+
 /**
  * One file per distinct `rule.file`, blocks in rule order. A file with one
  * block keeps the resolver's quirk of no final newline after typography
@@ -37,16 +49,17 @@ export class InvalidCssError extends Error {
 export function renderVariables(
   system: TokenSystem,
   rules: readonly RenderRule[],
-  options: RenderOptions
+  renderOptions: RenderOptions
 ): RenderedFiles {
+  const options = withDefaults(renderOptions);
   const blocks = new Map<string, Block[]>();
   const problems: InvalidCssError["problems"] = [];
   for (const rule of rules) {
     const dict = buildDictionary(system, findTheme(system, rule.theme));
     const values = finishValues(dict, {
       basePxFontSize: options.basePxFontSize,
-      units: options.units ?? "rem",
-      color: options.color ?? "rgb",
+      units: options.units,
+      color: options.color,
     });
     const block = renderBlock(dict, values, rule, options);
     for (const p of block.invalid) problems.push({ theme: rule.theme, file: rule.file, ...p });
@@ -109,5 +122,5 @@ export function renderBundle(files: ReadonlyMap<string, string>): RenderedFiles 
 
 /** `token-map.json`: Figma path ↔ CSS variable lookup. */
 export function renderTokenMap(system: TokenSystem, options: RenderOptions): RenderedFiles {
-  return new Map([["token-map.json", tokenMap(system, options)]]);
+  return new Map([["token-map.json", tokenMap(system, withDefaults(options))]]);
 }

@@ -104,6 +104,10 @@ describe("renderTokenMap", () => {
     expect(map.count).toBe(4);
     expect(map.categories).toEqual({ zIndex: 1, Title: 3 });
   });
+
+  it("needs only a prefix", () => {
+    expect(renderTokenMap(SYSTEM, { prefix: "x-" })).toEqual(renderTokenMap(SYSTEM, OPTIONS));
+  });
 });
 
 describe("renderUtilities", () => {
