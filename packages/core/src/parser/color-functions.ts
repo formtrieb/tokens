@@ -3,7 +3,6 @@ import {
   formatHex,
   formatHex8,
   converter,
-  displayable,
   differenceCiede2000,
   differenceEuclidean,
   wcagContrast,
@@ -39,14 +38,9 @@ function parseOrThrow(color: string): any {
   return parsed;
 }
 
-/**
- * As sRGB channels. Only a colour outside sRGB is gamut-mapped: the mapping
- * round-trips through OKLCH and nudges colours on the gamut edge (#ff0000 comes
- * back with r ≈ 0.9999), which compositing would carry into the result.
- */
+/** As sRGB channels, gamut-mapped when outside sRGB. */
 function srgb(color: string): any {
-  const parsed = parseOrThrow(color);
-  return toRgb(displayable(parsed) ? parsed : mapToSrgbGamut(parsed));
+  return mapToSrgbGamut(parseOrThrow(color));
 }
 
 /**
