@@ -3,11 +3,13 @@ import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import {
   deriveRenderTable,
+  parseRenderFile,
   renderBundle,
   renderImports,
   renderTokenMap,
   renderUtilities,
   renderVariables,
+  type RenderFileOptions,
   type RenderOptions,
   type RenderRule,
   type TokenSystem,
@@ -29,13 +31,45 @@ export interface RunOptions {
 
 const ALL_STEPS: PipelineStep[] = ['themes', 'utilities', 'imports', 'token-map', 'bundle'];
 
-/** The render table: `config.render` (rules or a JSON file of rules), else derived from `$themes.json`. */
-export async function renderTable(config: Config, system: TokenSystem): Promise<RenderRule[]> {
-  if (Array.isArray(config.render)) return config.render;
+/**
+ * The render table and the output options that came with it: `config.render`
+ * (rules, or a render file that may carry options), else derived from
+ * `$themes.json` without options.
+ */
+export async function renderSource(
+  config: Config,
+  system: TokenSystem
+): Promise<{ rules: RenderRule[]; options: RenderFileOptions }> {
+  if (Array.isArray(config.render)) return { rules: config.render, options: {} };
   if (typeof config.render === 'string') {
-    return JSON.parse(await readFile(resolve(config.render), 'utf-8')) as RenderRule[];
+    const path = resolve(config.render);
+    return parseRenderFile(JSON.parse(await readFile(path, 'utf-8')), config.render);
   }
-  return deriveRenderTable(system.themes, config);
+  return { rules: deriveRenderTable(system.themes, config), options: {} };
+}
+
+/** Options where the config overriding the render file changes the output for the tree's producer. */
+const WARN_ON_OVERRIDE = ['dialect', 'basePxFontSize'] as const;
+
+/** Config > render file > render's defaults, per option; warns where the config overrides the file. */
+function outputOptions(config: Config, file: RenderFileOptions): RenderOptions {
+  for (const key of WARN_ON_OVERRIDE) {
+    if (config[key] !== undefined && file[key] !== undefined && config[key] !== file[key]) {
+      console.warn(
+        `⚠ ${config.render} says ${key} ${JSON.stringify(file[key])}, the config sets ` +
+          `${JSON.stringify(config[key])}; using the config.`
+      );
+    }
+  }
+  return {
+    prefix: config.prefix,
+    dialect: config.dialect ?? file.dialect,
+    basePxFontSize: config.basePxFontSize ?? file.basePxFontSize,
+    units: config.units ?? file.units,
+    color: config.color ?? file.color,
+    privateTokenPrefixes: config.privateTokenPrefixes ?? ['*'],
+    typography: config.typography ?? {},
+  };
 }
 
 async function write(file: string, content: string): Promise<void> {
@@ -72,14 +106,10 @@ export async function runPipeline(config: Config, options: RunOptions = {}): Pro
   const out = config.paths.output;
 
   const system = await loadTokenSystem(config.paths.tokens);
-  const renderOptions: RenderOptions = {
-    prefix: config.prefix,
-    basePxFontSize: 16,
-    privateTokenPrefixes: config.privateTokenPrefixes ?? ['*'],
-    typography: config.typography ?? {},
-  };
+  const table = await renderSource(config, system);
+  const renderOptions = outputOptions(config, table.options);
 
-  const variables = renderVariables(system, await renderTable(config, system), renderOptions);
+  const variables = renderVariables(system, table.rules, renderOptions);
   const utilities = await renderUtilities(system, config.utilities ?? [], renderOptions, config);
   const mainPath = join(out, 'main.css');
   const existingMain = existsSync(mainPath) ? await readFile(mainPath, 'utf-8') : undefined;

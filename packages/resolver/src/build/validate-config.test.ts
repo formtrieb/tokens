@@ -26,4 +26,10 @@ describe('validateConfig', () => {
       validateConfig({ ...minimal, render: [rule, { ...rule, selector: '' }] })
     ).rejects.toThrow(/render\[1\]\.selector/);
   });
+
+  it('names an output option with an unknown value', async () => {
+    await expect(validateConfig({ ...minimal, dialect: 'canonical', units: 'source', basePxFontSize: 10 })).resolves.toBeUndefined();
+    await expect(validateConfig({ ...minimal, dialect: 'swift' as 'canonical' })).rejects.toThrow(/dialect must be one of/);
+    await expect(validateConfig({ ...minimal, basePxFontSize: 0 })).rejects.toThrow(/basePxFontSize/);
+  });
 });

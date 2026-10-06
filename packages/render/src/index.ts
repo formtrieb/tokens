@@ -2,6 +2,8 @@ export type {
   TokenSystem,
   RenderRule,
   RenderOptions,
+  RenderFile,
+  RenderFileOptions,
   Dialect,
   RenderedFiles,
   TypographyOptions,
@@ -15,6 +17,7 @@ export type {
 } from "./types.js";
 
 export { deriveRenderTable } from "./render-table.js";
+export { parseRenderFile } from "./render-file.js";
 export {
   renderVariables,
   renderUtilities,

@@ -82,6 +82,19 @@ export interface RenderOptions {
   typography?: TypographyOptions;
 }
 
+/**
+ * The output options a render file may carry. Only data: `typography` and
+ * builders are code and stay with the caller.
+ */
+export type RenderFileOptions = Partial<Pick<RenderOptions, "prefix" | "dialect" | "basePxFontSize" | "units" | "color">>;
+
+/**
+ * A render file (`render.json`) as a producer writes it and a consumer reads
+ * it: a bare list of rules, or the rules with the output options the tree
+ * was written for. {@link parseRenderFile} reads either form.
+ */
+export type RenderFile = RenderRule[] | { options?: RenderFileOptions; rules: RenderRule[] };
+
 /** {@link RenderOptions} with every default filled in; what the render internals read. */
 export type ResolvedRenderOptions = Required<RenderOptions>;
 

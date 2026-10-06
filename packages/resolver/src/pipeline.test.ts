@@ -67,3 +67,59 @@ describe('runPipeline leftover files', () => {
     expect(calls).toBe(0);
   });
 });
+
+describe('runPipeline render file options', () => {
+  const dir = join(tmpRoot, 'render-file');
+  const tokens = join(dir, 'tokens');
+  mkdirSync(tokens, { recursive: true });
+  writeFileSync(join(tokens, '$metadata.json'), JSON.stringify({ tokenSetOrder: ['Base'] }));
+  writeFileSync(
+    join(tokens, '$themes.json'),
+    JSON.stringify([{ id: 'base', name: 'Base', group: 'Base', selectedTokenSets: { Base: 'enabled' } }])
+  );
+  writeFileSync(
+    join(tokens, 'Base.json'),
+    JSON.stringify({
+      space: { s: { $value: '8px', $type: 'dimension' } },
+      brand: { $value: '#336699', $type: 'color' },
+    })
+  );
+  const rules = [{ theme: 'Base/Base', selector: ':root', references: false, file: 'variables/base.css' }];
+  const renderFile = join(dir, 'render.json');
+  writeFileSync(renderFile, JSON.stringify({ options: { dialect: 'canonical' }, rules }));
+
+  async function run(name: string, extra: Partial<typeof config> = {}) {
+    const output = join(dir, name);
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    await runPipeline({
+      prefix: 'x-',
+      paths: { tokens, output, tokenMap: join(dir, `${name}-map.json`) },
+      render: renderFile,
+      ...extra,
+    });
+    const warnings = warn.mock.calls.map((c) => c.join(' '));
+    warn.mockRestore();
+    return { css: readFileSync(join(output, 'variables', 'base.css'), 'utf-8'), warnings };
+  }
+
+  it('renders in the dialect the render file names', async () => {
+    const { css, warnings } = await run('from-file');
+    expect(css).toContain('--x-space-s: 8px;');
+    expect(css).toContain('--x-brand: #336699;');
+    expect(warnings).toEqual([]);
+  });
+
+  it('lets the config override the file, with one warning', async () => {
+    const { css, warnings } = await run('overridden', { dialect: 'style-dictionary' });
+    expect(css).toContain('--x-space-s: 0.5rem;');
+    expect(css).toContain('--x-brand: rgb(51, 102, 153);');
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toContain('dialect "canonical"');
+    expect(warnings[0]).toContain('"style-dictionary"');
+  });
+
+  it('stays quiet when the config agrees with the file', async () => {
+    const { warnings } = await run('agreeing', { dialect: 'canonical' });
+    expect(warnings).toEqual([]);
+  });
+});
