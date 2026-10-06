@@ -5,6 +5,17 @@ All notable changes to `@formtrieb/token-resolver` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `render` may name a render file of the form `{ options?, rules }`. Its
+  `dialect`, `basePxFontSize`, `units` and `color` apply unless the config
+  sets them; a bare list of rules works as before.
+- Config keys `dialect`, `basePxFontSize`, `units` and `color`, passed to
+  the renderer. When the config sets a different `dialect` or
+  `basePxFontSize` than the render file, the build warns and uses the config.
+
 ## [0.6.1] — 2026-10-06
 
 ### Added

@@ -191,6 +191,19 @@ render: [
 
 `theme` is `{group}/{name}` from `$themes.json`. Rules writing to the same file become blocks of that file, in table order. Which set overrides which comes from the theme in `$themes.json`, never from the table.
 
+## Render file
+
+`render` can name a JSON file instead of listing rules. The file is either a bare list of rules or the rules with the output options the tree was written for:
+
+```json
+{
+  "options": { "dialect": "canonical" },
+  "rules": [{ "theme": "Base/Base", "selector": ":root", "references": true, "file": "variables/base.css" }]
+}
+```
+
+Allowed options are `dialect`, `basePxFontSize`, `units`, `color` and `prefix`. Each option is taken from the config first, then from the file, then from the default. The config's `prefix` is required, so it always wins. When the config sets a different `dialect` or `basePxFontSize` than the file, the build warns once per option and uses the config.
+
 ## Invalid values
 
 A value that would be no valid CSS stops the build, and nothing is written. The error lists every such token with path, theme and file — for example an easing token with an empty bezier (`[{}, {}, {}, {}]`), a reference to a token that does not exist, or arithmetic that cannot be reduced and is not in `calc()`. Mixed-unit math on a reference, like `{breakpoints.tablet}-1px`, is written as `calc(var(--…) - 1px)`.
@@ -220,7 +233,11 @@ The CLI auto-discovers `formtrieb-tokens.config.{ts,mjs,js}` by walking from `cw
 | `defaultGroupBehavior`       | `{ useReferences }`                   | —        | Fallback for any group not listed in `themeGroups`.                                                                                  |
 | `typography.fontVariantNumeric.tabular` | `string[][]`               | `[]`     | Token-path prefixes whose typography tokens get a `tabular-nums` font-variant. See [Typography](#typography).                       |
 | `utilities`                  | `BuilderFn[]`                         | `[]`     | Builders that emit utility CSS / SCSS files. Order matters for output filenames only.                                                |
-| `render`                     | `RenderRule[] \| string`             | derived  | The render table: which theme goes to which file under which selector. Rules, or a path (from `cwd`) to a JSON file of rules. See [Theme Switching](#theme-switching). |
+| `render`                     | `RenderRule[] \| string`             | derived  | The render table: which theme goes to which file under which selector. Rules, or a path (from `cwd`) to a render file. See [Theme Switching](#theme-switching) and [Render file](#render-file). |
+| `dialect`                    | `'style-dictionary' \| 'canonical'`  | `'style-dictionary'` | Output dialect of `@formtrieb/tokens-render`. Overrides the render file. |
+| `basePxFontSize`             | `number`                              | `16`     | Root font size px are divided by for rem. Overrides the render file. |
+| `units`                      | `'rem' \| 'source'`                  | from dialect | Whether lengths become rem or stay as written. Overrides the render file. |
+| `color`                      | `'rgb' \| 'source'`                  | from dialect | Whether colour literals become `rgb()` or stay as written. Overrides the render file. |
 
 ## Programmatic API
 

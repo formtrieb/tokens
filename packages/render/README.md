@@ -23,6 +23,7 @@ ESM only, Node ≥ 20.
 | Function | Returns |
 |---|---|
 | `deriveRenderTable(themes, config)` | `RenderRule[]` — the default table from `$themes.json` |
+| `parseRenderFile(data, source?)` | `{ options, rules }` — a render file read and checked |
 | `renderVariables(system, rules, options)` | `variables/*.css` |
 | `renderUtilities(system, builders, options, config?)` | `utilities/*` |
 | `renderImports(files, existing?)` | `main.css` |
@@ -81,6 +82,16 @@ that file, in table order.
 
 Which set overrides which comes from the theme in `$themes.json`, never from
 code: render knows no set, group or theme name.
+
+### Render file
+
+A producer that writes a tree for one dialect writes the table with it, as
+`render.json`: a bare list of rules, or `{ options?, rules }`
+(`RenderFile`). `options` holds only output options (`prefix`, `dialect`,
+`basePxFontSize`, `units`, `color`); typography and builders are code and
+stay with the caller. `parseRenderFile(data)` reads either form and
+returns `{ options, rules }`; which side wins when the caller sets an
+option too is the caller's decision.
 
 ## How values are written
 

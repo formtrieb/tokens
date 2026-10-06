@@ -9,6 +9,15 @@ export async function validateConfig(config: Config): Promise<void> {
       'Config error: paths.tokens, paths.output, paths.tokenMap are required.'
     );
   }
+  const allowed = { dialect: ['style-dictionary', 'canonical'], units: ['rem', 'source'], color: ['rgb', 'source'] } as const;
+  for (const [key, values] of Object.entries(allowed) as [keyof typeof allowed, readonly string[]][]) {
+    if (config[key] !== undefined && !values.includes(config[key]!)) {
+      throw new Error(`Config error: ${key} must be one of ${values.map((v) => `'${v}'`).join(', ')}.`);
+    }
+  }
+  if (config.basePxFontSize !== undefined && !(typeof config.basePxFontSize === 'number' && config.basePxFontSize > 0)) {
+    throw new Error('Config error: basePxFontSize must be a positive number.');
+  }
   if (config.render !== undefined && typeof config.render !== 'string') {
     if (!Array.isArray(config.render)) {
       throw new Error('Config error: render must be a list of rules or a path to a JSON file of rules.');
