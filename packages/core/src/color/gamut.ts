@@ -5,13 +5,12 @@ import { converter, displayable, toGamut } from "culori";
  * §13 algorithm.
  *
  * This is deliberately NOT `formatHex`'s per-channel clip, and deliberately NOT
- * culori's `clampChroma`. `@tokens-studio/sd-transforms` gamut-maps via
- * colorjs.io's `toString({ inGamut: true })`, whose default is exactly this
- * algorithm; `clampChroma` converges elsewhere and produces visibly different
- * colours (e.g. `lch(72% 84 40)` → 255,148,125 instead of 255,140,113).
+ * culori's `clampChroma`, which converges elsewhere and produces visibly
+ * different colours (e.g. `lch(72% 84 40)` → 255,148,125 instead of the CSS
+ * Color 4 result 255,140,113). Browsers and colorjs.io map this way too.
  *
- * Sole owner of the gamut decision: both the plain `lch()` path and the colour
- * modifier path route through here so they cannot drift apart.
+ * Sole owner of the gamut decision: every colour this package writes or
+ * modifies routes through here, so no two paths can drift apart.
  */
 const map = toGamut("rgb", "oklch");
 const toRgb = converter("rgb");
