@@ -29,8 +29,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `set` takes a set or a layer in `find_placeholders` and
   `check_design_rules` too.
 - `list_token_sets` reports a set that is named but has no file.
-- The token folder is walked instead of opening files by set name; symbolic
-  links are not followed.
+- Only `$metadata.json`, `$themes.json` and the set files they name are
+  read. A set name that leaves the folder (`../x`, or through a symbolic
+  link) is not read and is reported as a missing set.
 
 ### Performance
 

@@ -43,11 +43,21 @@ describe("reading a token folder — set names from $metadata.json", () => {
     expect(problems).toEqual([{ kind: "missing-set", set: "../outside" }]);
   });
 
-  it("does not follow a symbolic link out of the folder", () => {
+  it("does not read a named set that a symbolic link puts outside the folder", () => {
     write("outside/secret.json", { secret: { $type: "color", $value: "#000" } });
-    write("tokens/$metadata.json", { tokenSetOrder: [] });
+    write("tokens/$metadata.json", { tokenSetOrder: ["linked/secret"] });
     symlinkSync(join(root, "outside"), join(root, "tokens", "linked"));
-    expect([...readTokenFiles(join(root, "tokens")).keys()]).toEqual(["$metadata.json"]);
+    const files = readTokenFiles(join(root, "tokens"));
+    expect([...files.keys()]).toEqual(["$metadata.json"]);
+    expect(buildTokenSystem(files).problems).toEqual([{ kind: "missing-set", set: "linked/secret" }]);
+  });
+
+  it("reads no JSON that neither $metadata.json nor $themes.json names", () => {
+    write("tokens/$metadata.json", { tokenSetOrder: ["Base"] });
+    write("tokens/Base.json", { a: { $type: "color", $value: "#fff" } });
+    write("tokens/package.json", { name: "not-a-set" });
+    writeFileSync(join(root, "tokens", "broken.json"), "{ not json");
+    expect([...readTokenFiles(join(root, "tokens")).keys()].sort()).toEqual(["$metadata.json", "Base.json"]);
   });
 
   it("still reads nested set names", () => {
