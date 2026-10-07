@@ -22,7 +22,8 @@ One resolution for MCP and CSS, and a smaller surface. Breaking.
 - `resolveDictionary` / `resolveToken`: every reference resolved
   (`{a.b}`, `{a.b.$value}`, in text, arrays, composites and modifiers),
   every value read under its type into a `TokenValue` at full precision,
-  with the chain of visited tokens and the problems found.
+  with the chain of visited tokens and the problems found. A bare number in
+  a length type is px; a bare `0` keeps no unit.
 - `referencesIn`, `textOf`, `alignType`.
 - Colour: `parseColor` (also `rgba(<colour>, a)`), `cssColor` (the one way
   a colour is written: `rgb`, `hex`, `percent`, `srgb`), `modifyColor`

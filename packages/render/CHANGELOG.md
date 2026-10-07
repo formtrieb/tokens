@@ -27,6 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   its own property's position; irreducible arithmetic is `calc()` from the
   resolved expression; numbers are rounded to four fraction digits.
 - Every file ends with a newline, also when it carries companions.
+- With references, a value that holds references inside text
+  (`calc(-1 * {a})`, `{a} - 1px`) is written with `var()` in their place,
+  arithmetic in `calc()`; a colour with references is written resolved.
+- A zero length is written `0` under a unit target, and as written
+  (`0` or `0px`) without one.
 - Builders get `typographyCompanions` instead of `dialect`.
 - `parseRenderFile` checks the unit policy; an older file's
   `dialect: "canonical"` is accepted without effect, `"style-dictionary"`
