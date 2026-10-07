@@ -3,7 +3,7 @@ import { z } from "zod";
 import { cssColor, findColorMatches, type ColorCandidate, type DictionaryEntry } from "@formtrieb/tokens-core";
 import { compositionFor, layerOf, selectionFor, tokensOf } from "../composition.js";
 import { resolveAndLoad, TOKENS_PATH_DESCRIPTION } from "../token-context.js";
-import { assertType, TYPE_DESCRIPTION } from "./present.js";
+import { assertType, TYPE_DESCRIPTION, underPrefix } from "./present.js";
 import { themeAxesArg, THEME_AXES_DESCRIPTION, resolveAxes } from "./theme-arg.js";
 
 export function registerBrowseTools(server: McpServer) {
@@ -75,7 +75,7 @@ export function registerBrowseTools(server: McpServer) {
 
       if (path_prefix) {
         tokens = tokens.filter(
-          (t) => t.key === path_prefix || t.key.startsWith(path_prefix + ".")
+          (t) => underPrefix(t.key, path_prefix)
         );
       }
 

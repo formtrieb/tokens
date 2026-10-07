@@ -1,19 +1,21 @@
-import type { RawToken, DesignRuleViolation } from "../types.js";
+import type { DesignRuleViolation } from "../types.js";
+import { referencesIn } from "../system/resolve.js";
+import type { DictionaryEntry } from "../system/types.js";
 
 export function checkControlsInteractionMapping(
-  tokens: RawToken[]
+  tokens: DictionaryEntry[]
 ): DesignRuleViolation[] {
   const violations: DesignRuleViolation[] = [];
 
   const controlsTokens = tokens.filter(
     (t) =>
-      t.dotPath.startsWith("color.controls.") && typeof t.$value === "string"
+      t.key.startsWith("color.controls.") && typeof t.value === "string"
   );
 
   for (const token of controlsTokens) {
-    const value = token.$value as string;
+    const value = token.value as string;
 
-    const refs = extractReferences(value);
+    const refs = referencesIn(value);
     if (refs.length === 0) continue;
 
     const property = getControlsProperty(token.path);
@@ -21,7 +23,7 @@ export function checkControlsInteractionMapping(
 
     for (const ref of refs) {
       const violation = checkPropertyReferenceConsistency(
-        token.dotPath,
+        token.key,
         property,
         ref
       );
@@ -33,22 +35,22 @@ export function checkControlsInteractionMapping(
 }
 
 export function checkComponentReferences(
-  tokens: RawToken[]
+  tokens: DictionaryEntry[]
 ): DesignRuleViolation[] {
   const violations: DesignRuleViolation[] = [];
 
   const componentTokens = tokens.filter(
     (t) =>
-      t.sourceSet.startsWith("Components/") && typeof t.$value === "string"
+      t.set.startsWith("Components/") && typeof t.value === "string"
   );
 
   for (const token of componentTokens) {
-    const refs = extractReferences(token.$value as string);
+    const refs = referencesIn(token.value as string);
     for (const ref of refs) {
       if (ref.startsWith("color.interaction.")) {
         violations.push({
           rule: "component-uses-interaction-directly",
-          path: token.dotPath,
+          path: token.key,
           expected: "Reference to color.controls.* or other semantic token",
           actual: `References ${ref} directly`,
           severity: "info",
@@ -70,7 +72,7 @@ const STANDARD_SEGMENTS: Record<string, Set<string>> = {
 };
 
 export function checkNamingConventions(
-  tokens: RawToken[]
+  tokens: DictionaryEntry[]
 ): DesignRuleViolation[] {
   const violations: DesignRuleViolation[] = [];
 
@@ -90,7 +92,7 @@ export function checkNamingConventions(
       if (!STANDARD_SEGMENTS.hierarchy.has(hierarchy)) {
         violations.push({
           rule: "non-standard-segment",
-          path: token.dotPath,
+          path: token.key,
           expected: `Standard hierarchy: ${[...STANDARD_SEGMENTS.hierarchy].join(", ")}`,
           actual: `Uses "${hierarchy}"`,
           severity: "info",
@@ -99,7 +101,7 @@ export function checkNamingConventions(
       if (!STANDARD_SEGMENTS.element.has(element)) {
         violations.push({
           rule: "non-standard-segment",
-          path: token.dotPath,
+          path: token.key,
           expected: `Standard element: ${[...STANDARD_SEGMENTS.element].join(", ")}`,
           actual: `Uses "${element}"`,
           severity: "info",
@@ -108,7 +110,7 @@ export function checkNamingConventions(
       if (!STANDARD_SEGMENTS.interaction.has(interaction)) {
         violations.push({
           rule: "non-standard-segment",
-          path: token.dotPath,
+          path: token.key,
           expected: `Standard interaction: ${[...STANDARD_SEGMENTS.interaction].join(", ")}`,
           actual: `Uses "${interaction}"`,
           severity: "info",
@@ -120,7 +122,7 @@ export function checkNamingConventions(
     if (segments.length > 6) {
       violations.push({
         rule: "deep-nesting",
-        path: token.dotPath,
+        path: token.key,
         expected: "Token path with 6 or fewer segments",
         actual: `${segments.length} segments`,
         severity: "info",
@@ -128,8 +130,8 @@ export function checkNamingConventions(
     }
 
     // 3. Redundant reference (token references a sibling at the same level)
-    if (typeof token.$value === "string") {
-      const refs = extractReferences(token.$value);
+    if (typeof token.value === "string") {
+      const refs = referencesIn(token.value);
       const tokenParent = token.path.slice(0, -1).join(".");
       for (const ref of refs) {
         const refParts = ref.split(".");
@@ -137,7 +139,7 @@ export function checkNamingConventions(
         if (refParent === tokenParent && refParts.length === token.path.length) {
           violations.push({
             rule: "sibling-reference",
-            path: token.dotPath,
+            path: token.key,
             expected: "Reference to a different level or group",
             actual: `References sibling ${ref}`,
             severity: "info",
@@ -194,14 +196,4 @@ function checkPropertyReferenceConsistency(
   }
 
   return null;
-}
-
-function extractReferences(value: string): string[] {
-  const refs: string[] = [];
-  const pattern = /\{([^}]+)\}/g;
-  let match;
-  while ((match = pattern.exec(value)) !== null) {
-    refs.push(match[1]);
-  }
-  return refs;
 }

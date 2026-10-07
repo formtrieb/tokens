@@ -20,8 +20,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   composites at their own property's position, computed colours as
   `rgb(r% g% b%)`, colour literals in shadows as `rgba(r, g, b, a)`, every
   file ending with a newline.
-- The token system is read with core's `buildTokenSystem`; a set named in
-  `$metadata.json` or a theme without a file is reported.
+- The token system is read with core's `buildTokenSystem`: only
+  `$metadata.json`, `$themes.json` and the sets they name are read, each
+  inside the token folder (symbolic links resolved). A JSON file no index
+  names is no set any more; a set named without a file is reported.
+
+### Migrating
+
+| Before | Now |
+|---|---|
+| `dialect: 'style-dictionary'` (the default) | nothing: the CLI defaults write the same (`units: 'tokens-studio'`, `color: 'rgb'`, `typographyCompanions: true`) |
+| `dialect: 'canonical'` | `units: 'source', color: 'source', typographyCompanions: false`; a render file that still says `dialect: "canonical"` keeps working, with a warning |
+| `units: 'rem'` | `units: 'tokens-studio'` or a policy |
+| a set file that no index names | name it in `$metadata.json` or a theme |
 
 ## [0.7.0] — 2026-10-06
 

@@ -52,7 +52,11 @@ describe("resolve_token", () => {
     const m = setupTools();
     const cycle = await m.callTool("resolve_token", { tokens_path: path, path: "a" });
     expect(cycle.value).toEqual({ kind: "unresolved", text: "{b}" });
-    expect(cycle.problems).toEqual([{ kind: "cycle", path: "b", cycle: ["a", "b", "a"] }]);
+    expect(cycle.problems).toEqual([
+      { kind: "cycle", path: "b", cycle: ["a", "b", "a"] },
+      // render would refuse to write the value
+      { kind: "invalid-css", path: "a", reason: "unresolved reference {b}" },
+    ]);
     const unknown = await m.callTool("resolve_token", { tokens_path: path, path: "nope" });
     expect(unknown.finalValue).toBeNull();
     expect(unknown.problems).toEqual([{ kind: "unknown-reference", path: "nope", reference: "nope" }]);
@@ -82,6 +86,15 @@ describe("resolve_batch", () => {
     const verbose = (await m.callTool("resolve_batch", { tokens_path: STUDIO, paths: ["color.accent"], verbose: true })).results as Record<string, Record<string, unknown>>;
     expect(verbose["color.accent"]!.value).toMatchObject({ kind: "color" });
     expect(verbose["color.accent"]!.chain).toHaveLength(2);
+  });
+});
+
+describe("path_prefix", () => {
+  it("stops at a dot boundary in browse_tokens and compare_themes", async () => {
+    const path = system({ color: { text: { $type: "color", $value: "#000" }, textual: { $type: "color", $value: "#111" } } });
+    const m = setupTools();
+    const tree = (await m.callTool("browse_tokens", { tokens_path: path, path_prefix: "color.text", depth: 3 })).count;
+    expect(tree).toBe(1);
   });
 });
 

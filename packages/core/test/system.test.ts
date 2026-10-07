@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildTokenSystem,
+  namedSets,
   compose,
   composeTheme,
   referencesIn,
@@ -8,6 +9,9 @@ import {
   resolveToken,
   textOf,
   cssColor,
+  modifyColor,
+  parseColor,
+  type Color,
   type TokenSystem,
   type TokenValue,
 } from "../src/index.js";
@@ -31,7 +35,7 @@ const tok = (type: string | undefined, value: unknown, extra: Json = {}) => ({ .
 const length = (value: number, unit: string): TokenValue => ({ kind: "length", value, unit });
 
 describe("buildTokenSystem", () => {
-  it("orders sets by $metadata, then sets a theme names, then other files by path", () => {
+  it("takes the sets $metadata names, then those a theme names — nothing else", () => {
     const files = new Map<string, unknown>([
       ["b.json", {}],
       ["a.json", {}],
@@ -41,16 +45,16 @@ describe("buildTokenSystem", () => {
       ["$themes.json", [{ id: "1", name: "x", selectedTokenSets: { named: "enabled" } }]],
     ]);
     const { system: s, problems } = buildTokenSystem(files);
-    expect(s.order).toEqual(["b", "named", "a", "z/one"]);
+    expect(s.order).toEqual(["b", "named"]);
+    expect(s.sets.has("a")).toBe(false);
     expect(s.themes[0].group).toBe("Ungrouped");
     expect(problems).toEqual([]);
+    expect(namedSets(files.get("$metadata.json"), files.get("$themes.json"))).toEqual(["b", "named"]);
   });
 
-  it("reports a set that is named but has no file, and skips $ and dot files", () => {
+  it("reports a set that is named but has no file", () => {
     const files = new Map<string, unknown>([
       ["a.json", {}],
-      [".hidden/x.json", {}],
-      ["$extra.json", {}],
       ["$metadata.json", { tokenSetOrder: ["a", "gone"] }],
     ]);
     const { system: s, problems } = buildTokenSystem(files);
@@ -351,6 +355,40 @@ describe("cssColor", () => {
 
   it("takes a channel within float noise of the edge as the edge", () => {
     expect(cssColor({ mode: "rgb", r: 0.000002, g: 0.5, b: 1.0000001 }, "percent")).toBe("rgb(0% 50% 100%)");
+  });
+});
+
+describe("cases kept from the former resolver", () => {
+  const mod = (modify: Record<string, unknown>) => ({ $extensions: { "studio.tokens": { modify } } });
+
+  it("mixes towards a referenced colour", () => {
+    const tokens = {
+      base: tok("color", "#ff0000"),
+      to: tok("color", "#0000ff"),
+      mixed: tok("color", "{base}", mod({ type: "mix", value: "0.5", space: "srgb", color: "{to}" })),
+    };
+    expect(cssColor((valueOf(tokens, "mixed") as { color: Color }).color, "rgb")).toBe("rgb(128, 0, 128)");
+  });
+
+  it("chains modifiers without rounding in between", () => {
+    const tokens = {
+      a: tok("color", "#2072b6", mod({ type: "lighten", value: "0.2", space: "lch" })),
+      b: tok("color", "{a}", mod({ type: "darken", value: "0.2", space: "lch" })),
+    };
+    const once = modifyColor(modifyColor(parseColor("#2072b6")!, { type: "lighten", amount: 0.2 }), { type: "darken", amount: 0.2 });
+    expect((valueOf(tokens, "b") as { color: Color }).color).toEqual(once);
+  });
+
+  it("keeps a __proto__ path an ordinary token", () => {
+    const d = compose(system({ a: JSON.parse('{"__proto__":{"x":{"$type":"number","$value":"1"}}}') }), [{ set: "a", state: "enabled" }]);
+    expect(d.entries.map((e) => e.key)).toEqual(["__proto__.x"]);
+    expect(({} as Record<string, unknown>).x).toBeUndefined();
+  });
+
+  it("an lch() outside sRGB is flagged and written gamut-mapped", () => {
+    const v = valueOf({ c: tok("color", "lch(72% 84 40)") }, "c") as Extract<TokenValue, { kind: "color" }>;
+    expect(v.outOfGamut).toBe(true);
+    expect(cssColor(v.color!, "rgb")).toBe("rgb(255, 140, 113)");
   });
 });
 

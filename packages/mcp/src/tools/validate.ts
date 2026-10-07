@@ -8,7 +8,7 @@ import {
   checkComponentReferences,
   checkNamingConventions,
 } from "@formtrieb/tokens-core";
-import { asRawToken, tokensOf } from "../composition.js";
+import { tokensOf } from "../composition.js";
 import { resolveAndLoad, TOKENS_PATH_DESCRIPTION } from "../token-context.js";
 
 export function registerValidateTools(server: McpServer) {
@@ -16,7 +16,7 @@ export function registerValidateTools(server: McpServer) {
     "find_placeholders",
     {
       description:
-        "Find all placeholder tokens (#f305b7 magenta or #ff00ff) that mark undefined states needing real values. Use to audit token completeness.",
+        "Find all placeholder tokens (#f305b7 magenta) that mark undefined states needing real values. Use to audit token completeness.",
       inputSchema: {
         set: z
           .string()
@@ -30,7 +30,7 @@ export function registerValidateTools(server: McpServer) {
     },
     async ({ set, tokens_path }) => {
       const ctx = resolveAndLoad({ tokens_path });
-      const tokens = tokensOf(ctx, set).map(asRawToken);
+      const tokens = tokensOf(ctx, set);
       const placeholders = findPlaceholders(tokens, set);
 
       const byContext: Record<string, string[]> = {};
@@ -81,8 +81,8 @@ export function registerValidateTools(server: McpServer) {
     },
     async ({ set, severity, tokens_path }) => {
       const ctx = resolveAndLoad({ tokens_path });
-      const tokens = tokensOf(ctx, set).map(asRawToken);
-      const allPaths = new Set(tokens.map((t) => t.dotPath));
+      const tokens = tokensOf(ctx, set);
+      const allPaths = new Set(tokens.map((t) => t.key));
 
       const controlsViolations = checkControlsInteractionMapping(tokens);
       const componentViolations = checkComponentReferences(tokens);
@@ -91,8 +91,8 @@ export function registerValidateTools(server: McpServer) {
 
       let structuralDiff = null;
       if (!set) {
-        const lightTokens = ctx.system.sets.has("Semantic/Light") ? tokensOf(ctx, "Semantic/Light").map(asRawToken) : [];
-        const darkTokens = ctx.system.sets.has("Semantic/Dark") ? tokensOf(ctx, "Semantic/Dark").map(asRawToken) : [];
+        const lightTokens = ctx.system.sets.has("Semantic/Light") ? tokensOf(ctx, "Semantic/Light") : [];
+        const darkTokens = ctx.system.sets.has("Semantic/Dark") ? tokensOf(ctx, "Semantic/Dark") : [];
         if (lightTokens.length > 0 && darkTokens.length > 0) {
           structuralDiff = compareStructure(
             lightTokens,

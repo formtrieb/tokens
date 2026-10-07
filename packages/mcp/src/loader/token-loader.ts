@@ -1,7 +1,6 @@
 import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { isAbsolute, relative, resolve, sep } from "node:path";
-
-const isObject = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
+import { namedSets } from "@formtrieb/tokens-core";
 
 /** The parsed file, or a thrown error naming it. */
 function readJson(file: string, name: string): unknown {
@@ -14,8 +13,8 @@ function readJson(file: string, name: string): unknown {
 
 /**
  * The files of a token folder as core's `buildTokenSystem` takes them:
- * `$metadata.json`, `$themes.json`, and the set files these two name — and
- * nothing else. A folder may hold other JSON (a package.json, build output);
+ * `$metadata.json`, `$themes.json`, and the set files these two name
+ * (core's `namedSets`) — and nothing else. A folder may hold other JSON (a package.json, build output);
  * it is never read, so it can neither show up as a set nor break loading.
  *
  * Every file read must lie inside the folder after resolving symbolic
@@ -39,18 +38,7 @@ export function readTokenFiles(tokensPath: string): Map<string, unknown> {
     if (file) files.set(name, readJson(file, name));
   }
 
-  const named = new Set<string>();
-  const meta = files.get("$metadata.json");
-  if (isObject(meta) && Array.isArray(meta.tokenSetOrder)) {
-    for (const set of meta.tokenSetOrder) if (typeof set === "string") named.add(set);
-  }
-  const themes = files.get("$themes.json");
-  if (Array.isArray(themes)) {
-    for (const theme of themes) {
-      if (isObject(theme) && isObject(theme.selectedTokenSets)) for (const set of Object.keys(theme.selectedTokenSets)) named.add(set);
-    }
-  }
-
+  const named = namedSets(files.get("$metadata.json"), files.get("$themes.json"));
   for (const set of named) {
     const file = inside(`${set}.json`);
     if (file) files.set(`${set}.json`, readJson(file, `${set}.json`));

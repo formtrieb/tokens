@@ -40,7 +40,7 @@ describe("MCP finalValue equals render's value, theme by theme", () => {
       for (const entry of dict.entries) {
         const name = `--${kebab(`x- ${entry.path.join(" ")}`)}`;
         if (!written.has(name)) continue;
-        expect(display(values.get(entry.key)!, entry, "source"), `${id} ${entry.key}`).toBe(written.get(name));
+        expect(display(values.get(entry.key)!, entry, "source").text, `${id} ${entry.key}`).toBe(written.get(name));
         compared++;
       }
       expect(written.size, id).toBeGreaterThan(0);

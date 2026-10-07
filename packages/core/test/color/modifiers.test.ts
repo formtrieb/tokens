@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { lightenLch, darkenLch } from "../src/parser/color-modifiers.js";
+import { lightenLch, darkenLch } from "../../src/color/modifiers.js";
 
 const base = { mode: "lch", l: 50, c: 40, h: 260 };
 

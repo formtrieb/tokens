@@ -3,12 +3,11 @@ import {
   parseThemes,
   buildAxisMap,
   getDefaultAxes,
-  getAxisGroups,
   describeAxes,
   validateAxes,
   UNGROUPED_AXIS,
-} from "../src/theme/theme-resolver.js";
-import type { RawTheme } from "../src/theme/theme-resolver.js";
+} from "../src/theme/themes.js";
+import type { RawTheme } from "../src/theme/themes.js";
 
 /** Foreign DS shape: axes that are not Semantic/Device/Shape. */
 const FOREIGN: RawTheme[] = [
@@ -70,7 +69,7 @@ describe("buildAxisMap", () => {
   });
 
   it("never produces an undefined axis key", () => {
-    const groups = getAxisGroups(buildAxisMap(parseThemes(UNGROUPED)));
+    const groups = [...buildAxisMap(parseThemes(UNGROUPED)).keys()];
     expect(groups).toEqual([UNGROUPED_AXIS]);
     expect(groups).not.toContain("undefined");
     expect(groups).not.toContain(undefined);

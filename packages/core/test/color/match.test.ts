@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { findColorMatches } from "../src/parser/color-match.js";
+import { findColorMatches } from "../../src/color/match.js";
 
 const CANDIDATES = [
   { path: "color.accent.primary", value: "#2072b6" },

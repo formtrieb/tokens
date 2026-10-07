@@ -7,27 +7,69 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+One resolution for MCP and CSS, and a smaller surface. Breaking.
+
 ### Added
 
-- One resolution for a Tokens-Studio export, next to the existing API:
-  - `buildTokenSystem(files)` builds a `TokenSystem` from the export's files
-    (path → parsed JSON) and reports sets that are named but missing.
-  - `compose(system, selection)` / `composeTheme(system, theme)` merge a
-    theme's sets into a `Dictionary`: groups merge, a token replaces a token
-    whole, a group's `$type` reaches the tokens below it, untyped tokens are
-    kept and reported. Each entry carries the Tokens Studio type and the
-    aligned type.
-  - `resolveToken` / `resolveDictionary` resolve every reference and read
-    each value under its type into a `TokenValue` (`length`, `number`,
-    `color`, `fontWeight`, `typography`, `shadow`, …) at full precision,
-    with the chain of visited tokens and the problems found (unknown
-    reference, reference to a group, cycle, invalid value).
-  - `referencesIn(value)` and `textOf(value)`.
-  - `cssColor(color, form)`: a resolved colour as `rgb()`, hex or
-    `rgb(r% g% b% / a)`, gamut-mapped; within float noise of the sRGB edge a
-    channel is the edge.
-  - References inside a plain array (a font family list, a bezier) are
-    resolved; DTCG `{ value, unit }` reads as a length or a duration.
+- `namedSets(metadata, themes)` and `buildTokenSystem(files)`: the sets a
+  token system has (those `$metadata.json` and `$themes.json` name, nothing
+  else) and the system from its files; a named set without a file is
+  reported.
+- `compose(system, selection)` / `composeTheme(system, theme)` /
+  `themeSelection(theme)`: the tokens of a selection of sets. Groups merge,
+  a token replaces a token whole, a group's `$type` reaches the tokens below
+  it, untyped tokens are kept and reported.
+- `resolveDictionary` / `resolveToken`: every reference resolved
+  (`{a.b}`, `{a.b.$value}`, in text, arrays, composites and modifiers),
+  every value read under its type into a `TokenValue` at full precision,
+  with the chain of visited tokens and the problems found.
+- `referencesIn`, `textOf`, `alignType`.
+- Colour: `parseColor` (also `rgba(<colour>, a)`), `cssColor` (the one way
+  a colour is written: `rgb`, `hex`, `percent`, `srgb`), `modifyColor`
+  (a Tokens Studio modifier on a colour; a base outside sRGB is mapped into
+  it first).
+
+### Changed
+
+- `composite` is now `over`.
+- `withAlpha` and `over` write alpha only when it is below 1:
+  `withAlpha(c, 1)` is `#rrggbb`, not `#rrggbbff`.
+- The analysis functions (`findPlaceholders`, `findBrokenReferences`,
+  `compareStructure`, `check…`) take dictionary entries (`DictionaryEntry[]`)
+  instead of `RawToken[]`.
+- `findPlaceholders` documents what it checks: `#f305b7`.
+
+### Removed
+
+- The former engine: `TokenTree`, `ReferenceResolver`, `evaluateMath`,
+  `containsMath`, and the types `RawToken`, `TokenExtensions`,
+  `ResolutionStep`, `ResolutionChain`.
+- The Style-Dictionary-shaped value steps: `canonicalize`, `resolveMath`,
+  `parseAndReduce`, `evaluateMathFor`, `pxFor`, `opacityFor`,
+  `lineHeightFor`, `fontWeightFor`, `letterSpacingFor`.
+- Colour helpers replaced by the above: `applyColorModifier`,
+  `formatColor`, `resolveLchToHex`, `resolveLchToHexWithGamut`,
+  `isLchFormula`, `isPlainColor`; the types `ColorFormat`,
+  `ModifierOutput`, `Oklch`, `ColorOutput`, `ColorMatchResult`,
+  `NearestColorMatch`.
+- Theme helpers without use: `getActiveSets`, `getAxisGroups`,
+  `getThemesForGroup`, `UNGROUPED_AXIS`, and the types `RawTheme`,
+  `AxisDescriptor`, `TokenSetInfo`.
+
+### Migrating from 1.x
+
+| 1.x | 2.0 |
+|---|---|
+| `new TokenTree(sets, order)` + `getActiveSets` + `buildMergedTree` + `new ReferenceResolver(merged).resolve(path)` | `buildTokenSystem(files)`, then `resolveDictionary(composeTheme(system, "Group/Name"))` or `compose(system, selection)`; `values.get(path)` gives `{ value, chain, problems }` |
+| `chain.finalValue` (raw string) | `resolution.value` (typed); write it with `cssColor`, `textOf`, or `@formtrieb/tokens-render` |
+| `chain.errors` (strings) | `resolution.problems` (`{ kind: "unknown-reference" \| "cycle" \| … }`) |
+| `chain.gamutClipped`, `chain.lchValue` | `value.outOfGamut`, `value.literal` |
+| `applyColorModifier(hex, modifier)` | `cssColor(modifyColor(parseColor(hex)!, { type, amount, space }), "hex")` |
+| `formatColor(value, "rgba" \| "hex8" \| "hex")` | `cssColor(parseColor(value)!, "rgb" \| "hex")` |
+| `composite(layer, base)` | `over(layer, base)` |
+| `withAlpha(c, 1)` → `#rrggbbff` | `#rrggbb` |
+| `canonicalize(value, type)` | the value of `resolveDictionary`, already read under its type |
+| analysis functions with `RawToken[]` | pass `DictionaryEntry[]` (`dict.entries`) |
 
 ## [1.7.1] — 2026-10-06
 

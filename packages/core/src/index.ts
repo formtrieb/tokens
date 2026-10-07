@@ -1,67 +1,7 @@
-// Types
-export type {
-  RawToken,
-  TokenExtensions,
-  ColorModifier,
-  ResolutionStep,
-  ResolutionChain,
-  ThemeDefinition,
-  ThemeAxes,
-  TokenSetInfo,
-  DesignRuleViolation,
-  PlaceholderToken,
-  StructuralDiff,
-} from "./types.js";
-
-// Parser
-export { TokenTree } from "./parser/token-tree.js";
-export { ReferenceResolver } from "./parser/reference-resolver.js";
-export { evaluateMath, containsMath } from "./parser/math-evaluator.js";
-export {
-  resolveLchToHex,
-  applyColorModifier,
-  isLchFormula,
-  isPlainColor,
-  isInSrgbGamut,
-  resolveLchToHexWithGamut,
-  formatColor,
-} from "./parser/color-resolver.js";
-export type { ColorFormat, ModifierOutput } from "./parser/color-resolver.js";
-export {
-  oklchToHex,
-  hexToOklch,
-  contrastWcag,
-  deltaE2000,
-  deltaEOK,
-  composite,
-  withAlpha,
-  alphaOf,
-} from "./parser/color-functions.js";
-export type { Oklch, ColorOutput } from "./parser/color-functions.js";
-export { findColorMatches } from "./parser/color-match.js";
-export type {
-  ColorCandidate,
-  ColorMatchResult,
-  NearestColorMatch,
-} from "./parser/color-match.js";
-
-// Canonicalize — Tokens Studio semantics of a resolved value
-export {
-  canonicalize,
-  alignType,
-  resolveMath,
-  parseAndReduce,
-  evaluateMathFor,
-  pxFor,
-  opacityFor,
-  lineHeightFor,
-  fontWeightFor,
-  letterSpacingFor,
-} from "./canonicalize/index.js";
-
-// System — one resolution: load, compose a theme, resolve to typed values
+// System — load a token system, compose a theme, resolve to typed values
 export {
   buildTokenSystem,
+  namedSets,
   compose,
   composeTheme,
   themeSelection,
@@ -69,7 +9,7 @@ export {
   resolveDictionary,
   referencesIn,
   textOf,
-  cssColor,
+  alignType,
 } from "./system/index.js";
 export type {
   TokenSystem,
@@ -84,34 +24,43 @@ export type {
   ChainStep,
   Resolution,
 } from "./system/index.js";
+export type { ColorModifier } from "./types.js";
 
-// Theme
+// Colour — read, write, modify, measure, layer, find
+export { parseColor } from "./color/parse.js";
+export { cssColor } from "./color/css.js";
+export { modifyColor } from "./color/modifiers.js";
+export {
+  oklchToHex,
+  hexToOklch,
+  contrastWcag,
+  deltaE2000,
+  deltaEOK,
+  over,
+  withAlpha,
+  alphaOf,
+  isInSrgbGamut,
+} from "./color/functions.js";
+export { findColorMatches } from "./color/match.js";
+export type { ColorCandidate } from "./color/match.js";
+
+// Themes and axes
 export {
   parseThemes,
   buildAxisMap,
   getThemeByName,
-  getActiveSets,
   getDefaultAxes,
-  getAxisGroups,
-  getThemesForGroup,
   describeAxes,
   validateAxes,
-  UNGROUPED_AXIS,
-} from "./theme/theme-resolver.js";
-export type {
-  RawTheme,
-  AxisDescriptor,
-  AxisProblem,
-} from "./theme/theme-resolver.js";
+} from "./theme/themes.js";
+export type { ThemeDefinition, ThemeAxes } from "./types.js";
+export type { AxisProblem } from "./theme/themes.js";
 
-// Analyzer
-export {
-  findPlaceholders,
-  findBrokenReferences,
-  compareStructure,
-} from "./analyzer/validation.js";
+// Analysis
+export { findPlaceholders, findBrokenReferences, compareStructure } from "./analyze/validation.js";
 export {
   checkControlsInteractionMapping,
   checkComponentReferences,
   checkNamingConventions,
-} from "./analyzer/design-rules.js";
+} from "./analyze/design-rules.js";
+export type { PlaceholderToken, StructuralDiff, DesignRuleViolation } from "./types.js";

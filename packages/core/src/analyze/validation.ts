@@ -1,30 +1,32 @@
-import type { RawToken, PlaceholderToken, StructuralDiff } from "../types.js";
+import type { PlaceholderToken, StructuralDiff } from "../types.js";
+import { referencesIn } from "../system/resolve.js";
+import type { DictionaryEntry } from "../system/types.js";
 
 const PLACEHOLDER_COLOR = "#f305b7";
 
 export function findPlaceholders(
-  tokens: RawToken[],
+  tokens: DictionaryEntry[],
   setFilter?: string
 ): PlaceholderToken[] {
   const filtered = setFilter
-    ? tokens.filter((t) => t.sourceSet === setFilter)
+    ? tokens.filter((t) => t.set === setFilter)
     : tokens;
 
   return filtered
     .filter(
       (t) =>
-        typeof t.$value === "string" &&
-        t.$value.toLowerCase() === PLACEHOLDER_COLOR
+        typeof t.value === "string" &&
+        t.value.toLowerCase() === PLACEHOLDER_COLOR
     )
     .map((t) => ({
-      path: t.dotPath,
-      sourceSet: t.sourceSet,
+      path: t.key,
+      sourceSet: t.set,
       context: getContext(t.path),
     }));
 }
 
 export function findBrokenReferences(
-  tokens: RawToken[],
+  tokens: DictionaryEntry[],
   allPaths: Set<string>
 ): Array<{ path: string; rawValue: string; missingRef: string; sourceSet: string }> {
   const broken: Array<{
@@ -35,16 +37,16 @@ export function findBrokenReferences(
   }> = [];
 
   for (const token of tokens) {
-    if (typeof token.$value !== "string") continue;
+    if (typeof token.value !== "string") continue;
 
-    const refs = extractReferences(token.$value);
+    const refs = referencesIn(token.value);
     for (const ref of refs) {
       if (!allPaths.has(ref)) {
         broken.push({
-          path: token.dotPath,
-          rawValue: token.$value,
+          path: token.key,
+          rawValue: token.value,
           missingRef: ref,
-          sourceSet: token.sourceSet,
+          sourceSet: token.set,
         });
       }
     }
@@ -54,13 +56,13 @@ export function findBrokenReferences(
 }
 
 export function compareStructure(
-  tokensA: RawToken[],
-  tokensB: RawToken[],
+  tokensA: DictionaryEntry[],
+  tokensB: DictionaryEntry[],
   labelA: string,
   labelB: string
 ): StructuralDiff {
-  const pathsA = new Map(tokensA.map((t) => [t.dotPath, t.$type]));
-  const pathsB = new Map(tokensB.map((t) => [t.dotPath, t.$type]));
+  const pathsA = new Map(tokensA.map((t) => [t.key, t.type ?? ""]));
+  const pathsB = new Map(tokensB.map((t) => [t.key, t.type ?? ""]));
 
   const missingInA: string[] = [];
   const missingInB: string[] = [];
@@ -90,16 +92,6 @@ export function compareStructure(
     missingInB,
     typeMismatches,
   };
-}
-
-function extractReferences(value: string): string[] {
-  const refs: string[] = [];
-  const pattern = /\{([^}]+)\}/g;
-  let match;
-  while ((match = pattern.exec(value)) !== null) {
-    refs.push(match[1]);
-  }
-  return refs;
 }
 
 function getContext(path: string[]): string {

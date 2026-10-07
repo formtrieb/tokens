@@ -1,7 +1,7 @@
 {
   "name": "@formtrieb/tokens-core",
   "version": "1.7.1",
-  "description": "Core library for Tokens-Studio-shaped design token systems — loaders, theme composition, reference resolution, and DTCG-aware analysis primitives. Pure functions, framework-agnostic.",
+  "description": "Core library for Tokens-Studio-shaped design token systems — build a system from its files, compose themes, resolve references to typed values, colour functions and analysis. Pure functions, no I/O.",
   "license": "Apache-2.0",
   "type": "module",
   "main": "dist/index.js",
@@ -38,8 +38,6 @@
     "culori": "^4.0.0"
   },
   "devDependencies": {
-    "@tokens-studio/sd-transforms": "^2.0.3",
-    "style-dictionary": "^5.5.2",
     "tsx": "^4.0.0",
     "typescript": "^5.0.0",
     "vitest": "^3.0.0"

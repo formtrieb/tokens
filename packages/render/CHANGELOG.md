@@ -46,6 +46,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - devDependencies `tinycolor2`, `@types/tinycolor2`.
 
+### Migrating from 0.x
+
+| 0.x | 1.0 |
+|---|---|
+| `dialect: "style-dictionary"` (the default) | `units: "tokens-studio", color: "rgb", typographyCompanions: true` |
+| `dialect: "canonical"` | no option needed: these are the defaults |
+| `units: "rem"` | `units: "tokens-studio"`, or a policy `{ types: { dimension: "rem" } }` |
+| `color: "rgb" \| "source"` | unchanged; `"hex"` is new |
+| `typography` builders with the default dialect | set `typographyCompanions: true` |
+| builder context `dialect` | `typographyCompanions` |
+| `TokenSystem` from render | the same shape; it is core's type now |
+
 ## [0.4.0] — 2026-10-06
 
 ### Added
