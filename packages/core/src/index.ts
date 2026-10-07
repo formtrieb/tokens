@@ -69,6 +69,7 @@ export {
   resolveDictionary,
   referencesIn,
   textOf,
+  cssColor,
 } from "./system/index.js";
 export type {
   TokenSystem,

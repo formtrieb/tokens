@@ -196,7 +196,7 @@ function toPrecision(n: number, precision: number): number {
 }
 
 /** Gamut-mapped `rgb(r% g% b%[ / a])`, five significant digits per channel. */
-function formatSrgb(color: any): string {
+export function formatSrgb(color: any): string {
   const rgb = mapToSrgbGamut(toRgb(color)) as any;
   const channels = [rgb.r, rgb.g, rgb.b]
     .map((v: number) => `${toPrecision((v ?? 0) * 100, 5)}%`)

@@ -34,39 +34,72 @@ const ALL_STEPS: PipelineStep[] = ['themes', 'utilities', 'imports', 'token-map'
 /**
  * The render table and the output options that came with it: `config.render`
  * (rules, or a render file that may carry options), else derived from
- * `$themes.json` without options.
+ * `$themes.json` without options. `canonical`: the file still says
+ * `dialect: "canonical"`.
  */
 export async function renderSource(
   config: Config,
   system: TokenSystem
-): Promise<{ rules: RenderRule[]; options: RenderFileOptions }> {
+): Promise<{ rules: RenderRule[]; options: RenderFileOptions; canonical?: boolean }> {
   if (Array.isArray(config.render)) return { rules: config.render, options: {} };
   if (typeof config.render === 'string') {
     const path = resolve(config.render);
-    return parseRenderFile(JSON.parse(await readFile(path, 'utf-8')), config.render);
+    const data = JSON.parse(await readFile(path, 'utf-8'));
+    const canonical = data?.options?.dialect === 'canonical';
+    return { ...parseRenderFile(data, config.render), canonical };
   }
   return { rules: deriveRenderTable(system.themes, config), options: {} };
 }
 
-/** Options where the config overriding the render file changes the output for the tree's producer. */
-const WARN_ON_OVERRIDE = ['dialect', 'basePxFontSize'] as const;
+/**
+ * What the CLI writes when neither config nor render file says otherwise:
+ * the Tokens-Studio policy, so a Tokens-Studio export keeps its rem, its
+ * `rgb()` colours and the companions its typography builders read.
+ */
+const CLI_DEFAULTS: Required<Omit<RenderFileOptions, 'prefix'>> = {
+  units: 'tokens-studio',
+  color: 'rgb',
+  typographyCompanions: true,
+  basePxFontSize: 16,
+};
 
-/** Config > render file > render's defaults, per option; warns where the config overrides the file. */
-function outputOptions(config: Config, file: RenderFileOptions): RenderOptions {
+/** What a render file's `dialect: "canonical"` meant: everything as written, no companions. */
+const CANONICAL_DEFAULTS: Required<Omit<RenderFileOptions, 'prefix'>> = {
+  units: 'source',
+  color: 'source',
+  typographyCompanions: false,
+  basePxFontSize: 16,
+};
+
+/** Options where the config overriding the render file changes the output for the tree's producer. */
+const WARN_ON_OVERRIDE = ['units', 'color', 'basePxFontSize', 'typographyCompanions'] as const;
+
+/** Config > render file > defaults, per option; warns where the config overrides the file. */
+function outputOptions(config: Config, table: { options: RenderFileOptions; canonical?: boolean }): RenderOptions {
+  const file = table.options;
+  const legacyDialect = (config as unknown as { dialect?: unknown }).dialect;
+  if (table.canonical || legacyDialect !== undefined) {
+    console.warn(
+      `⚠ "dialect" has no effect any more and can be removed; ` +
+        `the output follows "units", "color" and "typographyCompanions".`
+    );
+  }
   for (const key of WARN_ON_OVERRIDE) {
-    if (config[key] !== undefined && file[key] !== undefined && config[key] !== file[key]) {
+    if (config[key] !== undefined && file[key] !== undefined && JSON.stringify(config[key]) !== JSON.stringify(file[key])) {
       console.warn(
         `⚠ ${config.render} says ${key} ${JSON.stringify(file[key])}, the config sets ` +
           `${JSON.stringify(config[key])}; using the config.`
       );
     }
   }
+  // A file written for the canonical dialect keeps its meaning: values as written.
+  const defaults = table.canonical || legacyDialect === 'canonical' ? CANONICAL_DEFAULTS : CLI_DEFAULTS;
   return {
     prefix: config.prefix,
-    dialect: config.dialect ?? file.dialect,
-    basePxFontSize: config.basePxFontSize ?? file.basePxFontSize,
-    units: config.units ?? file.units,
-    color: config.color ?? file.color,
+    units: config.units ?? file.units ?? defaults.units,
+    color: config.color ?? file.color ?? defaults.color,
+    typographyCompanions: config.typographyCompanions ?? file.typographyCompanions ?? defaults.typographyCompanions,
+    basePxFontSize: config.basePxFontSize ?? file.basePxFontSize ?? defaults.basePxFontSize,
     privateTokenPrefixes: config.privateTokenPrefixes ?? ['*'],
     typography: config.typography ?? {},
   };
@@ -107,7 +140,7 @@ export async function runPipeline(config: Config, options: RunOptions = {}): Pro
 
   const system = await loadTokenSystem(config.paths.tokens);
   const table = await renderSource(config, system);
-  const renderOptions = outputOptions(config, table.options);
+  const renderOptions = outputOptions(config, table);
 
   const variables = renderVariables(system, table.rules, renderOptions);
   const utilities = await renderUtilities(system, config.utilities ?? [], renderOptions, config);

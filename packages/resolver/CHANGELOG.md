@@ -5,6 +5,24 @@ All notable changes to `@formtrieb/token-resolver` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed (breaking)
+
+- Config keys `units` (a unit policy or preset), `color` (`'source'`,
+  `'rgb'`, `'hex'`) and `typographyCompanions` replace `dialect`. CLI
+  defaults are the Tokens-Studio policy: `units: 'tokens-studio'`,
+  `color: 'rgb'`, `typographyCompanions: true`.
+- A render file with `dialect: "canonical"` keeps its meaning (lengths and
+  colours as written, no companions) and the build warns once;
+  `dialect: "style-dictionary"` is refused.
+- Output of the default policy: variables in source order, references in
+  composites at their own property's position, computed colours as
+  `rgb(r% g% b%)`, colour literals in shadows as `rgba(r, g, b, a)`, every
+  file ending with a newline.
+- The token system is read with core's `buildTokenSystem`; a set named in
+  `$metadata.json` or a theme without a file is reported.
+
 ## [0.7.0] — 2026-10-06
 
 ### Added

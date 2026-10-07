@@ -5,6 +5,42 @@ All notable changes to `@formtrieb/tokens-render` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed (breaking)
+
+- Values come from core's one resolution (`composeTheme`,
+  `resolveDictionary`) and are written by one formatter per kind of
+  value. The Style-Dictionary replay (transform chain, tinycolor port,
+  deep-extend, sort by reference) is gone.
+- The dialect is gone (`dialect`, `Dialect`). The output policy is data:
+  - `units`: a unit policy `{ types?, paths? }` or a preset (`"source"`,
+    `"tokens-studio"`); only lengths in px are converted, other units stay.
+  - `color`: `"source"`, `"rgb"` or `"hex"`; computed colours are
+    `rgb(r% g% b% / a)` under `"source"` and `"rgb"`. Applies inside
+    shadows and borders too.
+  - `typographyCompanions`: companion variables and their token-map
+    entries, default off. The `typography` builders throw without them.
+- Defaults without options: lengths and colours as written, no companions.
+- Variables keep source order; a reference in a composite is written at
+  its own property's position; irreducible arithmetic is `calc()` from the
+  resolved expression; numbers are rounded to four fraction digits.
+- Every file ends with a newline, also when it carries companions.
+- Builders get `typographyCompanions` instead of `dialect`.
+- `parseRenderFile` checks the unit policy; an older file's
+  `dialect: "canonical"` is accepted without effect, `"style-dictionary"`
+  is refused with the options to use instead.
+- `TokenSystem` is core's type.
+
+### Added
+
+- `TOKENS_STUDIO_UNITS`, and the types `UnitPolicy`, `UnitPreset`,
+  `UnitTarget`, `ColorForm`.
+
+### Removed
+
+- devDependencies `tinycolor2`, `@types/tinycolor2`.
+
 ## [0.4.0] — 2026-10-06
 
 ### Added

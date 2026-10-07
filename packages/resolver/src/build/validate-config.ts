@@ -1,3 +1,4 @@
+import { parseRenderFile } from '@formtrieb/tokens-render';
 import type { Config } from '../types.js';
 
 export async function validateConfig(config: Config): Promise<void> {
@@ -9,14 +10,16 @@ export async function validateConfig(config: Config): Promise<void> {
       'Config error: paths.tokens, paths.output, paths.tokenMap are required.'
     );
   }
-  const allowed = { dialect: ['style-dictionary', 'canonical'], units: ['rem', 'source'], color: ['rgb', 'source'] } as const;
-  for (const [key, values] of Object.entries(allowed) as [keyof typeof allowed, readonly string[]][]) {
-    if (config[key] !== undefined && !values.includes(config[key]!)) {
-      throw new Error(`Config error: ${key} must be one of ${values.map((v) => `'${v}'`).join(', ')}.`);
-    }
+  // The output options are checked as a render file checks them; an old `dialect` too.
+  const options: Record<string, unknown> = {};
+  for (const key of ['units', 'color', 'basePxFontSize', 'typographyCompanions', 'dialect'] as const) {
+    const value = (config as unknown as Record<string, unknown>)[key];
+    if (value !== undefined) options[key] = value;
   }
-  if (config.basePxFontSize !== undefined && !(typeof config.basePxFontSize === 'number' && config.basePxFontSize > 0)) {
-    throw new Error('Config error: basePxFontSize must be a positive number.');
+  try {
+    parseRenderFile({ options, rules: [] }, 'config');
+  } catch (e) {
+    throw new Error(`Config error: ${(e as Error).message.replace(/^config: options\./, '')}`);
   }
   if (config.render !== undefined && typeof config.render !== 'string') {
     if (!Array.isArray(config.render)) {

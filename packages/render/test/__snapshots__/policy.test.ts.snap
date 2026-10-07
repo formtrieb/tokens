@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`dialect 'canonical' > renders the fixture as committed 1`] = `
+exports[`render-API defaults > renders the fixture as committed 1`] = `
 {
   "variables/components-button.css": "/**
  * Do not edit directly, this file was auto-generated.
@@ -164,7 +164,7 @@ exports[`dialect 'canonical' > renders the fixture as committed 1`] = `
   --ds-colors-ocean-8: rgb(0% 46.379% 65.56%);
   --ds-colors-ocean-9: rgb(0% 36.92% 53.852%);
   --ds-colors-ocean-10: rgb(0% 26.921% 41.167%);
-  --ds-colors-ocean-11: rgb(4.351% 21.776% 32.779%);
+  --ds-colors-ocean-11: rgb(4.3511% 21.776% 32.78%);
   --ds-colors-ember-1: rgb(100% 93.913% 92.384%);
   --ds-colors-ember-2: rgb(100% 88.2% 86.05%);
   --ds-colors-ember-3: rgb(100% 77.597% 74.497%);
@@ -175,7 +175,7 @@ exports[`dialect 'canonical' > renders the fixture as committed 1`] = `
   --ds-colors-ember-8: rgb(74.295% 22.203% 23.065%);
   --ds-colors-ember-9: rgb(58.658% 18.672% 18.69%);
   --ds-colors-ember-10: rgb(42.66% 14.07% 13.653%);
-  --ds-colors-moss-0: rgb(92.982% 98.934% 92.446%);
+  --ds-colors-moss-0: rgb(92.981% 98.934% 92.446%);
   --ds-colors-moss-1: rgb(91.227% 98.668% 90.558%);
   --ds-colors-moss-2: rgb(81.109% 96.067% 80.079%);
   --ds-colors-moss-3: rgb(66.343% 90.246% 65.467%);
@@ -281,8 +281,8 @@ exports[`dialect 'canonical' > renders the fixture as committed 1`] = `
   --ds-color-status-info-text: var(--ds-colors-ocean-9);
   --ds-color-status-info-stroke: var(--ds-colors-ocean-4);
   --ds-color-status-info-indicator: var(--ds-colors-ocean-6);
-  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0,0,0,0.08);
-  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0,0,0,0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0,0,0,0.10);
+  --ds-shadow-elevation-1: 0px var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0px rgba(0,0,0,0.08);
+  --ds-shadow-elevation-2: 0px 0px var(--ds-dimension-1x) 0px rgba(0,0,0,0.05), 0px var(--ds-dimension-1x) var(--ds-dimension-6x) 0px rgba(0,0,0,0.10);
 }
 [data-semantic="Dark"] {
   --ds-opacity-disabled: var(--ds-opacity-medium);
@@ -297,7 +297,7 @@ exports[`dialect 'canonical' > renders the fixture as committed 1`] = `
   --ds-color-page: var(--ds-colors-black);
   --ds-color-backdrop: rgb(0% 0% 0% / 0.6);
   --ds-color-brand-primary: var(--ds-colors-ocean-5);
-  --ds-color-brand-hover: rgb(11.098% 56.962% 77.798%);
+  --ds-color-brand-hover: rgb(11.098% 56.961% 77.798%);
   --ds-color-brand-pressed: rgb(40.539% 78.117% 100%);
   --ds-color-brand-deep: var(--ds-colors-ocean-11);
   --ds-color-surface-level0: var(--ds-colors-black);
@@ -323,8 +323,8 @@ exports[`dialect 'canonical' > renders the fixture as committed 1`] = `
   --ds-color-status-info-text: var(--ds-colors-ocean-2);
   --ds-color-status-info-stroke: var(--ds-colors-ocean-7);
   --ds-color-status-info-indicator: var(--ds-colors-ocean-5);
-  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0,0,0,0.08);
-  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0,0,0,0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0,0,0,0.10);
+  --ds-shadow-elevation-1: 0px var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0px rgba(0,0,0,0.08);
+  --ds-shadow-elevation-2: 0px 0px var(--ds-dimension-1x) 0px rgba(0,0,0,0.05), 0px var(--ds-dimension-1x) var(--ds-dimension-6x) 0px rgba(0,0,0,0.10);
 }
 ",
   "variables/shape.css": "/**
@@ -343,7 +343,7 @@ exports[`dialect 'canonical' > renders the fixture as committed 1`] = `
   --ds-radius-xs: var(--ds-dimension-0x);
   --ds-radius-sm: var(--ds-dimension-0-5x);
   --ds-radius-md: var(--ds-dimension-1x);
-  --ds-radius-full: 0;
+  --ds-radius-full: 0px;
 }
 ",
   "variables/typography.css": "/**
@@ -388,7 +388,7 @@ exports[`dialect 'canonical' > renders the fixture as committed 1`] = `
 }
 `;
 
-exports[`dialect 'canonical' > renders the fixture as committed 2`] = `
+exports[`render-API defaults > renders the fixture as committed 2`] = `
 {
   "categories": {
     "Body": 6,

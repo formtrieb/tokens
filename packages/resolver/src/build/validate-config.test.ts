@@ -28,8 +28,18 @@ describe('validateConfig', () => {
   });
 
   it('names an output option with an unknown value', async () => {
-    await expect(validateConfig({ ...minimal, dialect: 'canonical', units: 'source', basePxFontSize: 10 })).resolves.toBeUndefined();
-    await expect(validateConfig({ ...minimal, dialect: 'swift' as 'canonical' })).rejects.toThrow(/dialect must be one of/);
+    await expect(
+      validateConfig({ ...minimal, units: 'source', color: 'hex', typographyCompanions: false, basePxFontSize: 10 })
+    ).resolves.toBeUndefined();
+    await expect(validateConfig({ ...minimal, units: { types: { spacing: 'px' } } })).resolves.toBeUndefined();
+    await expect(validateConfig({ ...minimal, units: 'rem' as 'source' })).rejects.toThrow(/^Config error: units: unknown preset "rem"/);
+    await expect(validateConfig({ ...minimal, color: 'cmyk' as 'rgb' })).rejects.toThrow(/Config error: color/);
     await expect(validateConfig({ ...minimal, basePxFontSize: 0 })).rejects.toThrow(/basePxFontSize/);
+  });
+
+  it('accepts an old dialect "canonical" and refuses "style-dictionary" with what to write instead', async () => {
+    const old = (dialect: string) => ({ ...minimal, dialect }) as unknown as Config;
+    await expect(validateConfig(old('canonical'))).resolves.toBeUndefined();
+    await expect(validateConfig(old('style-dictionary'))).rejects.toThrow(/"units": "tokens-studio"/);
   });
 });

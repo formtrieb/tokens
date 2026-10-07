@@ -10,13 +10,13 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
  */
 
 :root {
-  --ds-button-border: var(--ds-border-width-thin);
+  --ds-button-background: var(--ds-color-brand-primary);
+  --ds-button-background-hover: var(--ds-color-brand-hover);
   --ds-button-text: var(--ds-color-text-inverted-primary);
   --ds-button-radius: var(--ds-radius-sm);
   --ds-button-height: var(--ds-controls-height-medium);
   --ds-button-padding: var(--ds-spacing-inset-m);
-  --ds-button-background: var(--ds-color-brand-primary);
-  --ds-button-background-hover: var(--ds-color-brand-hover);
+  --ds-button-border: var(--ds-border-width-thin);
 }
 /* --- ./variables/components-card.css --- */
 /**
@@ -24,10 +24,10 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
  */
 
 :root {
+  --ds-card-background: var(--ds-color-surface-level1);
   --ds-card-shadow: var(--ds-shadow-elevation-1);
   --ds-card-radius: var(--ds-radius-md);
   --ds-card-gap: var(--ds-spacing-stack-2x);
-  --ds-card-background: var(--ds-color-surface-level1);
 }
 /* --- ./variables/device.css --- */
 /**
@@ -36,16 +36,6 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
 
 [data-device="Desktop"] {
   --ds-device-name: desktop;
-  --ds-layout-grid-columns: 12;
-  --ds-content-max-width: 75rem;
-  --ds-font-sizes-body-small: 0.875rem;
-  --ds-font-sizes-body-large: 1.125rem;
-  --ds-font-sizes-mono-base: 0.875rem;
-  --ds-line-heights-body-small: 20px;
-  --ds-line-heights-body-base: 1.5;
-  --ds-line-heights-body-large: 28px;
-  --ds-line-heights-mono-base: 20px;
-  --ds-line-heights-metric-base: 1.2;
   --ds-spacing-stack-1x: var(--ds-dimension-1x);
   --ds-spacing-stack-2x: var(--ds-dimension-2x);
   --ds-spacing-stack-4x: var(--ds-dimension-4x);
@@ -53,33 +43,34 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-spacing-inset-m: var(--ds-dimension-4x);
   --ds-spacing-inset-l: var(--ds-dimension-6x);
   --ds-spacing-component-gap: var(--ds-dimension-2x);
+  --ds-layout-grid-columns: 12;
   --ds-layout-grid-margin: var(--ds-dimension-8x);
   --ds-layout-grid-gutter: var(--ds-dimension-6x);
   --ds-content-min-width: var(--ds-breakpoints-desktop);
+  --ds-content-max-width: 75rem;
   --ds-paragraph-spacings-none: var(--ds-dimension-0x);
   --ds-paragraph-spacings-s: var(--ds-dimension-2x);
   --ds-paragraph-spacings-m: var(--ds-dimension-4x);
   --ds-font-sizes-title-1: var(--ds-dimension-12x);
   --ds-font-sizes-title-2: var(--ds-dimension-8x);
+  --ds-font-sizes-body-small: 0.875rem;
   --ds-font-sizes-body-base: var(--ds-dimension-4x);
+  --ds-font-sizes-body-large: 1.125rem;
+  --ds-font-sizes-mono-base: 0.875rem;
   --ds-font-sizes-metric-base: var(--ds-dimension-10x);
   --ds-line-heights-title-1: var(--ds-dimension-16x);
   --ds-line-heights-title-2: var(--ds-dimension-10x);
+  --ds-line-heights-body-small: 20px;
+  --ds-line-heights-body-base: 1.5;
+  --ds-line-heights-body-large: 28px;
+  --ds-line-heights-mono-base: 20px;
+  --ds-line-heights-metric-base: 1.2;
   --ds-controls-min-target: var(--ds-dimension-10x);
   --ds-controls-height-small: var(--ds-dimension-6x);
   --ds-controls-height-medium: var(--ds-dimension-8x);
 }
 [data-device="Tablet"] {
   --ds-device-name: tablet;
-  --ds-layout-grid-columns: 12;
-  --ds-font-sizes-body-small: 0.875rem;
-  --ds-font-sizes-body-large: 1.125rem;
-  --ds-font-sizes-mono-base: 0.875rem;
-  --ds-line-heights-body-small: 20px;
-  --ds-line-heights-body-base: 1.5;
-  --ds-line-heights-body-large: 28px;
-  --ds-line-heights-mono-base: 20px;
-  --ds-line-heights-metric-base: 1.2;
   --ds-spacing-stack-1x: var(--ds-dimension-1x);
   --ds-spacing-stack-2x: var(--ds-dimension-2x);
   --ds-spacing-stack-4x: var(--ds-dimension-4x);
@@ -87,6 +78,7 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-spacing-inset-m: var(--ds-dimension-4x);
   --ds-spacing-inset-l: var(--ds-dimension-6x);
   --ds-spacing-component-gap: var(--ds-dimension-2x);
+  --ds-layout-grid-columns: 12;
   --ds-layout-grid-margin: var(--ds-dimension-8x);
   --ds-layout-grid-gutter: var(--ds-dimension-6x);
   --ds-content-min-width: var(--ds-breakpoints-tablet);
@@ -96,26 +88,24 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-paragraph-spacings-m: var(--ds-dimension-4x);
   --ds-font-sizes-title-1: var(--ds-dimension-12x);
   --ds-font-sizes-title-2: var(--ds-dimension-8x);
+  --ds-font-sizes-body-small: 0.875rem;
   --ds-font-sizes-body-base: var(--ds-dimension-4x);
+  --ds-font-sizes-body-large: 1.125rem;
+  --ds-font-sizes-mono-base: 0.875rem;
   --ds-font-sizes-metric-base: var(--ds-dimension-10x);
   --ds-line-heights-title-1: var(--ds-dimension-16x);
   --ds-line-heights-title-2: var(--ds-dimension-10x);
+  --ds-line-heights-body-small: 20px;
+  --ds-line-heights-body-base: 1.5;
+  --ds-line-heights-body-large: 28px;
+  --ds-line-heights-mono-base: 20px;
+  --ds-line-heights-metric-base: 1.2;
   --ds-controls-min-target: var(--ds-dimension-10x);
   --ds-controls-height-small: var(--ds-dimension-6x);
   --ds-controls-height-medium: var(--ds-dimension-8x);
 }
 [data-device="Mobile"] {
   --ds-device-name: mobile;
-  --ds-layout-grid-columns: 4;
-  --ds-content-max-width: 100%;
-  --ds-font-sizes-body-small: 0.875rem;
-  --ds-font-sizes-body-large: 1.125rem;
-  --ds-font-sizes-mono-base: 0.875rem;
-  --ds-line-heights-body-small: 20px;
-  --ds-line-heights-body-base: 1.5;
-  --ds-line-heights-body-large: 28px;
-  --ds-line-heights-mono-base: 20px;
-  --ds-line-heights-metric-base: 1.2;
   --ds-spacing-stack-1x: var(--ds-dimension-1x);
   --ds-spacing-stack-2x: var(--ds-dimension-2x);
   --ds-spacing-stack-4x: var(--ds-dimension-3x);
@@ -123,18 +113,28 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-spacing-inset-m: var(--ds-dimension-3x);
   --ds-spacing-inset-l: var(--ds-dimension-4x);
   --ds-spacing-component-gap: var(--ds-dimension-2x);
+  --ds-layout-grid-columns: 4;
   --ds-layout-grid-margin: var(--ds-dimension-4x);
   --ds-layout-grid-gutter: var(--ds-dimension-4x);
   --ds-content-min-width: var(--ds-breakpoints-mobile);
+  --ds-content-max-width: 100%;
   --ds-paragraph-spacings-none: var(--ds-dimension-0x);
   --ds-paragraph-spacings-s: var(--ds-dimension-2x);
   --ds-paragraph-spacings-m: var(--ds-dimension-4x);
   --ds-font-sizes-title-1: var(--ds-dimension-8x);
   --ds-font-sizes-title-2: var(--ds-dimension-6x);
+  --ds-font-sizes-body-small: 0.875rem;
   --ds-font-sizes-body-base: var(--ds-dimension-4x);
+  --ds-font-sizes-body-large: 1.125rem;
+  --ds-font-sizes-mono-base: 0.875rem;
   --ds-font-sizes-metric-base: var(--ds-dimension-8x);
   --ds-line-heights-title-1: var(--ds-dimension-10x);
   --ds-line-heights-title-2: var(--ds-dimension-8x);
+  --ds-line-heights-body-small: 20px;
+  --ds-line-heights-body-base: 1.5;
+  --ds-line-heights-body-large: 28px;
+  --ds-line-heights-mono-base: 20px;
+  --ds-line-heights-metric-base: 1.2;
   --ds-controls-min-target: var(--ds-dimension-12x);
   --ds-controls-height-small: var(--ds-dimension-6x);
   --ds-controls-height-medium: var(--ds-dimension-10x);
@@ -145,8 +145,8 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
  */
 
 :root {
-  --ds-colors-white: rgb(255, 255, 255);
-  --ds-colors-black: rgb(0, 0, 0);
+  --ds-colors-white: rgb(100% 100% 100%);
+  --ds-colors-black: rgb(0% 0% 0%);
   --ds-colors-neutral-1: rgb(96.601% 96.601% 96.601%);
   --ds-colors-neutral-2: rgb(92.103% 92.103% 92.103%);
   --ds-colors-neutral-3: rgb(84.332% 84.332% 84.332%);
@@ -167,7 +167,7 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-colors-ocean-8: rgb(0% 46.379% 65.56%);
   --ds-colors-ocean-9: rgb(0% 36.92% 53.852%);
   --ds-colors-ocean-10: rgb(0% 26.921% 41.167%);
-  --ds-colors-ocean-11: rgb(4.351% 21.776% 32.779%);
+  --ds-colors-ocean-11: rgb(4.3511% 21.776% 32.78%);
   --ds-colors-ember-1: rgb(100% 93.913% 92.384%);
   --ds-colors-ember-2: rgb(100% 88.2% 86.05%);
   --ds-colors-ember-3: rgb(100% 77.597% 74.497%);
@@ -178,7 +178,7 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-colors-ember-8: rgb(74.295% 22.203% 23.065%);
   --ds-colors-ember-9: rgb(58.658% 18.672% 18.69%);
   --ds-colors-ember-10: rgb(42.66% 14.07% 13.653%);
-  --ds-colors-moss-0: rgb(92.982% 98.934% 92.446%);
+  --ds-colors-moss-0: rgb(92.981% 98.934% 92.446%);
   --ds-colors-moss-1: rgb(91.227% 98.668% 90.558%);
   --ds-colors-moss-2: rgb(81.109% 96.067% 80.079%);
   --ds-colors-moss-3: rgb(66.343% 90.246% 65.467%);
@@ -249,23 +249,24 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-opacity-disabled: var(--ds-opacity-medium);
   --ds-opacity-hover: var(--ds-opacity-subtle);
   --ds-color-text-primary: var(--ds-colors-black);
-  --ds-color-text-inverted-primary: var(--ds-colors-white);
-  --ds-color-page: var(--ds-colors-white);
-  --ds-color-backdrop: rgb(0% 0% 0% / 0.6);
-  --ds-color-surface-level0: var(--ds-colors-white);
-  --ds-color-interaction-stroke-neutral-primary: rgb(0% 0% 0% / 0.12);
-  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0,0,0,0.08);
-  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0,0,0,0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0,0,0,0.10);
   --ds-color-text-secondary: rgb(0% 0% 0% / 0.6);
   --ds-color-text-tertiary: rgb(0% 0% 0% / 0.4);
+  --ds-color-text-inverted-primary: var(--ds-colors-white);
   --ds-color-text-inverted-secondary: rgb(100% 100% 100% / 0.6);
   --ds-color-text-accent: var(--ds-colors-plum-7);
+  --ds-color-text-highlight: var(--ds-colors-sun-0);
+  --ds-color-page: var(--ds-colors-white);
+  --ds-color-backdrop: rgb(0% 0% 0% / 0.6);
   --ds-color-brand-primary: var(--ds-colors-ocean-6);
   --ds-color-brand-hover: rgb(10.15% 50.714% 71.176%);
   --ds-color-brand-pressed: rgb(38.437% 71.461% 93.202%);
+  --ds-color-brand-deep: var(--ds-colors-ocean-11);
+  --ds-color-surface-level0: var(--ds-colors-white);
   --ds-color-surface-level1: var(--ds-colors-neutral-1);
   --ds-color-surface-level2: var(--ds-colors-neutral-2);
+  --ds-color-surface-fresh: var(--ds-colors-moss-0);
   --ds-color-divider: var(--ds-colors-neutral-3);
+  --ds-color-interaction-stroke-neutral-primary: rgb(0% 0% 0% / 0.12);
   --ds-color-interaction-stroke-neutral-secondary: var(--ds-colors-neutral-4);
   --ds-color-status-positive-background: var(--ds-colors-moss-1);
   --ds-color-status-positive-text: var(--ds-colors-moss-9);
@@ -283,31 +284,31 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-color-status-info-text: var(--ds-colors-ocean-9);
   --ds-color-status-info-stroke: var(--ds-colors-ocean-4);
   --ds-color-status-info-indicator: var(--ds-colors-ocean-6);
-  --ds-color-text-highlight: var(--ds-colors-sun-0);
-  --ds-color-brand-deep: var(--ds-colors-ocean-11);
-  --ds-color-surface-fresh: var(--ds-colors-moss-0);
+  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0, 0, 0, 0.08);
+  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0, 0, 0, 0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0, 0, 0, 0.1);
 }
 [data-semantic="Dark"] {
   --ds-opacity-disabled: var(--ds-opacity-medium);
   --ds-opacity-hover: var(--ds-opacity-subtle);
   --ds-color-text-primary: var(--ds-colors-white);
-  --ds-color-text-inverted-primary: var(--ds-colors-black);
-  --ds-color-page: var(--ds-colors-black);
-  --ds-color-backdrop: rgb(0% 0% 0% / 0.6);
-  --ds-color-surface-level0: var(--ds-colors-black);
-  --ds-color-interaction-stroke-neutral-primary: rgb(100% 100% 100% / 0.12);
-  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0,0,0,0.08);
-  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0,0,0,0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0,0,0,0.10);
   --ds-color-text-secondary: rgb(100% 100% 100% / 0.6);
   --ds-color-text-tertiary: rgb(100% 100% 100% / 0.4);
+  --ds-color-text-inverted-primary: var(--ds-colors-black);
   --ds-color-text-inverted-secondary: rgb(0% 0% 0% / 0.6);
   --ds-color-text-accent: var(--ds-colors-plum-4);
+  --ds-color-text-highlight: var(--ds-colors-sun-0);
+  --ds-color-page: var(--ds-colors-black);
+  --ds-color-backdrop: rgb(0% 0% 0% / 0.6);
   --ds-color-brand-primary: var(--ds-colors-ocean-5);
-  --ds-color-brand-hover: rgb(11.098% 56.962% 77.798%);
+  --ds-color-brand-hover: rgb(11.098% 56.961% 77.798%);
   --ds-color-brand-pressed: rgb(40.539% 78.117% 100%);
+  --ds-color-brand-deep: var(--ds-colors-ocean-11);
+  --ds-color-surface-level0: var(--ds-colors-black);
   --ds-color-surface-level1: var(--ds-colors-neutral-10);
   --ds-color-surface-level2: var(--ds-colors-neutral-9);
+  --ds-color-surface-fresh: var(--ds-colors-moss-0);
   --ds-color-divider: var(--ds-colors-neutral-8);
+  --ds-color-interaction-stroke-neutral-primary: rgb(100% 100% 100% / 0.12);
   --ds-color-interaction-stroke-neutral-secondary: var(--ds-colors-neutral-7);
   --ds-color-status-positive-background: var(--ds-colors-moss-10);
   --ds-color-status-positive-text: var(--ds-colors-moss-2);
@@ -325,9 +326,8 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-color-status-info-text: var(--ds-colors-ocean-2);
   --ds-color-status-info-stroke: var(--ds-colors-ocean-7);
   --ds-color-status-info-indicator: var(--ds-colors-ocean-5);
-  --ds-color-text-highlight: var(--ds-colors-sun-0);
-  --ds-color-brand-deep: var(--ds-colors-ocean-11);
-  --ds-color-surface-fresh: var(--ds-colors-moss-0);
+  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0, 0, 0, 0.08);
+  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0, 0, 0, 0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0, 0, 0, 0.1);
 }
 /* --- ./variables/shape.css --- */
 /**
@@ -335,18 +335,18 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
  */
 
 [data-shape="Round"] {
-  --ds-radius-full: 6249.9375rem;
   --ds-radius-none: var(--ds-dimension-0x);
   --ds-radius-xs: var(--ds-dimension-0-5x);
   --ds-radius-sm: var(--ds-dimension-1x);
   --ds-radius-md: var(--ds-dimension-2x);
+  --ds-radius-full: 6249.9375rem;
 }
 [data-shape="Sharp"] {
-  --ds-radius-full: 0;
   --ds-radius-none: var(--ds-dimension-0x);
   --ds-radius-xs: var(--ds-dimension-0x);
   --ds-radius-sm: var(--ds-dimension-0-5x);
   --ds-radius-md: var(--ds-dimension-1x);
+  --ds-radius-full: 0;
 }
 /* --- ./variables/typography.css --- */
 /**
@@ -469,7 +469,6 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-table-numeric-base-text-indent: var(--ds-paragraph-indents-none);
   --ds-table-numeric-base-margin-block-end: var(--ds-paragraph-spacings-none);
   --ds-table-numeric-base-fvn: tabular-nums;
-
 }
 /* Utility classes — auto-generated */
 /* --- ./utilities/content.css --- */
@@ -959,13 +958,13 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
  */
 
 :root {
-  --ds-button-border: var(--ds-border-width-thin);
+  --ds-button-background: var(--ds-color-brand-primary);
+  --ds-button-background-hover: var(--ds-color-brand-hover);
   --ds-button-text: var(--ds-color-text-inverted-primary);
   --ds-button-radius: var(--ds-radius-sm);
   --ds-button-height: var(--ds-controls-height-medium);
   --ds-button-padding: var(--ds-spacing-inset-m);
-  --ds-button-background: var(--ds-color-brand-primary);
-  --ds-button-background-hover: var(--ds-color-brand-hover);
+  --ds-button-border: var(--ds-border-width-thin);
 }
 ",
   "cssOutput/css/variables/components-card.css": "/**
@@ -973,10 +972,10 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
  */
 
 :root {
+  --ds-card-background: var(--ds-color-surface-level1);
   --ds-card-shadow: var(--ds-shadow-elevation-1);
   --ds-card-radius: var(--ds-radius-md);
   --ds-card-gap: var(--ds-spacing-stack-2x);
-  --ds-card-background: var(--ds-color-surface-level1);
 }
 ",
   "cssOutput/css/variables/device.css": "/**
@@ -985,16 +984,6 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
 
 [data-device="Desktop"] {
   --ds-device-name: desktop;
-  --ds-layout-grid-columns: 12;
-  --ds-content-max-width: 75rem;
-  --ds-font-sizes-body-small: 0.875rem;
-  --ds-font-sizes-body-large: 1.125rem;
-  --ds-font-sizes-mono-base: 0.875rem;
-  --ds-line-heights-body-small: 20px;
-  --ds-line-heights-body-base: 1.5;
-  --ds-line-heights-body-large: 28px;
-  --ds-line-heights-mono-base: 20px;
-  --ds-line-heights-metric-base: 1.2;
   --ds-spacing-stack-1x: var(--ds-dimension-1x);
   --ds-spacing-stack-2x: var(--ds-dimension-2x);
   --ds-spacing-stack-4x: var(--ds-dimension-4x);
@@ -1002,33 +991,34 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-spacing-inset-m: var(--ds-dimension-4x);
   --ds-spacing-inset-l: var(--ds-dimension-6x);
   --ds-spacing-component-gap: var(--ds-dimension-2x);
+  --ds-layout-grid-columns: 12;
   --ds-layout-grid-margin: var(--ds-dimension-8x);
   --ds-layout-grid-gutter: var(--ds-dimension-6x);
   --ds-content-min-width: var(--ds-breakpoints-desktop);
+  --ds-content-max-width: 75rem;
   --ds-paragraph-spacings-none: var(--ds-dimension-0x);
   --ds-paragraph-spacings-s: var(--ds-dimension-2x);
   --ds-paragraph-spacings-m: var(--ds-dimension-4x);
   --ds-font-sizes-title-1: var(--ds-dimension-12x);
   --ds-font-sizes-title-2: var(--ds-dimension-8x);
+  --ds-font-sizes-body-small: 0.875rem;
   --ds-font-sizes-body-base: var(--ds-dimension-4x);
+  --ds-font-sizes-body-large: 1.125rem;
+  --ds-font-sizes-mono-base: 0.875rem;
   --ds-font-sizes-metric-base: var(--ds-dimension-10x);
   --ds-line-heights-title-1: var(--ds-dimension-16x);
   --ds-line-heights-title-2: var(--ds-dimension-10x);
+  --ds-line-heights-body-small: 20px;
+  --ds-line-heights-body-base: 1.5;
+  --ds-line-heights-body-large: 28px;
+  --ds-line-heights-mono-base: 20px;
+  --ds-line-heights-metric-base: 1.2;
   --ds-controls-min-target: var(--ds-dimension-10x);
   --ds-controls-height-small: var(--ds-dimension-6x);
   --ds-controls-height-medium: var(--ds-dimension-8x);
 }
 [data-device="Tablet"] {
   --ds-device-name: tablet;
-  --ds-layout-grid-columns: 12;
-  --ds-font-sizes-body-small: 0.875rem;
-  --ds-font-sizes-body-large: 1.125rem;
-  --ds-font-sizes-mono-base: 0.875rem;
-  --ds-line-heights-body-small: 20px;
-  --ds-line-heights-body-base: 1.5;
-  --ds-line-heights-body-large: 28px;
-  --ds-line-heights-mono-base: 20px;
-  --ds-line-heights-metric-base: 1.2;
   --ds-spacing-stack-1x: var(--ds-dimension-1x);
   --ds-spacing-stack-2x: var(--ds-dimension-2x);
   --ds-spacing-stack-4x: var(--ds-dimension-4x);
@@ -1036,6 +1026,7 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-spacing-inset-m: var(--ds-dimension-4x);
   --ds-spacing-inset-l: var(--ds-dimension-6x);
   --ds-spacing-component-gap: var(--ds-dimension-2x);
+  --ds-layout-grid-columns: 12;
   --ds-layout-grid-margin: var(--ds-dimension-8x);
   --ds-layout-grid-gutter: var(--ds-dimension-6x);
   --ds-content-min-width: var(--ds-breakpoints-tablet);
@@ -1045,26 +1036,24 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-paragraph-spacings-m: var(--ds-dimension-4x);
   --ds-font-sizes-title-1: var(--ds-dimension-12x);
   --ds-font-sizes-title-2: var(--ds-dimension-8x);
+  --ds-font-sizes-body-small: 0.875rem;
   --ds-font-sizes-body-base: var(--ds-dimension-4x);
+  --ds-font-sizes-body-large: 1.125rem;
+  --ds-font-sizes-mono-base: 0.875rem;
   --ds-font-sizes-metric-base: var(--ds-dimension-10x);
   --ds-line-heights-title-1: var(--ds-dimension-16x);
   --ds-line-heights-title-2: var(--ds-dimension-10x);
+  --ds-line-heights-body-small: 20px;
+  --ds-line-heights-body-base: 1.5;
+  --ds-line-heights-body-large: 28px;
+  --ds-line-heights-mono-base: 20px;
+  --ds-line-heights-metric-base: 1.2;
   --ds-controls-min-target: var(--ds-dimension-10x);
   --ds-controls-height-small: var(--ds-dimension-6x);
   --ds-controls-height-medium: var(--ds-dimension-8x);
 }
 [data-device="Mobile"] {
   --ds-device-name: mobile;
-  --ds-layout-grid-columns: 4;
-  --ds-content-max-width: 100%;
-  --ds-font-sizes-body-small: 0.875rem;
-  --ds-font-sizes-body-large: 1.125rem;
-  --ds-font-sizes-mono-base: 0.875rem;
-  --ds-line-heights-body-small: 20px;
-  --ds-line-heights-body-base: 1.5;
-  --ds-line-heights-body-large: 28px;
-  --ds-line-heights-mono-base: 20px;
-  --ds-line-heights-metric-base: 1.2;
   --ds-spacing-stack-1x: var(--ds-dimension-1x);
   --ds-spacing-stack-2x: var(--ds-dimension-2x);
   --ds-spacing-stack-4x: var(--ds-dimension-3x);
@@ -1072,18 +1061,28 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-spacing-inset-m: var(--ds-dimension-3x);
   --ds-spacing-inset-l: var(--ds-dimension-4x);
   --ds-spacing-component-gap: var(--ds-dimension-2x);
+  --ds-layout-grid-columns: 4;
   --ds-layout-grid-margin: var(--ds-dimension-4x);
   --ds-layout-grid-gutter: var(--ds-dimension-4x);
   --ds-content-min-width: var(--ds-breakpoints-mobile);
+  --ds-content-max-width: 100%;
   --ds-paragraph-spacings-none: var(--ds-dimension-0x);
   --ds-paragraph-spacings-s: var(--ds-dimension-2x);
   --ds-paragraph-spacings-m: var(--ds-dimension-4x);
   --ds-font-sizes-title-1: var(--ds-dimension-8x);
   --ds-font-sizes-title-2: var(--ds-dimension-6x);
+  --ds-font-sizes-body-small: 0.875rem;
   --ds-font-sizes-body-base: var(--ds-dimension-4x);
+  --ds-font-sizes-body-large: 1.125rem;
+  --ds-font-sizes-mono-base: 0.875rem;
   --ds-font-sizes-metric-base: var(--ds-dimension-8x);
   --ds-line-heights-title-1: var(--ds-dimension-10x);
   --ds-line-heights-title-2: var(--ds-dimension-8x);
+  --ds-line-heights-body-small: 20px;
+  --ds-line-heights-body-base: 1.5;
+  --ds-line-heights-body-large: 28px;
+  --ds-line-heights-mono-base: 20px;
+  --ds-line-heights-metric-base: 1.2;
   --ds-controls-min-target: var(--ds-dimension-12x);
   --ds-controls-height-small: var(--ds-dimension-6x);
   --ds-controls-height-medium: var(--ds-dimension-10x);
@@ -1094,8 +1093,8 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
  */
 
 :root {
-  --ds-colors-white: rgb(255, 255, 255);
-  --ds-colors-black: rgb(0, 0, 0);
+  --ds-colors-white: rgb(100% 100% 100%);
+  --ds-colors-black: rgb(0% 0% 0%);
   --ds-colors-neutral-1: rgb(96.601% 96.601% 96.601%);
   --ds-colors-neutral-2: rgb(92.103% 92.103% 92.103%);
   --ds-colors-neutral-3: rgb(84.332% 84.332% 84.332%);
@@ -1116,7 +1115,7 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-colors-ocean-8: rgb(0% 46.379% 65.56%);
   --ds-colors-ocean-9: rgb(0% 36.92% 53.852%);
   --ds-colors-ocean-10: rgb(0% 26.921% 41.167%);
-  --ds-colors-ocean-11: rgb(4.351% 21.776% 32.779%);
+  --ds-colors-ocean-11: rgb(4.3511% 21.776% 32.78%);
   --ds-colors-ember-1: rgb(100% 93.913% 92.384%);
   --ds-colors-ember-2: rgb(100% 88.2% 86.05%);
   --ds-colors-ember-3: rgb(100% 77.597% 74.497%);
@@ -1127,7 +1126,7 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-colors-ember-8: rgb(74.295% 22.203% 23.065%);
   --ds-colors-ember-9: rgb(58.658% 18.672% 18.69%);
   --ds-colors-ember-10: rgb(42.66% 14.07% 13.653%);
-  --ds-colors-moss-0: rgb(92.982% 98.934% 92.446%);
+  --ds-colors-moss-0: rgb(92.981% 98.934% 92.446%);
   --ds-colors-moss-1: rgb(91.227% 98.668% 90.558%);
   --ds-colors-moss-2: rgb(81.109% 96.067% 80.079%);
   --ds-colors-moss-3: rgb(66.343% 90.246% 65.467%);
@@ -1198,23 +1197,24 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-opacity-disabled: var(--ds-opacity-medium);
   --ds-opacity-hover: var(--ds-opacity-subtle);
   --ds-color-text-primary: var(--ds-colors-black);
-  --ds-color-text-inverted-primary: var(--ds-colors-white);
-  --ds-color-page: var(--ds-colors-white);
-  --ds-color-backdrop: rgb(0% 0% 0% / 0.6);
-  --ds-color-surface-level0: var(--ds-colors-white);
-  --ds-color-interaction-stroke-neutral-primary: rgb(0% 0% 0% / 0.12);
-  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0,0,0,0.08);
-  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0,0,0,0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0,0,0,0.10);
   --ds-color-text-secondary: rgb(0% 0% 0% / 0.6);
   --ds-color-text-tertiary: rgb(0% 0% 0% / 0.4);
+  --ds-color-text-inverted-primary: var(--ds-colors-white);
   --ds-color-text-inverted-secondary: rgb(100% 100% 100% / 0.6);
   --ds-color-text-accent: var(--ds-colors-plum-7);
+  --ds-color-text-highlight: var(--ds-colors-sun-0);
+  --ds-color-page: var(--ds-colors-white);
+  --ds-color-backdrop: rgb(0% 0% 0% / 0.6);
   --ds-color-brand-primary: var(--ds-colors-ocean-6);
   --ds-color-brand-hover: rgb(10.15% 50.714% 71.176%);
   --ds-color-brand-pressed: rgb(38.437% 71.461% 93.202%);
+  --ds-color-brand-deep: var(--ds-colors-ocean-11);
+  --ds-color-surface-level0: var(--ds-colors-white);
   --ds-color-surface-level1: var(--ds-colors-neutral-1);
   --ds-color-surface-level2: var(--ds-colors-neutral-2);
+  --ds-color-surface-fresh: var(--ds-colors-moss-0);
   --ds-color-divider: var(--ds-colors-neutral-3);
+  --ds-color-interaction-stroke-neutral-primary: rgb(0% 0% 0% / 0.12);
   --ds-color-interaction-stroke-neutral-secondary: var(--ds-colors-neutral-4);
   --ds-color-status-positive-background: var(--ds-colors-moss-1);
   --ds-color-status-positive-text: var(--ds-colors-moss-9);
@@ -1232,31 +1232,31 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-color-status-info-text: var(--ds-colors-ocean-9);
   --ds-color-status-info-stroke: var(--ds-colors-ocean-4);
   --ds-color-status-info-indicator: var(--ds-colors-ocean-6);
-  --ds-color-text-highlight: var(--ds-colors-sun-0);
-  --ds-color-brand-deep: var(--ds-colors-ocean-11);
-  --ds-color-surface-fresh: var(--ds-colors-moss-0);
+  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0, 0, 0, 0.08);
+  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0, 0, 0, 0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0, 0, 0, 0.1);
 }
 [data-semantic="Dark"] {
   --ds-opacity-disabled: var(--ds-opacity-medium);
   --ds-opacity-hover: var(--ds-opacity-subtle);
   --ds-color-text-primary: var(--ds-colors-white);
-  --ds-color-text-inverted-primary: var(--ds-colors-black);
-  --ds-color-page: var(--ds-colors-black);
-  --ds-color-backdrop: rgb(0% 0% 0% / 0.6);
-  --ds-color-surface-level0: var(--ds-colors-black);
-  --ds-color-interaction-stroke-neutral-primary: rgb(100% 100% 100% / 0.12);
-  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0,0,0,0.08);
-  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0,0,0,0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0,0,0,0.10);
   --ds-color-text-secondary: rgb(100% 100% 100% / 0.6);
   --ds-color-text-tertiary: rgb(100% 100% 100% / 0.4);
+  --ds-color-text-inverted-primary: var(--ds-colors-black);
   --ds-color-text-inverted-secondary: rgb(0% 0% 0% / 0.6);
   --ds-color-text-accent: var(--ds-colors-plum-4);
+  --ds-color-text-highlight: var(--ds-colors-sun-0);
+  --ds-color-page: var(--ds-colors-black);
+  --ds-color-backdrop: rgb(0% 0% 0% / 0.6);
   --ds-color-brand-primary: var(--ds-colors-ocean-5);
-  --ds-color-brand-hover: rgb(11.098% 56.962% 77.798%);
+  --ds-color-brand-hover: rgb(11.098% 56.961% 77.798%);
   --ds-color-brand-pressed: rgb(40.539% 78.117% 100%);
+  --ds-color-brand-deep: var(--ds-colors-ocean-11);
+  --ds-color-surface-level0: var(--ds-colors-black);
   --ds-color-surface-level1: var(--ds-colors-neutral-10);
   --ds-color-surface-level2: var(--ds-colors-neutral-9);
+  --ds-color-surface-fresh: var(--ds-colors-moss-0);
   --ds-color-divider: var(--ds-colors-neutral-8);
+  --ds-color-interaction-stroke-neutral-primary: rgb(100% 100% 100% / 0.12);
   --ds-color-interaction-stroke-neutral-secondary: var(--ds-colors-neutral-7);
   --ds-color-status-positive-background: var(--ds-colors-moss-10);
   --ds-color-status-positive-text: var(--ds-colors-moss-2);
@@ -1274,9 +1274,8 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-color-status-info-text: var(--ds-colors-ocean-2);
   --ds-color-status-info-stroke: var(--ds-colors-ocean-7);
   --ds-color-status-info-indicator: var(--ds-colors-ocean-5);
-  --ds-color-text-highlight: var(--ds-colors-sun-0);
-  --ds-color-brand-deep: var(--ds-colors-ocean-11);
-  --ds-color-surface-fresh: var(--ds-colors-moss-0);
+  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0, 0, 0, 0.08);
+  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0, 0, 0, 0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0, 0, 0, 0.1);
 }
 ",
   "cssOutput/css/variables/shape.css": "/**
@@ -1284,18 +1283,18 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
  */
 
 [data-shape="Round"] {
-  --ds-radius-full: 6249.9375rem;
   --ds-radius-none: var(--ds-dimension-0x);
   --ds-radius-xs: var(--ds-dimension-0-5x);
   --ds-radius-sm: var(--ds-dimension-1x);
   --ds-radius-md: var(--ds-dimension-2x);
+  --ds-radius-full: 6249.9375rem;
 }
 [data-shape="Sharp"] {
-  --ds-radius-full: 0;
   --ds-radius-none: var(--ds-dimension-0x);
   --ds-radius-xs: var(--ds-dimension-0x);
   --ds-radius-sm: var(--ds-dimension-0-5x);
   --ds-radius-md: var(--ds-dimension-1x);
+  --ds-radius-full: 0;
 }
 ",
   "cssOutput/css/variables/typography.css": "/**
@@ -1418,8 +1417,8 @@ exports[`pipeline E2E > produces stable CSS output 1`] = `
   --ds-table-numeric-base-text-indent: var(--ds-paragraph-indents-none);
   --ds-table-numeric-base-margin-block-end: var(--ds-paragraph-spacings-none);
   --ds-table-numeric-base-fvn: tabular-nums;
-
-}",
+}
+",
 }
 `;
 

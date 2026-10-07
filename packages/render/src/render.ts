@@ -2,10 +2,9 @@
  * The render functions. Each returns a map of output file → content; the
  * caller decides where the files go.
  */
-import { buildDictionary, findTheme } from "./css/dictionary.js";
-import { finishValues } from "./css/values.js";
-import type { Presentation } from "./css/transforms.js";
+import { composeTheme, resolveDictionary } from "@formtrieb/tokens-core";
 import { FILE_HEADER, renderBlock, type Block } from "./css/variables.js";
+import { unitPolicy } from "./css/units.js";
 import { builderTokens } from "./builders/tokens.js";
 import { bundleCss } from "./bundle.js";
 import { mainCss } from "./imports.js";
@@ -31,24 +30,21 @@ export class InvalidCssError extends Error {
   }
 }
 
-function withDefaults(options: RenderOptions): ResolvedRenderOptions {
-  const dialect = options.dialect ?? "style-dictionary";
-  const canonical = dialect === "canonical";
+export function withDefaults(options: RenderOptions): ResolvedRenderOptions {
   return {
     prefix: options.prefix,
-    dialect,
+    units: unitPolicy(options.units),
     basePxFontSize: options.basePxFontSize ?? 16,
-    units: options.units ?? (canonical ? "source" : "rem"),
-    color: options.color ?? (canonical ? "source" : "rgb"),
+    color: options.color ?? "source",
+    typographyCompanions: options.typographyCompanions ?? false,
     privateTokenPrefixes: options.privateTokenPrefixes ?? ["*"],
     typography: options.typography ?? {},
   };
 }
 
 /**
- * One file per distinct `rule.file`, blocks in rule order. A file with one
- * block keeps the resolver's quirk of no final newline after typography
- * companions. Throws {@link InvalidCssError} when any value is no valid CSS.
+ * One file per distinct `rule.file`, blocks in rule order. Throws
+ * {@link InvalidCssError} when any value is no valid CSS.
  */
 export function renderVariables(
   system: TokenSystem,
@@ -58,16 +54,11 @@ export function renderVariables(
   const options = withDefaults(renderOptions);
   const blocks = new Map<string, Block[]>();
   const problems: InvalidCssError["problems"] = [];
-  const presentation: Presentation = {
-    basePxFontSize: options.basePxFontSize,
-    units: options.units,
-    color: options.color,
-    dialect: options.dialect,
-  };
   for (const rule of rules) {
-    const dict = buildDictionary(system, findTheme(system, rule.theme));
-    const values = finishValues(dict, presentation);
-    const block = renderBlock(dict, values, rule, options, presentation);
+    const theme = system.themes.find((t) => `${t.group}/${t.name}` === rule.theme);
+    if (!theme) throw new Error(`render: no theme "${rule.theme}" in $themes.json`);
+    const dict = composeTheme(system, theme);
+    const block = renderBlock(dict, resolveDictionary(dict).values, rule, options);
     for (const p of block.invalid) problems.push({ theme: rule.theme, file: rule.file, ...p });
     const list = blocks.get(rule.file) ?? [];
     list.push(block);
@@ -76,13 +67,8 @@ export function renderVariables(
   if (problems.length > 0) throw new InvalidCssError(problems);
 
   const files: RenderedFiles = new Map();
-  for (const [file, list] of blocks) {
-    if (list.length === 1) {
-      files.set(file, FILE_HEADER + list[0].text + (list[0].expanded ? "" : "\n"));
-    } else {
-      files.set(file, (FILE_HEADER + list.map((b) => `${b.text}\n`).join("")).trim() + "\n");
-    }
-  }
+  for (const [file, list] of blocks) files.set(file, FILE_HEADER + list.map((b) => `${b.text}
+`).join(""));
   return files;
 }
 
@@ -100,9 +86,9 @@ export async function renderUtilities<C extends BuilderConfig = BuilderConfig>(
   const files: RenderedFiles = new Map();
   if (builders.length === 0) return files;
   const tokens = builderTokens(system.sets, system.order);
-  const { dialect } = withDefaults(options);
+  const { typographyCompanions } = withDefaults(options);
   for (const builder of builders) {
-    const out = await builder({ tokens, config, dialect });
+    const out = await builder({ tokens, config, typographyCompanions });
     const file = `utilities/${out.filename}`;
     if (files.has(file)) {
       throw new Error(

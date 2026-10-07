@@ -8,8 +8,8 @@ import { findByType } from "./tokens.js";
  * properties the variables carry, and a `--paragraph` class for spacing.
  */
 export function typography(): BuilderFn {
-  const fn: BuilderFn = ({ tokens, config, dialect }) => {
-    requireCompanions("typography()", dialect);
+  const fn: BuilderFn = ({ tokens, config, typographyCompanions }) => {
+    requireCompanions("typography()", typographyCompanions);
     const blocks: string[] = [];
     for (const token of findByType(tokens, "typography")) {
       const slug = kebab(token.path);

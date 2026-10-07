@@ -7,6 +7,7 @@
 import { converter, formatHex, formatHex8, parse } from "culori";
 import { alignType, fontWeightFor } from "../canonicalize/index.js";
 import { mapToSrgbGamut } from "../parser/gamut.js";
+import { formatSrgb } from "../parser/color-resolver.js";
 import { evaluate } from "./arithmetic.js";
 import type { Color, Expr, TokenProblem, TokenValue } from "./types.js";
 
@@ -43,11 +44,12 @@ export type Report = (problem: TokenProblem) => void;
 const asColor = (c: unknown): Color => c as Color;
 
 const toRgb = converter("rgb");
-const GAMUT_EPSILON = 1e-6;
+const GAMUT_EPSILON = 1e-5;
 
 /**
- * Whether a colour lies outside sRGB. A conversion leaves white at
- * r 1.0000001; that is float noise, not a colour outside.
+ * Whether a colour lies outside sRGB. Conversions leave noise of up to about
+ * 2e-6 per channel (white at r 1.0000001, a mapped colour round-tripped
+ * through LCH at r -0.0000013); that is not a colour outside.
  */
 export function isOutOfGamut(color: Color): boolean {
   const { r, g, b } = toRgb(color);
@@ -80,6 +82,29 @@ export function colorText(value: Extract<TokenValue, { kind: "color" }>): string
   if (!value.color) return "";
   const mapped = mapToSrgbGamut(value.color);
   return (mapped.alpha ?? 1) < 1 ? formatHex8(mapped) : formatHex(mapped);
+}
+
+/**
+ * A colour in one CSS form, gamut-mapped into sRGB:
+ * - `rgb`: `rgb(r, g, b)` / `rgba(r, g, b, a)`, 8-bit channels, alpha to two digits
+ * - `hex`: `#rrggbb` / `#rrggbbaa`
+ * - `percent`: `rgb(r% g% b% / a)`, five significant digits
+ */
+export function cssColor(color: Color, form: "rgb" | "hex" | "percent"): string {
+  // Inside sRGB up to float noise: a channel within the noise of an edge is
+  // the edge. Mapping such a colour again would move it inward (`0%` →
+  // `0.0002%`); only a colour really outside is mapped.
+  const rgb = toRgb(color);
+  const clamp = (v: number | undefined) => {
+    const c = v ?? 0;
+    return c < GAMUT_EPSILON ? 0 : c > 1 - GAMUT_EPSILON ? 1 : c;
+  };
+  const mapped = isOutOfGamut(color) ? mapToSrgbGamut(rgb) : { ...rgb, r: clamp(rgb.r), g: clamp(rgb.g), b: clamp(rgb.b) };
+  if (form === "percent") return formatSrgb(mapped);
+  const alpha = mapped.alpha ?? 1;
+  if (form === "hex") return alpha < 1 ? formatHex8(mapped) : formatHex(mapped);
+  const [r, g, b] = [mapped.r, mapped.g, mapped.b].map((v: number) => Math.round(Math.max(0, Math.min(1, v ?? 0)) * 255));
+  return alpha < 1 ? `rgba(${r}, ${g}, ${b}, ${Math.round(alpha * 100) / 100})` : `rgb(${r}, ${g}, ${b})`;
 }
 
 function exprText(e: Expr): string {
