@@ -281,8 +281,8 @@ exports[`render-API defaults > renders the fixture as committed 1`] = `
   --ds-color-status-info-text: var(--ds-colors-ocean-9);
   --ds-color-status-info-stroke: var(--ds-colors-ocean-4);
   --ds-color-status-info-indicator: var(--ds-colors-ocean-6);
-  --ds-shadow-elevation-1: 0px var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0px rgba(0,0,0,0.08);
-  --ds-shadow-elevation-2: 0px 0px var(--ds-dimension-1x) 0px rgba(0,0,0,0.05), 0px var(--ds-dimension-1x) var(--ds-dimension-6x) 0px rgba(0,0,0,0.10);
+  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0,0,0,0.08);
+  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0,0,0,0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0,0,0,0.10);
 }
 [data-semantic="Dark"] {
   --ds-opacity-disabled: var(--ds-opacity-medium);
@@ -323,8 +323,8 @@ exports[`render-API defaults > renders the fixture as committed 1`] = `
   --ds-color-status-info-text: var(--ds-colors-ocean-2);
   --ds-color-status-info-stroke: var(--ds-colors-ocean-7);
   --ds-color-status-info-indicator: var(--ds-colors-ocean-5);
-  --ds-shadow-elevation-1: 0px var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0px rgba(0,0,0,0.08);
-  --ds-shadow-elevation-2: 0px 0px var(--ds-dimension-1x) 0px rgba(0,0,0,0.05), 0px var(--ds-dimension-1x) var(--ds-dimension-6x) 0px rgba(0,0,0,0.10);
+  --ds-shadow-elevation-1: 0 var(--ds-dimension-0-5x) var(--ds-dimension-2x) 0 rgba(0,0,0,0.08);
+  --ds-shadow-elevation-2: 0 0 var(--ds-dimension-1x) 0 rgba(0,0,0,0.05), 0 var(--ds-dimension-1x) var(--ds-dimension-6x) 0 rgba(0,0,0,0.10);
 }
 ",
   "variables/shape.css": "/**
@@ -343,7 +343,7 @@ exports[`render-API defaults > renders the fixture as committed 1`] = `
   --ds-radius-xs: var(--ds-dimension-0x);
   --ds-radius-sm: var(--ds-dimension-0-5x);
   --ds-radius-md: var(--ds-dimension-1x);
-  --ds-radius-full: 0px;
+  --ds-radius-full: 0;
 }
 ",
   "variables/typography.css": "/**
