@@ -82,7 +82,7 @@ class Formatter {
 
   length(v: Extract<TokenValue, { kind: "length" }>, where: Where): string {
     const target = unitTarget(this.f.units, where.path, where.type, alignType(where.type));
-    if (v.unit === "px" && target !== "source") {
+    if ((v.unit === "px" || v.unit === "") && target !== "source") {
       // A zero length needs no unit; under a target it is written as `0`.
       if (v.value === 0) return "0";
       if (target === "rem") return `${num(v.value / this.f.basePxFontSize)}rem`;

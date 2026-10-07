@@ -131,6 +131,23 @@ describe("renderVariables", () => {
     ]);
   });
 
+  it("keeps references inside a function or other text as variables", () => {
+    const s = one({
+      width: { $value: "2px", $type: "dimension" },
+      inset: { $value: "calc(-1 * {width})", $type: "dimension" },
+      sum: { $value: "calc({width} + {width})", $type: "dimension" },
+      ink: { $value: "#336699", $type: "color" },
+      scrim: { $value: "rgba({ink}, 0.5)", $type: "color" },
+    });
+    expect(lines(s, OPTIONS).slice(1)).toEqual([
+      "  --x-inset: calc(-1 * var(--x-width));",
+      "  --x-sum: calc(var(--x-width) + var(--x-width));",
+      "  --x-ink: #336699;",
+      // a colour is written resolved: rgba(var(--x-ink), 0.5) would be no CSS
+      "  --x-scrim: rgba(51, 102, 153, 0.5);",
+    ]);
+  });
+
   it("writes a computed colour as computed, unless the modifier changed nothing", () => {
     const s = one({
       ink: { $value: "#336699", $type: "color" },
@@ -210,7 +227,7 @@ describe("unit policy", () => {
       "  --x-track-px: 1px;",
       "  --x-lh: 8px;",
       "  --x-calc: calc(80rem - 16px);",
-      "  --x-pad: 0px 8px 16px;",
+      "  --x-pad: 0 8px 16px;",
     ]);
   });
 

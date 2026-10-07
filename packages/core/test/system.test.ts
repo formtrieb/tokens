@@ -163,6 +163,9 @@ describe("values mean what their type says, not how they were reached", () => {
     expect(valueOf({ a: tok("dimension", "0.5rem") }, "a")).toEqual(length(0.5, "rem"));
     expect(valueOf({ a: tok("sizing", "60ch") }, "a")).toEqual(length(60, "ch"));
     expect(valueOf({ a: tok("sizing", "100%") }, "a")).toEqual(length(100, "%"));
+    // a bare zero keeps no unit; a written 0px keeps its px
+    expect(valueOf({ a: tok("spacing", "0") }, "a")).toEqual(length(0, ""));
+    expect(valueOf({ a: tok("spacing", "0px") }, "a")).toEqual(length(0, "px"));
   });
 
   it("a reference and a literal of the same length are the same value", () => {
@@ -243,8 +246,8 @@ describe("arithmetic", () => {
   });
 
   it("reads space-separated values as a list, a glued minus as a new item", () => {
-    expect(valueOf({ a: tok("spacing", "0 4px 8") }, "a")).toEqual({ kind: "list", items: [length(0, "px"), length(4, "px"), length(8, "px")] });
-    expect(valueOf({ a: tok("spacing", "0 -4px") }, "a")).toEqual({ kind: "list", items: [length(0, "px"), length(-4, "px")] });
+    expect(valueOf({ a: tok("spacing", "0 4px 8") }, "a")).toEqual({ kind: "list", items: [length(0, ""), length(4, "px"), length(8, "px")] });
+    expect(valueOf({ a: tok("spacing", "0 -4px") }, "a")).toEqual({ kind: "list", items: [length(0, ""), length(-4, "px")] });
     expect(valueOf({ a: tok("spacing", "8 - 4") }, "a")).toEqual(length(4, "px"));
   });
 });
@@ -316,7 +319,7 @@ describe("colours", () => {
     expect(valueOf(tokens, "hex")).toMatchObject({ kind: "color", literal: "rgba(#336699, 0.5)", color: { mode: "rgb", alpha: 0.5 } });
     expect(valueOf(tokens, "ref")).toMatchObject({ kind: "color", literal: "rgba(#336699, 50%)", color: { alpha: 0.5 } });
     const shadow = valueOf(tokens, "shadow");
-    expect(shadow).toMatchObject({ kind: "shadow", layers: [{ inset: true, offsetX: length(0, "px"), offsetY: length(2, "px"), blur: length(4, "px"), color: { kind: "color", color: { alpha: 0.25 } } }] });
+    expect(shadow).toMatchObject({ kind: "shadow", layers: [{ inset: true, offsetX: length(0, ""), offsetY: length(2, "px"), blur: length(4, "px"), color: { kind: "color", color: { alpha: 0.25 } } }] });
     expect(valueOf(tokens, "border")).toMatchObject({ kind: "border", width: length(1, "px"), style: { kind: "string", value: "solid" }, color: { color: { alpha: 0.1 } } });
   });
 
