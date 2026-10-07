@@ -39,6 +39,10 @@ One resolution for MCP and CSS, and a smaller surface. Breaking.
   `compareStructure`, `check…`) take dictionary entries (`DictionaryEntry[]`)
   instead of `RawToken[]`.
 - `findPlaceholders` documents what it checks: `#f305b7`.
+- Design rules are data: `parseRules(data)` reads a rules file
+  (`references`, `segments`, `depth`, `sibling-reference`; token and set
+  patterns with `*` and `**`), `checkRules(entries, rules)` reports
+  violations. `matchPath(pattern, path)` is the one pattern rule.
 
 ### Removed
 
@@ -53,6 +57,8 @@ One resolution for MCP and CSS, and a smaller surface. Breaking.
   `isLchFormula`, `isPlainColor`; the types `ColorFormat`,
   `ModifierOutput`, `Oklch`, `ColorOutput`, `ColorMatchResult`,
   `NearestColorMatch`.
+- `checkControlsInteractionMapping`, `checkComponentReferences`,
+  `checkNamingConventions`: their rules are now a rules file (`checkRules`).
 - Theme helpers without use: `getActiveSets`, `getAxisGroups`,
   `getThemesForGroup`, `UNGROUPED_AXIS`, and the types `RawTheme`,
   `AxisDescriptor`, `TokenSetInfo`.
@@ -71,6 +77,7 @@ One resolution for MCP and CSS, and a smaller surface. Breaking.
 | `withAlpha(c, 1)` → `#rrggbbff` | `#rrggbb` |
 | `canonicalize(value, type)` | the value of `resolveDictionary`, already read under its type |
 | analysis functions with `RawToken[]` | pass `DictionaryEntry[]` (`dict.entries`) |
+| `checkControlsInteractionMapping` / `checkComponentReferences` / `checkNamingConventions` | write the rules as data and call `checkRules(entries, parseRules(file))` |
 
 ## [1.7.1] — 2026-10-06
 

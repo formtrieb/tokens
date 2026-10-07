@@ -40,6 +40,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `path_prefix` in `browse_tokens` and `compare_themes` matches at a `.`
   boundary: `color.text` holds `color.text.primary`, not `color.textual`.
 - `find_placeholders` names what it checks: `#f305b7`.
+- `check_design_rules` checks rules given as data (`rules` argument,
+  `rules_path`, or `tokens.rules.json` next to the token folder) and names
+  their source in `rules`; without rules only the structural checks run. No
+  rule is built in any more. Parity compares the themes of one axis (`axis`,
+  default the first axis with several themes): `lightDarkParity` is now
+  `parity: { axis, base, against }`. `affected` lists the group of each
+  violating token.
 
 ### Performance
 
@@ -57,6 +64,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | `compose_theme` → `missingAxes` | `defaulted`; the missing axes are filled |
 | `type` limited to a fixed list | any `$type` the loaded system uses |
 | `path_prefix: "color.t"` matched `color.text…` | give whole segments: `color.text` |
+| `check_design_rules` with built-in Formtrieb rules | put the rules in `tokens.rules.json` next to the token folder, or pass `rules` |
+| `lightDarkParity` | `parity` for an `axis` |
 
 ## [2.6.0] — 2026-10-03
 

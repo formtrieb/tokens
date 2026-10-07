@@ -27,7 +27,8 @@ npm install @formtrieb/tokens-core
 | **Resolution** | `resolveDictionary`, `resolveToken`, `referencesIn`, `textOf`, `alignType` | Every reference resolved (`{a.b}`, `{a.b.$value}`, in text, arrays, composites and colour modifiers), every value read under its Tokens Studio type into a `TokenValue` (`length`, `number`, `color`, `fontWeight`, `typography`, `shadow`, …), unrounded, with the chain of visited tokens and the problems found (unknown reference, cycle, invalid value, …). |
 | **Colour** | `parseColor`, `cssColor`, `modifyColor`, `oklchToHex`, `hexToOklch`, `contrastWcag`, `deltaE2000`, `deltaEOK`, `over`, `withAlpha`, `alphaOf`, `isInSrgbGamut`, `findColorMatches` | Read a colour (also Tokens Studio's `rgba(<colour>, a)`), write it in one of four CSS forms, apply a Tokens Studio modifier, convert, measure contrast and distance, layer colours, find tokens by colour. Gamut mapping into sRGB by the CSS Color 4 method. |
 | **Themes** | `parseThemes`, `buildAxisMap`, `getThemeByName`, `getDefaultAxes`, `describeAxes`, `validateAxes` | `$themes.json` read, themes grouped into axes, defaults, and a check of an axis selection that names what exists. |
-| **Analysis** | `findPlaceholders`, `findBrokenReferences`, `compareStructure`, `checkControlsInteractionMapping`, `checkComponentReferences`, `checkNamingConventions` | Placeholder colours (`#f305b7`), references to nothing, structural differences between two sets, and rule checks on token paths. Each takes dictionary entries. |
+| **Analysis** | `findPlaceholders`, `findBrokenReferences`, `compareStructure` | Placeholder colours (`#f305b7`), references to nothing, structural differences between two sets of tokens. Each takes dictionary entries. |
+| **Design rules** | `parseRules`, `checkRules`, `matchPath` | Rules as data: which references a token may hold, which segments a path may use, how deep it may go, no sibling references. Patterns are dot paths or set names with `*` (one segment) and `**` (any). The rules come from the design system, not from this package. |
 
 See [`src/index.ts`](src/index.ts) for every export and type.
 
@@ -56,7 +57,6 @@ if (background.value.kind === "color" && background.value.color) console.log(css
 | Package | Role |
 |---|---|
 | [`@formtrieb/tokens-mcp`](https://github.com/formtrieb/tokens/tree/main/packages/mcp) | MCP server exposing this library to LLM clients (Claude Desktop, MCP Inspector, custom runtimes). Thin adapter — every parsing/resolution decision lives here. |
-| [`@formtrieb/cdf-core`](https://github.com/formtrieb/cdf-core) + [`@formtrieb/cdf-mcp`](https://github.com/formtrieb/cdf-mcp) | Component Description Format. Independent of this package. CDF inlines its own generic `TokenTree` (forked from this library 2026-04-26) so it has no runtime dep on `tokens-core`. |
 
 ## Development
 

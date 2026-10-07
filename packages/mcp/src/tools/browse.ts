@@ -48,13 +48,13 @@ export function registerBrowseTools(server: McpServer) {
           .string()
           .optional()
           .describe(
-            "Token set name (e.g. 'Semantic/Light') or layer (e.g. 'Foundation'). Omit to browse every set."
+            "Token set name (e.g. 'Brand/Acme') or layer (e.g. 'Brand'). Omit to browse every set."
           ),
         path_prefix: z
           .string()
           .optional()
           .describe(
-            "Dot-path prefix to narrow scope (e.g. 'color.controls.brand')"
+            "Dot-path prefix to narrow scope (e.g. 'color.text')"
           ),
         type: z.string().optional().describe(TYPE_DESCRIPTION),
         depth: z
