@@ -131,6 +131,10 @@ The output names where the rules came from (`rules`: `"argument"`, the file,
 or `"none"`). Without rules only the structural checks run. Parity compares
 the tokens each theme of an axis enables, the first theme against the others;
 `axis` picks the axis, by default the first one with more than one theme.
+`resolution` lists the problems of resolving one axis selection (`theme`,
+missing axes take their default). The summary counts rule and resolution
+findings, not `brokenReferences`, since a reference to nothing also shows in
+the resolution. The CLI's `formtrieb-tokens check` reports in the same form.
 
 ## Brand-iteration loop
 

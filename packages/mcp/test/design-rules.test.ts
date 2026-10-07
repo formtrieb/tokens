@@ -88,6 +88,23 @@ describe("rule source", () => {
   });
 });
 
+describe("resolution", () => {
+  it("reports the problems of resolving the axis selection and counts them", async () => {
+    write("tokens/$metadata.json", { tokenSetOrder: ["base"] });
+    write("tokens/$themes.json", [{ id: "t", name: "T", group: "G", selectedTokenSets: { base: "enabled" } }]);
+    write("tokens/base.json", { a: { $type: "number", $value: "{b}" }, b: { $type: "number", $value: "{a}" }, c: { $value: "x" } });
+    const out = await setupTools().callTool("check_design_rules", { tokens_path: join(root, "tokens") });
+    expect(out.resolution).toEqual({
+      themes: ["G=T"],
+      problems: [
+        { theme: "G=T", severity: "warning", kind: "untyped-token", path: "c", set: "base" },
+        { theme: "G=T", severity: "error", kind: "cycle", path: "b", cycle: ["a", "b", "a"] },
+      ],
+    });
+    expect(out.summary).toMatchObject({ errors: 1, warnings: 1, resolution: 2 });
+  });
+});
+
 describe("parity over an axis", () => {
   it("compares the first theme of the first axis with several themes against the others", async () => {
     const out = await setupTools().callTool("check_design_rules", { tokens_path: STUDIO });

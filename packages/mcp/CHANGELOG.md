@@ -5,6 +5,15 @@ All notable changes to `@formtrieb/tokens-mcp` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `check_design_rules` reports `resolution`: the problems of resolving one
+  axis selection (new argument `theme`, missing axes take their default),
+  each with its severity. The summary counts rule and resolution findings.
+  The report is built by core's `designReport`, the same as the CLI's.
+
 ## [3.0.0] — 2026-10-07
 
 ### Changed (breaking)

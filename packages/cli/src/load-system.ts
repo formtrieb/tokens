@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import { isAbsolute, relative, resolve, sep } from 'node:path';
-import { buildTokenSystem, namedSets, type TokenSystem } from '@formtrieb/tokens-core';
+import { buildTokenSystem, namedSets, type TokenProblem, type TokenSystem } from '@formtrieb/tokens-core';
 
 function readJson(file: string, name: string): unknown {
   try {
@@ -44,9 +44,14 @@ function readTokenFiles(tokensPath: string): Map<string, unknown> {
  * `$metadata.json` or a theme names without a file is reported.
  */
 export async function loadTokenSystem(dir: string): Promise<TokenSystem> {
-  const files = readTokenFiles(dir);
-  if (!files.has('$themes.json')) throw new Error(`No $themes.json in ${dir}.`);
-  const { system, problems } = buildTokenSystem(files);
+  const { system, problems } = readTokenSystem(dir);
   for (const p of problems) if (p.kind === 'missing-set') console.warn(`⚠ token set "${p.set}" is named but has no file in ${dir}.`);
   return system;
+}
+
+/** The token system and the problems of loading it, without reporting them. */
+export function readTokenSystem(dir: string): { system: TokenSystem; problems: TokenProblem[] } {
+  const files = readTokenFiles(dir);
+  if (!files.has('$themes.json')) throw new Error(`No $themes.json in ${dir}.`);
+  return buildTokenSystem(files);
 }

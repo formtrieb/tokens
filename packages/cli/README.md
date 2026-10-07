@@ -225,6 +225,21 @@ Options:
 
 The CLI auto-discovers `formtrieb-tokens.config.{ts,mjs,js}` by walking from `cwd` up to the filesystem root.
 
+## Check
+
+```
+formtrieb-tokens check [--config <path>] [--rules <file>] [--axis <name>]
+                       [--severity error|warning|info] [--json]
+```
+
+Checks the token system and writes nothing — for CI before the build:
+
+- **Resolution**, per theme of the render table: references to nothing or to a group, cycles, missing sets and invalid values (errors), untyped tokens and a token replacing a group (warnings).
+- **Design rules**, when there are any: `--rules <file>`, else `tokens.rules.json` in the folder that holds `paths.tokens` (not inside it: Tokens Studio reads every JSON file there as a token set). The rules format is `parseRules` in [`@formtrieb/tokens-core`](https://github.com/formtrieb/tokens/tree/main/packages/core).
+- **Broken references** over all sets, and **parity** of the themes of one axis (`--axis`, by default the first with more than one theme).
+
+Exit code 0 when nothing reaches `--severity` (default `error`), 1 when a finding does, 2 for a usage error (unknown option, malformed rules file, unknown axis). Findings from `warning` up are shown either way (`info` too with `--severity info`). `--json` prints the report in the form of the MCP server's `check_design_rules`, plus `passed` and `threshold`; the summary counts rule and resolution findings, not `brokenReferences`, since a reference to nothing also shows in the resolution.
+
 ## Config reference
 
 | Key                          | Type                                  | Default  | Purpose                                                                                                                              |

@@ -17,6 +17,8 @@ import { resolveTokensPath } from "./path-resolver.js";
 export interface Composition {
   dict: Dictionary;
   values: ReadonlyMap<string, Resolution>;
+  /** Every problem of composing and resolving, each once. */
+  problems: TokenProblem[];
 }
 
 export interface TokenContext {
