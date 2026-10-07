@@ -1,11 +1,13 @@
-# @formtrieb/token-resolver
+# @formtrieb/tokens-cli
 
-Tokens-Studio JSON → CSS variables, utility classes, SCSS mixins, and Figma↔CSS lookup map. Driven by a project-local config. The CSS comes from [`@formtrieb/tokens-render`](https://github.com/formtrieb/tokens/tree/main/packages/render) on top of [`@formtrieb/tokens-core`](https://github.com/formtrieb/tokens/tree/main/packages/core); since 0.6 there is no Style Dictionary inside.
+Tokens-Studio JSON → CSS variables, utility classes, SCSS mixins, and Figma↔CSS lookup map. Driven by a project-local config. The CSS comes from [`@formtrieb/tokens-render`](https://github.com/formtrieb/tokens/tree/main/packages/render) on top of [`@formtrieb/tokens-core`](https://github.com/formtrieb/tokens/tree/main/packages/core).
+
+Up to 0.7 this package was published as `@formtrieb/token-resolver`. Moving over means changing the package name in `package.json` and in the imports (`@formtrieb/tokens-cli`, `@formtrieb/tokens-cli/builders`); the command `formtrieb-tokens` and the config files stay as they are.
 
 ## Install
 
 ```bash
-npm install --save-dev @formtrieb/token-resolver
+npm install --save-dev @formtrieb/tokens-cli
 ```
 
 Your consumer project's `package.json` must have `"type": "module"` (this package is ESM-only). The CLI loads `.ts`, `.mjs`, and `.js` config files.
@@ -15,13 +17,13 @@ Your consumer project's `package.json` must have `"type": "module"` (this packag
 Create `formtrieb-tokens.config.ts` in your project root:
 
 ```ts
-import { defineConfig } from '@formtrieb/token-resolver';
+import { defineConfig } from '@formtrieb/tokens-cli';
 import {
   typography,
   typographyMixin,
   directional,
   container,
-} from '@formtrieb/token-resolver/builders';
+} from '@formtrieb/tokens-cli/builders';
 
 export default defineConfig({
   prefix: 'ds-',
@@ -244,7 +246,7 @@ The CLI auto-discovers `formtrieb-tokens.config.{ts,mjs,js}` by walking from `cw
 ## Programmatic API
 
 ```ts
-import { runPipeline } from '@formtrieb/token-resolver';
+import { runPipeline } from '@formtrieb/tokens-cli';
 import config from './formtrieb-tokens.config.ts';
 
 await runPipeline(config);

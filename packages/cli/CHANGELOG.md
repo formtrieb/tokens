@@ -1,6 +1,8 @@
 # Changelog
 
-All notable changes to `@formtrieb/token-resolver` are documented here.
+All notable changes to `@formtrieb/tokens-cli` are documented here. Up to
+0.7.0 the package was published as `@formtrieb/token-resolver`; those entries
+are below under their versions.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -9,6 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed (breaking)
 
+- Renamed to `@formtrieb/tokens-cli`. Change the package name in
+  `package.json` and the imports: `@formtrieb/token-resolver` →
+  `@formtrieb/tokens-cli`, `@formtrieb/token-resolver/builders` →
+  `@formtrieb/tokens-cli/builders`. Nothing else: the command
+  `formtrieb-tokens`, the config files and the options of a config stay.
+- The builder and config types come from `@formtrieb/tokens-render`
+  (`BuilderToken`, `TypographyOptions`, `GroupBehavior`); the former names
+  `Token`, `TypographyConfig`, `ThemeGroupBehavior` remain as deprecated
+  aliases.
 - Config keys `units` (a unit policy or preset), `color` (`'source'`,
   `'rgb'`, `'hex'`) and `typographyCompanions` replace `dialect`. CLI
   defaults are the Tokens-Studio policy: `units: 'tokens-studio'`,

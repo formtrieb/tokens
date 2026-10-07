@@ -126,7 +126,7 @@ export interface RenderTableConfig {
 
 /**
  * A token as a utility builder sees it: path, raw `$value`, raw `$type`.
- * The shape `@formtrieb/token-resolver` builders have always received.
+ * The shape the CLI's builders have always received.
  */
 export interface BuilderToken {
   path: string[];

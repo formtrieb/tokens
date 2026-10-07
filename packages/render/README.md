@@ -5,7 +5,7 @@ table, utility classes, `main.css`, bundle, token map. Pure functions over
 the [`@formtrieb/tokens-core`](https://github.com/formtrieb/tokens/tree/main/packages/core)
 tree. No file system, no console.**
 
-The CLI [`@formtrieb/token-resolver`](https://github.com/formtrieb/tokens/tree/main/packages/resolver)
+The CLI [`@formtrieb/tokens-cli`](https://github.com/formtrieb/tokens/tree/main/packages/cli)
 loads a config, calls these functions and writes the files. Use this package
 directly when you want the CSS in memory — in a build tool, a generator, a
 test.
@@ -206,7 +206,7 @@ build utility classes. A builder gets `{ tokens, config, typographyCompanions }`
 every token of the system (sets in `$metadata.json` order, first definition
 of a path wins), the caller's config and whether the variables carry
 typography companions. See the
-[token-resolver README](https://github.com/formtrieb/tokens/tree/main/packages/resolver#builders)
+[tokens-cli README](https://github.com/formtrieb/tokens/tree/main/packages/cli#builders)
 for their options.
 
 ## License

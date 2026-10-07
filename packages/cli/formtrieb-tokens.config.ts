@@ -8,7 +8,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 export default defineConfig({
   prefix: 'ds-',
   paths: {
-    tokens: join(__dirname, 'tests', 'fixtures', 'tokens'),
+    tokens: join(__dirname, '..', '..', 'fixtures', 'tokens-studio'),
     output: join(__dirname, 'cssOutput', 'css'),
     tokenMap: join(__dirname, 'cssOutput', 'tokens', 'token-map.json'),
   },

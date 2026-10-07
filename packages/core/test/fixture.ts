@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import { join, relative } from "node:path";
 
 /** The synthetic Tokens-Studio export, as the file map a loader hands to core. */
-export const FIXTURE_DIR = fileURLToPath(new URL("../../resolver/tests/fixtures/tokens/", import.meta.url));
+export const FIXTURE_DIR = fileURLToPath(new URL("../../../fixtures/tokens-studio/", import.meta.url));
 
 export function readFixture(dir = FIXTURE_DIR): Map<string, unknown> {
   const files = new Map<string, unknown>();
