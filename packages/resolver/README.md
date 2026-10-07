@@ -197,16 +197,18 @@ render: [
 
 ```json
 {
-  "options": { "dialect": "canonical" },
+  "options": { "units": "source", "color": "source", "typographyCompanions": false },
   "rules": [{ "theme": "Base/Base", "selector": ":root", "references": true, "file": "variables/base.css" }]
 }
 ```
 
-Allowed options are `dialect`, `basePxFontSize`, `units`, `color` and `prefix`. Each option is taken from the config first, then from the file, then from the default. The config's `prefix` is required, so it always wins. When the config sets a different `dialect` or `basePxFontSize` than the file, the build warns once per option and uses the config.
+Allowed options are `prefix`, `units`, `basePxFontSize`, `color` and `typographyCompanions` (see [`@formtrieb/tokens-render`](https://github.com/formtrieb/tokens/tree/main/packages/render#units) for the unit policy). Each option is taken from the config first, then from the file, then from the CLI default. The config's `prefix` is required, so it always wins. When the config sets a different value than the file, the build warns once per option and uses the config.
+
+An older render file with `"dialect": "canonical"` still works: its missing options default to what that dialect wrote (lengths and colours as written, no companions), and the build warns once that `dialect` can be removed. `"dialect": "style-dictionary"` is refused; write `"units": "tokens-studio", "color": "rgb", "typographyCompanions": true` instead.
 
 ## Invalid values
 
-A value that would be no valid CSS stops the build, and nothing is written. The error lists every such token with path, theme and file — for example an easing token with an empty bezier (`[{}, {}, {}, {}]`), a reference to a token that does not exist, or arithmetic that cannot be reduced and is not in `calc()`. Mixed-unit math on a reference, like `{breakpoints.tablet}-1px`, is written as `calc(var(--…) - 1px)`.
+A value that would be no valid CSS stops the build, and nothing is written. The error lists every such token with path, theme and file — for example an easing token with an empty bezier (`[{}, {}, {}, {}]`), a reference to a token that does not exist, or arithmetic CSS cannot compute (`2px * 3rem`). Math on a reference, like `{breakpoints.tablet}-1px`, is written as `calc(var(--…) - 1px)`, irreducible math like `80rem - 16px` as `calc(80rem - 1rem)`.
 
 ## CLI Reference
 
@@ -234,10 +236,10 @@ The CLI auto-discovers `formtrieb-tokens.config.{ts,mjs,js}` by walking from `cw
 | `typography.fontVariantNumeric.tabular` | `string[][]`               | `[]`     | Token-path prefixes whose typography tokens get a `tabular-nums` font-variant. See [Typography](#typography).                       |
 | `utilities`                  | `BuilderFn[]`                         | `[]`     | Builders that emit utility CSS / SCSS files. Order matters for output filenames only.                                                |
 | `render`                     | `RenderRule[] \| string`             | derived  | The render table: which theme goes to which file under which selector. Rules, or a path (from `cwd`) to a render file. See [Theme Switching](#theme-switching) and [Render file](#render-file). |
-| `dialect`                    | `'style-dictionary' \| 'canonical'`  | `'style-dictionary'` | Output dialect of `@formtrieb/tokens-render`. Overrides the render file. |
+| `units`                      | `UnitPolicy \| 'tokens-studio' \| 'source'` | `'tokens-studio'` | Unit policy: which unit a length in px is written in, per Tokens Studio type and path. `'tokens-studio'`: sizes and spacing in rem, borders and shadows in px. Overrides the render file. |
 | `basePxFontSize`             | `number`                              | `16`     | Root font size px are divided by for rem. Overrides the render file. |
-| `units`                      | `'rem' \| 'source'`                  | from dialect | Whether lengths become rem or stay as written. Overrides the render file. |
-| `color`                      | `'rgb' \| 'source'`                  | from dialect | Whether colour literals become `rgb()` or stay as written. Overrides the render file. |
+| `color`                      | `'source' \| 'rgb' \| 'hex'`         | `'rgb'`  | How colour literals are written. Overrides the render file. |
+| `typographyCompanions`       | `boolean`                             | `true`   | Companion variables (`-letter-spacing`, `-text-transform`, …) next to each typography token; the `typography` builders need them. Overrides the render file. |
 
 ## Programmatic API
 

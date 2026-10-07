@@ -86,15 +86,18 @@ describe('runPipeline render file options', () => {
   );
   const rules = [{ theme: 'Base/Base', selector: ':root', references: false, file: 'variables/base.css' }];
   const renderFile = join(dir, 'render.json');
-  writeFileSync(renderFile, JSON.stringify({ options: { dialect: 'canonical' }, rules }));
+  writeFileSync(join(dir, 'missing-options.json'), JSON.stringify({ rules }));
+  const canonicalFile = join(dir, 'render-canonical.json');
+  writeFileSync(renderFile, JSON.stringify({ options: { units: 'source', color: 'source' }, rules }));
+  writeFileSync(canonicalFile, JSON.stringify({ options: { dialect: 'canonical' }, rules }));
 
-  async function run(name: string, extra: Partial<typeof config> = {}) {
+  async function run(name: string, extra: Partial<typeof config> = {}, render = renderFile) {
     const output = join(dir, name);
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     await runPipeline({
       prefix: 'x-',
       paths: { tokens, output, tokenMap: join(dir, `${name}-map.json`) },
-      render: renderFile,
+      render,
       ...extra,
     });
     const warnings = warn.mock.calls.map((c) => c.join(' '));
@@ -102,24 +105,38 @@ describe('runPipeline render file options', () => {
     return { css: readFileSync(join(output, 'variables', 'base.css'), 'utf-8'), warnings };
   }
 
-  it('renders in the dialect the render file names', async () => {
+  it('renders with the options the render file names', async () => {
     const { css, warnings } = await run('from-file');
     expect(css).toContain('--x-space-s: 8px;');
     expect(css).toContain('--x-brand: #336699;');
     expect(warnings).toEqual([]);
   });
 
-  it('lets the config override the file, with one warning', async () => {
-    const { css, warnings } = await run('overridden', { dialect: 'style-dictionary' });
+  it('defaults to the Tokens-Studio policy where neither config nor file says', async () => {
+    const { css } = await run('defaults', {}, join(dir, 'missing-options.json'));
     expect(css).toContain('--x-space-s: 0.5rem;');
     expect(css).toContain('--x-brand: rgb(51, 102, 153);');
-    expect(warnings).toHaveLength(1);
-    expect(warnings[0]).toContain('dialect "canonical"');
-    expect(warnings[0]).toContain('"style-dictionary"');
+  });
+
+  it('lets the config override the file, with one warning per option', async () => {
+    const { css, warnings } = await run('overridden', { units: 'tokens-studio', color: 'rgb' });
+    expect(css).toContain('--x-space-s: 0.5rem;');
+    expect(css).toContain('--x-brand: rgb(51, 102, 153);');
+    expect(warnings).toHaveLength(2);
+    expect(warnings[0]).toContain('units "source"');
+    expect(warnings[0]).toContain('"tokens-studio"');
   });
 
   it('stays quiet when the config agrees with the file', async () => {
-    const { warnings } = await run('agreeing', { dialect: 'canonical' });
+    const { warnings } = await run('agreeing', { units: 'source' });
     expect(warnings).toEqual([]);
+  });
+
+  it('keeps an old canonical render file as written, with one warning that dialect has no effect', async () => {
+    const { css, warnings } = await run('canonical', {}, canonicalFile);
+    expect(css).toContain('--x-space-s: 8px;');
+    expect(css).toContain('--x-brand: #336699;');
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toContain('"dialect" has no effect');
   });
 });

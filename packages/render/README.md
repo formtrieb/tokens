@@ -51,12 +51,17 @@ Only `prefix` is required. The other options and their defaults:
 
 | Option | Default | |
 |---|---|---|
-| `dialect` | `"style-dictionary"` | `"canonical"` for producers that write on purpose, see below |
+| `units` | `"source"` | unit policy or preset, see [Units](#units) |
 | `basePxFontSize` | `16` | root font size for rem |
-| `units` | `"rem"` (`"source"` in `canonical`) | `"source"` keeps lengths as written, see below |
-| `color` | `"rgb"` (`"source"` in `canonical`) | `"source"` keeps colour literals as written, see below |
+| `color` | `"source"` | `"source"`, `"rgb"` or `"hex"`, see [Colours](#colours) |
+| `typographyCompanions` | `false` | companion variables for typography, see below |
 | `privateTokenPrefixes` | `["*"]` | path segments starting with one of these are left out |
-| `typography` | `{}` | `fontVariantNumeric.tabular`: paths that get `tabular-nums` (`style-dictionary` only) |
+| `typography` | `{}` | `fontVariantNumeric.tabular`: paths that get `tabular-nums` (with companions) |
+
+Without options every value is written as core resolved it: lengths in
+their own units, colour literals as written. A Tokens-Studio export usually
+wants `{ units: "tokens-studio", color: "rgb", typographyCompanions: true }`,
+which is what the CLI uses by default.
 
 ## The render table
 
@@ -85,105 +90,122 @@ code: render knows no set, group or theme name.
 
 ### Render file
 
-A producer that writes a tree for one dialect writes the table with it, as
-`render.json`: a bare list of rules, or `{ options?, rules }`
-(`RenderFile`). `options` holds only output options (`prefix`, `dialect`,
-`basePxFontSize`, `units`, `color`); typography and builders are code and
-stay with the caller. `parseRenderFile(data)` reads either form and
-returns `{ options, rules }`; which side wins when the caller sets an
-option too is the caller's decision.
+A producer writes the table with its tree, as `render.json`: a bare list of
+rules, or `{ options?, rules }` (`RenderFile`). `options` holds only output
+options (`prefix`, `units`, `basePxFontSize`, `color`,
+`typographyCompanions`); typography and builders are code and stay with the
+caller. `parseRenderFile(data)` reads either form, checks every option
+(including the unit policy: preset name, target units, path patterns) and
+returns `{ options, rules }`; which side wins when the caller sets an option
+too is the caller's decision. An older file's `"dialect": "canonical"` is
+accepted and has no effect; `"style-dictionary"` is refused with what to
+write instead.
 
 ## How values are written
 
-- **Composition.** A theme's `source` sets, then its `enabled` sets, in
-  `$themes.json` order, deep-merged: a later set wins. Only tokens from
-  `enabled` sets are written; path segments starting with a private prefix
-  (default `*`) are left out.
-- **Meaning** comes from core's `canonicalize`: `150%` line height → `1.5`,
-  `-5%` letter-spacing → `-0.05em`, `Bold` → `700`, a bare `8` → `8px`,
-  math reduced. Colour modifiers (`$extensions['studio.tokens'].modify`) are
-  computed by core.
-- **Presentation** by default: lengths in rem (`basePxFontSize`), colour
-  literals as `rgb(r, g, b)` / `rgba(…)`, computed colours as
-  `rgb(r% g% b% / a)`, quoted font families, `font` / shadow / border
-  shorthands, `cubic-bezier()`.
-- **Literal or reference.** A token that references another takes the
-  target's finished value. A line height pointing at a dimension therefore
-  ships in rem, a literal line height in px.
-- **`references: true`** writes `var(--…)` where the source referenced, in
-  an order where every variable is defined before it is used. A computed
-  colour keeps its computed value.
-- **Arithmetic** that cannot be reduced, like `{breakpoints.desktop}-1px`,
-  is written as `calc(var(--…) - 1px)`.
-- **Typography tokens** get companion properties next to the `font`
-  shorthand, which cannot carry them: `-letter-spacing`, `-text-transform`,
-  `-text-decoration`, `-text-indent`, `-margin-block-end`, and
-  `-fvn: tabular-nums` for paths listed in
-  `typography.fontVariantNumeric.tabular`.
+- **Composition and meaning** come from core: a theme's `source` sets, then
+  its `enabled` sets, in `$themes.json` order (groups merge, a token
+  replaces a token whole); each value resolved and read under its type
+  (`150%` line height → `1.5`, `-5%` letter-spacing → `-0.05em`, `Bold` →
+  `700`, a bare `8` → `8px`, math reduced, colour modifiers computed). The
+  meaning does not depend on the way to a value: `{dimension.5x}` and
+  `20px` are the same length.
+- Only tokens from `enabled` sets are written, in source order; path
+  segments starting with a private prefix (default `*`) are left out.
+  `var()` resolves at computed-value time, so no definition-before-use order
+  is needed.
+- **`references: true`** writes `var(--…)` where the source referenced; in
+  a composite (typography, shadow, border, transition) at the position of
+  the property that referenced. A computed colour keeps its computed value
+  unless the modifier changed nothing. Arithmetic over a reference, like
+  `{breakpoints.desktop}-1px`, is written as `calc(var(--…) - 1px)`.
+- **Arithmetic** that cannot be reduced, like `80rem - 16px`, is written as
+  `calc()`.
+- Numbers are rounded to four fraction digits when written; core keeps
+  them unrounded.
+- Font families are quoted where they hold a space; typography, shadow,
+  border and transition are written as shorthands; easings as
+  `cubic-bezier()`.
 
-The output is byte-compatible with `@formtrieb/token-resolver` up to 0.5,
-which used Style Dictionary, apart from the `calc()` form above and the
-refused values below.
+## Units
 
-## Dialects
-
-Both dialects read the same tree and write the same variable names, render
-table, files and blocks. They differ in values, companions and the order
-within a block.
-
-- **`style-dictionary`** (default) writes what the Style-Dictionary pipeline
-  wrote, as described above: rem, `rgb()`, typography companions. It does
-  not change, so existing systems keep their exact CSS.
-- **`canonical`** writes each value as core canonicalizes it — lengths
-  with their own units, colour literals as written — and no typography
-  companions, in the variables or in the token map. It is meant for
-  producers that write their tokens on purpose and carry letter-spacing,
-  text case and the like as tokens of their own. It also leaves three habits
-  the Style-Dictionary output had:
-  - Variables keep source order. `var()` resolves at computed-value time, so
-    no definition-before-use sort is needed; the old sort compared
-    non-transitively and its order followed the engine's sort algorithm.
-  - A reference inside a composite (typography, shadow, border, transition)
-    is written in its own property's place. Replaced by value, a line height
-    equal to the font size took the font size's place.
-  - A colour a modifier computed stays as core wrote it, also with
-    `color: "rgb"`. The literal colour step read core's
-    `rgb(r% g% b% / a)` as opaque.
+`units` is a policy, as data: which unit a length in px is written in.
+A length written in another unit (`0.5rem`, `60ch`, `50%`, `-0.05em`) is
+never converted.
 
 ```ts
-renderVariables(system, rules, { prefix: "ds-", dialect: "canonical" });
+interface UnitPolicy {
+  types?: Record<string, "rem" | "px" | "source">;
+  paths?: { match: string; unit: "rem" | "px" | "source" }[];
+}
 ```
 
-The dialect only sets the defaults of `units` and `color`; either can
-still be set on its own. Pass the same options to `renderVariables`,
-`renderUtilities` and `renderTokenMap`. The `typography` and
-`typographyMixin` builders read the companions and throw in the
-`canonical` dialect.
+- `paths` are checked first; the first match wins. `match` is a token's dot
+  path in source casing (`zIndex.base`); `*` matches one segment, `**` zero
+  or more (`breakpoints.**`).
+- `types` is looked up with the token's Tokens Studio type (`spacing`),
+  then with its aligned type (`dimension`), so `{ dimension: "rem" }`
+  covers every length type not named itself. A type named nowhere is
+  `source`.
+- `rem` divides by `basePxFontSize`; under `rem` and `px` a zero length is
+  written `0`.
+- A shadow's lengths are looked up under the shadow's type (`boxShadow`);
+  the properties of typography and border under their own types
+  (`fontSizes`, `lineHeights`, `borderWidth`, …).
 
-## Units and colours as written
+Two presets: `"source"` (nothing converted, the default) and
+`"tokens-studio"`, exported as `TOKENS_STUDIO_UNITS`: `fontSizes`,
+`spacing`, `sizing`, `borderRadius`, `paragraphSpacing`, `paragraphIndent`
+and `dimension` in rem; `borderWidth` and `boxShadow` in px;
+`letterSpacing` and `lineHeights` as written.
 
-`units` and `color` switch single parts of the presentation:
+```ts
+renderVariables(system, rules, {
+  prefix: "ds-",
+  units: { types: { dimension: "rem" }, paths: [{ match: "breakpoints.*", unit: "px" }] },
+});
+```
 
-- `units: "source"` keeps lengths as the canonical value has them: `1024px`,
-  `-0.05em`, `60ch`; a bare number is px.
-- `color: "source"` keeps colour literals as written: `#336699`,
-  `rgba(0,0,0,0.5)`, system colours like `CanvasText`. Computed colours
-  still come from core as `rgb(r% g% b% / a)`.
+## Colours
+
+- `"source"`: literals as written (`#336699`, `rgba(0,0,0,0.5)`,
+  `lch(62 72 250)`, `CanvasText`). Tokens Studio's `rgba(#336699, 0.5)` is
+  no CSS and is written as `rgba(51, 102, 153, 0.5)`.
+- `"rgb"`: literals as `rgb(r, g, b)` / `rgba(r, g, b, a)`, gamut-mapped
+  into sRGB.
+- `"hex"`: every colour as `#rrggbb` / `#rrggbbaa`.
+
+A colour a modifier computed has no literal. It is written as
+`rgb(r% g% b% / a)` under `"source"` and `"rgb"`, as hex under `"hex"`.
+Colours in shadows and borders follow the same option. A colour culori
+cannot read (a gradient, a system colour) is always written as written.
+
+## Typography companions
+
+The `font` shorthand cannot carry letter-spacing, text-transform and the
+rest. With `typographyCompanions: true` every typography token gets them as
+companion properties pointing at the referenced tokens: `-letter-spacing`,
+`-text-transform`, `-text-decoration`, `-text-indent`, `-margin-block-end`,
+and `-fvn: tabular-nums` for paths listed in
+`typography.fontVariantNumeric.tabular`; the token map lists them too. The
+`typography` and `typographyMixin` builders read them and throw without
+the option.
 
 ## Values that are no CSS
 
 `renderVariables` throws `InvalidCssError` instead of writing a value that
-is no valid CSS: an object where text belongs (`cubic-bezier([object
-Object], …)`), a reference that never resolved, a bezier without four
-numbers, arithmetic that is neither reduced nor in `calc()`. Every problem
-is listed with token path, theme and file; nothing is written.
+is no valid CSS: a reference that never resolved, an object where text
+belongs, a bezier without four numbers, arithmetic CSS cannot compute
+(`2px * 3rem`). Every problem is listed with token path, theme and file;
+nothing is written.
 
 ## Builders
 
 `typography`, `typographyMixin`, `directional`, `single` and `container`
-build utility classes. A builder gets `{ tokens, config, dialect }`: every
-token of the system (sets in `$metadata.json` order, first definition of a
-path wins), the caller's config and the dialect of the run. See the
+build utility classes. A builder gets `{ tokens, config, typographyCompanions }`:
+every token of the system (sets in `$metadata.json` order, first definition
+of a path wins), the caller's config and whether the variables carry
+typography companions. See the
 [token-resolver README](https://github.com/formtrieb/tokens/tree/main/packages/resolver#builders)
 for their options.
 

@@ -7,6 +7,7 @@ import {
   resolveDictionary,
   resolveToken,
   textOf,
+  cssColor,
   type TokenSystem,
   type TokenValue,
 } from "../src/index.js";
@@ -336,6 +337,20 @@ describe("colours", () => {
     expect(v).not.toHaveProperty("literal");
     expect(textOf(v)).toBe("#1a81b5");
     expect(textOf(valueOf(tokens, "darkOfComputed"))).toBe("#1a81b5");
+  });
+});
+
+describe("cssColor", () => {
+  it("writes a colour as rgb(), hex or percentages, gamut-mapped", () => {
+    const c = { mode: "rgb", r: 0.2, g: 0.4, b: 0.6, alpha: 0.5 };
+    expect(cssColor(c, "rgb")).toBe("rgba(51, 102, 153, 0.5)");
+    expect(cssColor(c, "hex")).toBe("#33669980");
+    expect(cssColor(c, "percent")).toBe("rgb(20% 40% 60% / 0.5)");
+    expect(cssColor({ mode: "lch", l: 62, c: 72, h: 250 }, "rgb")).toBe("rgb(0, 165, 233)");
+  });
+
+  it("takes a channel within float noise of the edge as the edge", () => {
+    expect(cssColor({ mode: "rgb", r: 0.000002, g: 0.5, b: 1.0000001 }, "percent")).toBe("rgb(0% 50% 100%)");
   });
 });
 

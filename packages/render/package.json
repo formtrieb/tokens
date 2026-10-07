@@ -42,8 +42,6 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "change-case": "^5.4.4",
-    "tinycolor2": "^1.6.0",
-    "@types/tinycolor2": "^1.4.6",
     "typescript": "^5.0.0",
     "vitest": "^3.0.0"
   },

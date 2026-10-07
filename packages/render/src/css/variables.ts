@@ -1,83 +1,30 @@
 /**
- * One render rule → one block of custom properties, in the shape the
- * resolver has always written (Style Dictionary's `css/variables`):
+ * One render rule → one block of custom properties:
  *
- *   - only tokens of the theme's enabled sets, private paths left out
+ *   - the tokens of the theme's enabled sets, in source order, private paths
+ *     left out (a custom property may use one declared after it: `var()`
+ *     resolves at computed-value time)
+ *   - each value as core resolved it, written by the formatters
  *   - with references: a token that points elsewhere is written as
- *     `var(--…)`; tokens are ordered so a variable is defined before use
- *   - typography composites get their companion properties appended
+ *     `var(--…)`, in a composite at the position of the property that points
+ *   - optionally the typography companions
  */
+import { referencesIn, type Dictionary, type DictionaryEntry, type Resolution, type TokenValue } from "@formtrieb/tokens-core";
 import { kebab } from "../kebab.js";
-import { writesCompanions, type ResolvedRenderOptions, type RenderRule } from "../types.js";
-import type { Dictionary, Entry } from "./dictionary.js";
-import { referencesIn, resolveReferences, usesReferences } from "./references.js";
-import { transform, type Presentation } from "./transforms.js";
-import type { Values } from "./values.js";
+import type { ResolvedRenderOptions, RenderRule } from "../types.js";
+import { formatValue, type Format, type Position } from "./format.js";
 
 export const FILE_HEADER = "/**\n * Do not edit directly, this file was auto-generated.\n */\n\n";
 
 export interface Block {
   text: string;
-  /** typography companions were appended; the resolver wrote such a file without final newline */
-  expanded: boolean;
   /** values that are no valid CSS, by token path */
   invalid: { path: string; value: string; reason: string }[];
 }
 
-// ── a value that is no CSS is not written ─────────────────────────────────
-
-const EASING_KEYWORDS = /^(linear|ease|ease-in|ease-out|ease-in-out|step-start|step-end|steps\([^)]*\))$/;
-const NUMBER = String.raw`-?(?:\d+\.?\d*|\.\d+)`;
-const BEZIER = new RegExp(String.raw`^cubic-bezier\(${NUMBER}, ${NUMBER}, ${NUMBER}, ${NUMBER}\)$`);
-/** Types whose value is a single quantity; there, leftover arithmetic is an error. */
-const QUANTITIES = new Set(["dimension", "fontSize", "lineHeight", "number", "opacity", "fontWeight", "duration"]);
-/** CSS math functions. Whatever stands inside their parentheses is arithmetic by design. */
-const MATH_FUNCTION = /\b(calc|clamp|min|max|round|mod|rem|abs|sign|pow|sqrt|hypot|log|exp)\(/;
-
-/**
- * The value with every math function blanked to `name()`, however deep its
- * parentheses nest — `calc((var(--a) - var(--b)) / 2)` becomes `calc()`.
- * A regex cannot do this (it knows one level); a counter can.
- */
-function withoutMathFunctions(value: string): string {
-  let out = "";
-  let rest = value;
-  for (;;) {
-    const m = MATH_FUNCTION.exec(rest);
-    if (!m) return out + rest;
-    const open = m.index + m[0].length - 1;
-    let depth = 0;
-    let close = open;
-    for (; close < rest.length; close++) {
-      if (rest[close] === "(") depth++;
-      else if (rest[close] === ")" && --depth === 0) break;
-    }
-    out += rest.slice(0, m.index) + m[1] + "()";
-    rest = rest.slice(close + 1);
-  }
-}
-
-const LEFTOVER_MATH = /(?:\d[a-zA-Z%]*|\))(?:\s*[*/+]\s*|-|\s-\s)(?:\d|\.\d|var\()/;
-
-/**
- * Why a written value is no valid CSS, or undefined. Checks what the source
- * can get wrong: an object where text belongs, a reference that never
- * resolved, a bezier without four numbers, arithmetic not in calc().
- */
-export function invalidCss(value: string, type: string | undefined): string | undefined {
-  if (value.includes("[object Object]")) return "an object where CSS needs a value";
-  const ref = value.match(/\{[^}]+\}/);
-  if (ref) return `unresolved reference ${ref[0]}`;
-  if (type === "cubicBezier" && !value.startsWith("var(") && !BEZIER.test(value) && !EASING_KEYWORDS.test(value)) {
-    return "cubic-bezier needs four numbers";
-  }
-  if (type && QUANTITIES.has(type)) {
-    // Variable names may hold digits and dashes (`--x-0-5x`); only their position counts.
-    const outside = withoutMathFunctions(value).replace(/var\(--[\w-]+\)/g, "(v)");
-    if (LEFTOVER_MATH.test(outside)) return "arithmetic that is neither reduced nor in calc()";
-  }
-  return undefined;
-}
+const PURE_REFERENCE = /^\{([^{}]+)\}$/;
+const REFERENCE = /\{([^{}]+)\}/g;
+const ARITHMETIC_KINDS = new Set<TokenValue["kind"]>(["length", "number", "expression", "list"]);
 
 function isPrivate(path: string[], prefixes: string[]): boolean {
   return path.some((segment) => prefixes.some((p) => segment.startsWith(p)));
@@ -85,15 +32,18 @@ function isPrivate(path: string[], prefixes: string[]): boolean {
 
 const nameOf = (path: string[], prefix: string) => kebab(`${prefix} ${path.join(" ")}`);
 
-// ── arithmetic is written as calc() ───────────────────────────────────────
+const keyOf = (inner: string) => inner.trim().replace(/\.\$value$/, "");
+
+// ── arithmetic over var() is written as calc() ────────────────────────────
 
 const OPERAND = /(?:var\(--[\w-]+\)|-?(?:\d+\.?\d*|\.\d+)[a-zA-Z%]*)/y;
 const OPERATOR = /\s*([-+*/])\s*/y;
 
 /**
- * `var(--x)-1px` is no CSS; `calc(var(--x) - 1px)` is. Only a value made of
- * operands and operators is rewritten — a single negative number, a list of
- * lengths or a function call stay as they are.
+ * `var(--x)-1px` is no CSS; `calc(var(--x) - 1px)` is. Only for a value with
+ * references, written as variables: a resolved value's arithmetic is an
+ * `expression` and needs no scanning. Only a value made of operands and
+ * operators is rewritten — a single number, a list or a function call stays.
  */
 export function asCalc(value: string): string {
   const parts: string[] = [];
@@ -114,38 +64,6 @@ export function asCalc(value: string): string {
   return parts.length > 1 ? `calc(${parts.join(" ")})` : value;
 }
 
-// ── reference-safe order, as Style Dictionary's sortByReference ───────────
-
-interface Sortable {
-  name?: string;
-  original?: unknown;
-}
-
-function referenceOrder(dict: Dictionary, prefix: string) {
-  const asSortable = (r: { entry?: Entry }): Sortable =>
-    r.entry ? { name: nameOf(r.entry.path, prefix), original: r.entry.original } : {};
-
-  const sorter = (a: Sortable | undefined, b: Sortable | undefined, depth = 0): number => {
-    if (a === undefined) return -1;
-    if (b === undefined) return 1;
-    if (depth > 64) return 0;
-    const aUses = a.original !== undefined && usesReferences(a.original);
-    const bUses = b.original !== undefined && usesReferences(b.original);
-    if (aUses && bUses) {
-      const aRefs = referencesIn(a.original, dict).map(asSortable);
-      const bRefs = referencesIn(b.original, dict).map(asSortable);
-      if (aRefs.some((r) => r.name !== undefined && r.name === b.name)) return 1;
-      if (bRefs.some((r) => r.name !== undefined && r.name === a.name)) return -1;
-      return sorter(aRefs[0], bRefs[0], depth + 1);
-    }
-    if (aUses) return 1;
-    if (bUses) return -1;
-    return 0;
-  };
-  return (a: Entry, b: Entry) =>
-    sorter({ name: nameOf(a.path, prefix), original: a.original }, { name: nameOf(b.path, prefix), original: b.original });
-}
-
 // ── one declaration ───────────────────────────────────────────────────────
 
 function withComment(line: string, description: string | undefined): string {
@@ -156,98 +74,76 @@ function withComment(line: string, description: string | undefined): string {
   return `${comment}\n${line}`;
 }
 
-// The marker's length encodes the index (n × `x` is reference n): no digits,
-// so the math and unit steps of the value chain cannot read it as a number.
-const MARK = /\u0001(x+)\u0001/g;
+const SHADOW_ALIASES: Record<string, string> = { offsetX: "x", offsetY: "y" };
 
-/**
- * A composite (typography, shadow, border, transition) with references, each
- * reference written in the place of its own property. A property that is
- * exactly one reference rides through the value chain as a marker, which then
- * becomes its `var(--…)`. The 'style-dictionary' dialect replaces by value
- * instead: a variable lands where its value first occurs, so a line height
- * equal to the font size takes the font size's place.
- */
-function compositeInPlace(entry: Entry, dict: Dictionary, values: Values, presentation: Presentation, prefix: string): unknown {
-  const vars: string[] = [];
-  const mark = (v: unknown): unknown => {
-    if (typeof v === "string") {
-      const ref = /^\{[^}]+\}$/.test(v) ? referencesIn(v, dict)[0] : undefined;
-      if (!ref?.entry || !values.has(ref.key)) return resolveReferences(v, (key) => values.get(key));
-      vars.push(`var(--${nameOf(ref.entry.path, prefix)})`);
-      return `\u0001${"x".repeat(vars.length)}\u0001`;
-    }
-    if (Array.isArray(v)) return v.map(mark);
-    if (typeof v === "object" && v !== null) return Object.fromEntries(Object.entries(v).map(([k, p]) => [k, mark(p)]));
-    return v;
-  };
-  const marked = mark(entry.original);
-  const out = transform({ type: entry.type, originalType: entry.originalType, value: marked }, true, presentation);
-  return typeof out === "string" ? out.replace(MARK, (_, x: string) => vars[x.length - 1]) : values.get(entry.key);
+/** The written value at a composite position: `["fontSize"]`, `[0, "blur"]`. */
+function rawAt(raw: unknown, position: Position, shadow: boolean): unknown {
+  let node: unknown = raw;
+  let rest = position;
+  if (shadow) {
+    const [i, ...tail] = position;
+    node = Array.isArray(raw) ? raw[i as number] : i === 0 ? raw : undefined;
+    rest = tail;
+  }
+  for (const step of rest) {
+    if (typeof node !== "object" || node === null) return undefined;
+    const o = node as Record<string, unknown>;
+    node = o[step as string] ?? (shadow ? o[SHADOW_ALIASES[step as string]] : undefined);
+  }
+  return node;
 }
 
-function declaration(
-  entry: Entry,
-  dict: Dictionary,
-  values: Values,
-  rule: RenderRule,
-  options: ResolvedRenderOptions,
-  presentation: Presentation,
-  invalid: Block["invalid"]
-): string {
-  const prefix = options.prefix;
-  const value = values.get(entry.key);
-  const original = entry.original;
-  const finished = (key: string) => values.get(key);
+interface Context {
+  dict: Dictionary;
+  values: ReadonlyMap<string, Resolution>;
+  rule: RenderRule;
+  options: ResolvedRenderOptions;
+  format: Format;
+}
 
-  let outputRef = rule.references && usesReferences(original);
-  if (outputRef && entry.modify) {
-    // A computed colour keeps its computed value, unless computing changed nothing.
-    outputRef = typeof original === "string" && value === resolveReferences(original, finished);
-  }
+function declaration(entry: DictionaryEntry, ctx: Context, invalid: Block["invalid"]): string {
+  const { dict, values, rule, options, format } = ctx;
+  const reasons: string[] = [];
+  const report = (reason: string) => reasons.push(reason);
+  const where = { path: entry.path, type: entry.type };
+  const resolved = values.get(entry.key)!.value;
+  const varOf = (inner: string) => {
+    const target = dict.byKey.get(keyOf(inner));
+    return target ? `var(--${nameOf(target.path, options.prefix)})` : undefined;
+  };
+  const formatted = () => formatValue(resolved, where, format, report);
 
-  let out: unknown = value;
-  if (outputRef) {
-    const refs = referencesIn(original, dict).filter((r) => r.entry && values.has(r.key));
-    if (typeof original !== "object" || original === null) {
-      let text = `${original}`;
-      for (const r of refs) {
-        const pattern = new RegExp(`{${r.entry!.path.join("\\.")}(\\.\\$?value)?}`, "g");
-        text = text.replace(pattern, () => `var(--${nameOf(r.entry!.path, prefix)})`);
+  let out: string;
+  const raw = entry.value;
+  if (!rule.references || referencesIn(raw).length === 0 || resolved.kind === "unresolved") {
+    out = formatted();
+  } else if (typeof raw === "string") {
+    const pure = raw.trim().match(PURE_REFERENCE);
+    if (pure) {
+      const variable = varOf(pure[1]);
+      out = variable ?? formatted();
+      if (variable && entry.extensions?.["studio.tokens"] && (entry.extensions["studio.tokens"] as Record<string, unknown>).modify) {
+        // A computed colour is written as computed, unless computing changed nothing.
+        const target = values.get(keyOf(pure[1]))!.value;
+        const asHex = (v: TokenValue) => formatValue(v, where, { ...format, color: "hex" }, () => {});
+        if (asHex(resolved) !== asHex(target)) out = formatted();
       }
-      out = text;
-    } else if (options.dialect === "canonical") {
-      out = compositeInPlace(entry, dict, values, presentation, prefix);
+    } else if (ARITHMETIC_KINDS.has(resolved.kind)) {
+      out = asCalc(raw.replace(REFERENCE, (match, inner: string) => varOf(inner) ?? match));
     } else {
-      let text = `${value}`;
-      for (const r of refs) {
-        text = text.replace(`${values.get(r.key)}`, () => `var(--${nameOf(r.entry!.path, prefix)})`);
-      }
-      out = entry.type === "typography" ? fontOrder(text, original as Record<string, unknown>, dict, prefix) : text;
+      out = formatted();
     }
+  } else {
+    const shadow = resolved.kind === "shadow";
+    out = formatValue(resolved, where, format, report, (position) => {
+      const at = rawAt(raw, position, shadow);
+      const pure = typeof at === "string" ? at.trim().match(PURE_REFERENCE) : null;
+      return pure ? varOf(pure[1]) : undefined;
+    });
   }
-  if (typeof out === "string") out = asCalc(out);
-  const text = `${out}`;
-  const reason = invalidCss(text, entry.type);
-  if (reason) invalid.push({ path: entry.key, value: text, reason });
-  return withComment(`  --${nameOf(entry.path, prefix)}: ${out};`, entry.description);
-}
 
-/**
- * Replacing references in a typography shorthand by value can land the line
- * height's variable before the font size's when both had the same value. The
- * resolver swapped them back afterwards; so does this ('style-dictionary' only,
- * 'canonical' places references by position and needs no repair).
- */
-function fontOrder(text: string, original: Record<string, unknown>, dict: Dictionary, prefix: string): string {
-  const varOf = (prop: string) => {
-    const ref = referencesIn(original[prop], dict)[0];
-    return ref?.entry ? `var(--${nameOf(ref.entry.path, prefix)})` : undefined;
-  };
-  const fs = varOf("fontSize");
-  const lh = varOf("lineHeight");
-  if (!fs || !lh) return text;
-  return text.split(`${lh}/${fs}`).join(`${fs}/${lh}`);
+  for (const reason of reasons) invalid.push({ path: entry.key, value: out, reason });
+  return withComment(`  --${nameOf(entry.path, options.prefix)}: ${out};`, entry.description);
 }
 
 // ── typography companions ─────────────────────────────────────────────────
@@ -262,16 +158,17 @@ const COMPANIONS: [string, string][] = [
 
 /**
  * The `font` shorthand cannot carry letter-spacing, text-transform and the
- * rest; each typography token gets them as companion properties pointing at
- * the referenced tokens, plus `-fvn: tabular-nums` where configured.
+ * rest; with `typographyCompanions`, each typography token gets them as
+ * companion properties pointing at the referenced tokens, plus
+ * `-fvn: tabular-nums` where configured.
  */
-function companions(entries: Entry[], options: ResolvedRenderOptions): string[] {
+function companions(entries: DictionaryEntry[], options: ResolvedRenderOptions): string[] {
   const prefix = options.prefix;
   const tabular = (options.typography.fontVariantNumeric?.tabular ?? []).map((p) => p.map((s) => s.toLowerCase()));
   const out: string[] = [];
   for (const entry of entries) {
-    if (entry.type !== "typography" || typeof entry.original !== "object" || entry.original === null) continue;
-    const value = entry.original as Record<string, unknown>;
+    if (entry.alignedType !== "typography" || typeof entry.value !== "object" || entry.value === null) continue;
+    const value = entry.value as Record<string, unknown>;
     const full = `--${prefix}${kebab(entry.path)}`;
     for (const [prop, suffix] of COMPANIONS) {
       const ref = typeof value[prop] === "string" ? (value[prop] as string).match(/^\{(.+)\}$/) : null;
@@ -287,23 +184,17 @@ function companions(entries: Entry[], options: ResolvedRenderOptions): string[] 
 
 export function renderBlock(
   dict: Dictionary,
-  values: Values,
+  values: ReadonlyMap<string, Resolution>,
   rule: RenderRule,
-  options: ResolvedRenderOptions,
-  presentation: Presentation
+  options: ResolvedRenderOptions
 ): Block {
   const emitted = dict.entries.filter((e) => e.emitted && !isPrivate(e.path, options.privateTokenPrefixes));
-  // A custom property may use one declared after it: var() resolves at computed-value time. The
-  // 'canonical' dialect keeps source order; 'style-dictionary' sorts as Style Dictionary did, with a
-  // comparator that is not transitive, so its order follows the engine's sort algorithm.
-  const sorted = rule.references && options.dialect === "style-dictionary";
-  const ordered = sorted ? [...emitted].sort(referenceOrder(dict, options.prefix)) : emitted;
+  const format: Format = { units: options.units, basePxFontSize: options.basePxFontSize, color: options.color };
+  const ctx: Context = { dict, values, rule, options, format };
   const invalid: Block["invalid"] = [];
-  const lines = ordered.map((e) => declaration(e, dict, values, rule, options, presentation, invalid));
-  const extra = writesCompanions(options) ? companions(emitted, options) : [];
-
-  const body = extra.length > 0 ? `${lines.join("\n")}\n${extra.join("\n")}\n` : lines.join("\n");
-  let text = `${rule.selector} {\n${body}\n}`;
+  const lines = emitted.map((e) => declaration(e, ctx, invalid));
+  if (options.typographyCompanions) lines.push(...companions(emitted, options));
+  let text = `${rule.selector} {\n${lines.join("\n")}\n}`;
   if (rule.media) text = `@media ${rule.media} {\n${text}\n}`;
-  return { text, expanded: extra.length > 0, invalid };
+  return { text, invalid };
 }

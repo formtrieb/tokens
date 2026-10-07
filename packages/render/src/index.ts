@@ -4,7 +4,10 @@ export type {
   RenderOptions,
   RenderFile,
   RenderFileOptions,
-  Dialect,
+  UnitPolicy,
+  UnitPreset,
+  UnitTarget,
+  ColorForm,
   RenderedFiles,
   TypographyOptions,
   GroupBehavior,
@@ -27,4 +30,5 @@ export {
   InvalidCssError,
 } from "./render.js";
 export { kebab } from "./kebab.js";
+export { TOKENS_STUDIO_UNITS } from "./css/units.js";
 export { typography, typographyMixin, directional, single, container, type Side } from "./builders/index.js";

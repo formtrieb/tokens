@@ -1,11 +1,11 @@
 /**
  * `token-map.json`: Figma path → CSS variable, for everything a theme
  * writes (sets that are `enabled` somewhere), typography companions
- * included in the `'style-dictionary'` dialect. The Figma path keeps source casing (`zIndex/base`); the
+ * included when the options write them. The Figma path keeps source casing (`zIndex/base`); the
  * variable kebab-cases each segment (`--ds-z-index-base`).
  */
 import { kebab } from "./kebab.js";
-import { writesCompanions, type ResolvedRenderOptions, type TokenSystem } from "./types.js";
+import type { ResolvedRenderOptions, TokenSystem } from "./types.js";
 
 const TYPOGRAPHY_COMPANIONS: [string, string][] = [
   ["letterSpacing", "letterSpacing"],
@@ -31,7 +31,7 @@ function collect(node: unknown, path: string[], options: ResolvedRenderOptions, 
     if (isPrivate(path, options.privateTokenPrefixes)) return;
     out[path.join("/")] = cssVar(path);
     const value = obj.$value;
-    if (writesCompanions(options) && obj.$type === "typography" && value !== null && typeof value === "object" && !Array.isArray(value)) {
+    if (options.typographyCompanions && obj.$type === "typography" && value !== null && typeof value === "object" && !Array.isArray(value)) {
       for (const [field, segment] of TYPOGRAPHY_COMPANIONS) {
         if (!(value as Record<string, unknown>)[field]) continue;
         const p = [...path, segment];

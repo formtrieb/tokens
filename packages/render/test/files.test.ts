@@ -9,7 +9,7 @@ import {
   type TokenSystem,
 } from "../src/index.js";
 
-const OPTIONS: RenderOptions = { prefix: "x-", basePxFontSize: 16, privateTokenPrefixes: ["*"], typography: {} };
+const OPTIONS: RenderOptions = { prefix: "x-", basePxFontSize: 16, privateTokenPrefixes: ["*"], typography: {}, typographyCompanions: true };
 
 describe("renderImports", () => {
   const files = ["variables/b.css", "variables/a.css", "utilities/u.css", "utilities/_m.scss", "variables/nested/no.css", "bundle.css"];
@@ -105,8 +105,8 @@ describe("renderTokenMap", () => {
     expect(map.categories).toEqual({ zIndex: 1, Title: 3 });
   });
 
-  it("needs only a prefix", () => {
-    expect(renderTokenMap(SYSTEM, { prefix: "x-" })).toEqual(renderTokenMap(SYSTEM, OPTIONS));
+  it("leaves the companions out by default", () => {
+    expect(Object.keys(JSON.parse(renderTokenMap(SYSTEM, { prefix: "x-" }).get("token-map.json")!).figmaToCSS)).toEqual(["zIndex/modal", "Title"]);
   });
 });
 

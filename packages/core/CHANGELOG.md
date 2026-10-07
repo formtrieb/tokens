@@ -23,6 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     with the chain of visited tokens and the problems found (unknown
     reference, reference to a group, cycle, invalid value).
   - `referencesIn(value)` and `textOf(value)`.
+  - `cssColor(color, form)`: a resolved colour as `rgb()`, hex or
+    `rgb(r% g% b% / a)`, gamut-mapped; within float noise of the sRGB edge a
+    channel is the edge.
+  - References inside a plain array (a font family list, a bezier) are
+    resolved; DTCG `{ value, unit }` reads as a length or a duration.
 
 ## [1.7.1] — 2026-10-06
 

@@ -11,8 +11,8 @@ const HEADER = `/// Typography mixins — auto-generated.
 
 /** SCSS mixins doing what the typography classes do, for a token name. */
 export function typographyMixin(): BuilderFn {
-  return ({ config, dialect }) => {
-    requireCompanions("typographyMixin()", dialect);
+  return ({ config, typographyCompanions }) => {
+    requireCompanions("typographyMixin()", typographyCompanions);
     const p = config.prefix;
     const content =
       HEADER +

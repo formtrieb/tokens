@@ -1,17 +1,11 @@
-import type { ThemeDefinition } from "@formtrieb/tokens-core";
+import type { TokenSystem } from "@formtrieb/tokens-core";
 
 /**
- * A token system as read from a Tokens-Studio export, already in memory.
- * Reading it from disk is the caller's job; render never touches a file.
+ * A token system as read from a Tokens-Studio export, already in memory —
+ * core's `TokenSystem`. Reading it from disk is the caller's job; render
+ * never touches a file.
  */
-export interface TokenSystem {
-  /** Set names in `$metadata.json` order — the order sets override each other. */
-  order: string[];
-  /** Set name → parsed JSON of that set. */
-  sets: ReadonlyMap<string, Record<string, unknown>>;
-  /** `$themes.json`, parsed with core's `parseThemes`. */
-  themes: ThemeDefinition[];
-}
+export type { TokenSystem };
 
 /**
  * One line of the render table: which theme is written where, under which
@@ -42,43 +36,59 @@ export interface TypographyOptions {
   };
 }
 
+/** What a length in px becomes. `source`: as written. Other units are never converted. */
+export type UnitTarget = "rem" | "px" | "source";
+
 /**
- * How the output is written. Both read the same Tokens-Studio tree and write
- * the same names, render table and blocks; they differ in values, typography
- * companions and the order within a block.
- *
- * - `'style-dictionary'` (default): what the Style-Dictionary pipeline wrote
- *   — px as rem, colours as `rgb()`, typography companions. Frozen, so
- *   existing systems keep their exact CSS.
- * - `'canonical'`: each value as core canonicalizes it — lengths with their
- *   own units, colours as written, no companions, source order, references
- *   in a composite by position, computed colours as core wrote them. For
- *   producers that write their tokens on purpose.
+ * Which unit a length is written in, as data. A length in px is converted to
+ * the target; a length written in another unit (`0.5rem`, `60ch`, `50%`,
+ * `-0.03em`) stays as it is.
  */
-export type Dialect = "style-dictionary" | "canonical";
+export interface UnitPolicy {
+  /**
+   * Tokens Studio type → target. The token's own type is looked up first
+   * (`spacing`), then its aligned type (`dimension`), so `{ dimension: "rem" }`
+   * covers every length type not named itself. A type named nowhere: `source`.
+   */
+  types?: Record<string, UnitTarget>;
+  /**
+   * Path rules, checked before `types`; the first match wins. `match` is a
+   * token's dot path in source casing (`zIndex.base`); `*` matches one
+   * segment, `**` zero or more.
+   */
+  paths?: { match: string; unit: UnitTarget }[];
+}
+
+/** Named unit policies. `source`: nothing converted. `tokens-studio`: see {@link TOKENS_STUDIO_UNITS}. */
+export type UnitPreset = "source" | "tokens-studio";
+
+/**
+ * How colours are written. `source`: literals as written. `rgb`: literals as
+ * `rgb(r, g, b)` / `rgba(r, g, b, a)`. `hex`: every colour as `#rrggbb(aa)`.
+ * A computed colour (a modifier's result) has no literal; it is
+ * `rgb(r% g% b% / a)` under `source` and `rgb`, hex under `hex`.
+ */
+export type ColorForm = "source" | "rgb" | "hex";
 
 export interface RenderOptions {
   /** Prefix of every custom property and utility class, e.g. `ds-`. */
   prefix: string;
-  /** Output dialect; sets the defaults of `units` and `color`. Default `'style-dictionary'`. */
-  dialect?: Dialect;
+  /** Unit policy or preset. Default `source`. */
+  units?: UnitPolicy | UnitPreset;
   /** Root font size that px values are divided by for rem. Default 16. */
   basePxFontSize?: number;
+  /** Default `source`. */
+  color?: ColorForm;
   /**
-   * `'rem'` (default in `'style-dictionary'`): px and bare numbers become rem by `basePxFontSize`.
-   * `'source'` (default in `'canonical'`): lengths stay as the canonical value has them — `8px`,
-   * `0.05em`, `60ch` — for producers that write their units on purpose.
+   * Write a typography token's letter-spacing, text-transform,
+   * text-decoration, text-indent and paragraph spacing as companion
+   * variables next to the `font` shorthand (`--x-body-letter-spacing`, …),
+   * which the `typography` builders read. Default false.
    */
-  units?: "rem" | "source";
-  /**
-   * `'rgb'` (default in `'style-dictionary'`): colour literals are rewritten to `rgb(r, g, b)` /
-   * `rgba(…)`. `'source'` (default in `'canonical'`): literals stay as written (`#336699`, `Canvas`,
-   * `rgba(0,0,0,0.5)`). Computed colours (modifiers) come from core either way.
-   */
-  color?: "rgb" | "source";
+  typographyCompanions?: boolean;
   /** A path segment starting with one of these is private and never emitted. Default `["*"]`. */
   privateTokenPrefixes?: string[];
-  /** Typography companions (`'style-dictionary'` only). Default `{}`. */
+  /** The tabular-numerals flag of typography companions. Default `{}`. */
   typography?: TypographyOptions;
 }
 
@@ -86,7 +96,7 @@ export interface RenderOptions {
  * The output options a render file may carry. Only data: `typography` and
  * builders are code and stay with the caller.
  */
-export type RenderFileOptions = Partial<Pick<RenderOptions, "prefix" | "dialect" | "basePxFontSize" | "units" | "color">>;
+export type RenderFileOptions = Partial<Pick<RenderOptions, "prefix" | "units" | "basePxFontSize" | "color" | "typographyCompanions">>;
 
 /**
  * A render file (`render.json`) as a producer writes it and a consumer reads
@@ -95,11 +105,8 @@ export type RenderFileOptions = Partial<Pick<RenderOptions, "prefix" | "dialect"
  */
 export type RenderFile = RenderRule[] | { options?: RenderFileOptions; rules: RenderRule[] };
 
-/** {@link RenderOptions} with every default filled in; what the render internals read. */
-export type ResolvedRenderOptions = Required<RenderOptions>;
-
-/** Whether the run writes typography companions (only the 'style-dictionary' dialect does). */
-export const writesCompanions = (options: ResolvedRenderOptions): boolean => options.dialect === "style-dictionary";
+/** {@link RenderOptions} with every default filled in and the unit preset expanded; what the render internals read. */
+export type ResolvedRenderOptions = Required<Omit<RenderOptions, "units">> & { units: UnitPolicy };
 
 /** Output file (relative to the CSS output root) → file content. */
 export type RenderedFiles = Map<string, string>;
@@ -137,8 +144,8 @@ export interface BuilderConfig {
 export interface BuilderContext<C extends BuilderConfig = BuilderConfig> {
   tokens: BuilderToken[];
   config: C;
-  /** The dialect the variables are written in; builders that read companions need `'style-dictionary'`. */
-  dialect?: Dialect;
+  /** Whether the variables carry typography companions; the `typography` builders need them. */
+  typographyCompanions?: boolean;
 }
 
 export interface BuilderOutput {
