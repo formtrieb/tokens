@@ -97,8 +97,8 @@ describe("resolution", () => {
     expect(out.resolution).toEqual({
       themes: ["G=T"],
       problems: [
-        { theme: "G=T", severity: "warning", kind: "untyped-token", path: "c", set: "base" },
-        { theme: "G=T", severity: "error", kind: "cycle", path: "b", cycle: ["a", "b", "a"] },
+        { themes: ["G=T"], severity: "warning", kind: "untyped-token", path: "c", set: "base" },
+        { themes: ["G=T"], severity: "error", kind: "cycle", path: "b", cycle: ["a", "b", "a"] },
       ],
     });
     expect(out.summary).toMatchObject({ errors: 1, warnings: 1, resolution: 2 });

@@ -17,8 +17,24 @@ describe("designReport", () => {
     expect(r.summary).toEqual({ errors: 2, warnings: 1, info: 0, brokenReferences: 1, resolution: 2 });
     expect(r.byRule.deep).toMatchObject({ count: 1, severity: "error", affected: ["a.b.c"] });
     expect(r.byRule.note).toBeUndefined();
-    expect(r.resolution.problems.map((p) => `${p.theme} ${p.severity} ${p.kind}`)).toEqual(["G/T error unknown-reference", "G/T warning untyped-token"]);
+    expect(r.resolution.problems.map((p) => `${p.themes} ${p.severity} ${p.kind}`)).toEqual(["G/T error unknown-reference", "G/T warning untyped-token"]);
     expect(r.parity).toBe("not checked");
+  });
+
+  it("reports a problem every theme shares once, with its themes, and counts it once", () => {
+    const shared = { kind: "cycle" as const, path: "a", cycle: ["a", "b", "a"] };
+    const r = designReport({
+      entries: [],
+      resolution: [
+        { scope: "One", problems: [shared] },
+        { scope: "Two", problems: [shared, { kind: "untyped-token" as const, path: "u", set: "s" }] },
+      ],
+    });
+    expect(r.resolution.problems).toEqual([
+      { themes: ["One", "Two"], severity: "error", ...shared },
+      { themes: ["Two"], severity: "warning", kind: "untyped-token", path: "u", set: "s" },
+    ]);
+    expect(r.summary).toMatchObject({ errors: 1, warnings: 1, resolution: 2 });
   });
 
   it("lets info in with severity info and keeps warnings out with severity error", () => {

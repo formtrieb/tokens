@@ -11,8 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `designReport(input)`: one report of the checks — rules grouped by rule,
   references to nothing, parity of the themes of an axis, resolution
-  problems with their severity (`RESOLUTION_SEVERITY`). The summary counts
-  rule and resolution findings; `brokenReferences` is counted apart.
+  problems with their severity (`RESOLUTION_SEVERITY`). A problem several
+  themes share (one in a source set) is one finding listing its `themes`.
+  The summary counts rule and resolution findings, each once;
+  `brokenReferences` is counted apart.
 - `atLeast(severity, threshold)`, and the type `Severity`.
 
 ## [2.0.0] — 2026-10-07

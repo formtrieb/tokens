@@ -42,12 +42,12 @@ describe('runCheck', () => {
     const result = await runCheck(system());
     expect(result.rules).toBe('none');
     expect(result.resolution.themes).toEqual(['Mode/Light', 'Mode/Dark']);
-    expect(result.resolution.problems.map((p) => `${p.theme} ${p.severity} ${p.kind}`)).toEqual([
-      'Mode/Light warning untyped-token',
-      'Mode/Dark warning untyped-token',
+    // the untyped token sits in the source set both themes read: one finding, both themes
+    expect(result.resolution.problems.map((p) => `${p.themes.join('+')} ${p.severity} ${p.kind}`)).toEqual([
+      'Mode/Light+Mode/Dark warning untyped-token',
       'Mode/Dark error cycle',
     ]);
-    expect(result.summary).toMatchObject({ errors: 1, warnings: 2, resolution: 3 });
+    expect(result.summary).toMatchObject({ errors: 1, warnings: 1, resolution: 2 });
     expect(result.passed).toBe(false);
     expect(result.parity).toEqual({ axis: 'Mode', base: 'Light', against: { Dark: { identical: false, missingInBase: ['ink2'] } } });
   });
@@ -84,9 +84,10 @@ describe('runCheck', () => {
   it('writes text that names each finding and the verdict', async () => {
     const text = formatCheck(await runCheck(system()));
     expect(text).toContain('✗ cycle');
-    expect(text).toContain('Mode/Dark   ink → ink2 → ink');
+    expect(text).toContain('ink → ink2 → ink   (Mode/Dark)');
+    expect(text).toContain('note (set base)   (all 2 themes)');
     expect(text).toContain('Parity (axis Mode): Light vs Dark: 1 only in Dark');
-    expect(text).toMatch(/✗ 1 error, 2 warnings — failed at threshold "error"$/);
+    expect(text).toMatch(/✗ 1 error, 1 warning — failed at threshold "error"$/);
   });
 });
 
@@ -112,5 +113,7 @@ describe('formtrieb-tokens check (exit codes)', () => {
     expect(JSON.parse(failed.stdout).passed).toBe(false);
     expect((await cli('--severity', 'fatal')).code).toBe(2);
     expect((await cli('--axis', 'Nope')).code).toBe(2);
+    write('formtrieb-tokens.config.mjs', "import './missing.mjs'; export default {};");
+    expect((await cli()).code).toBe(2);
   }, 60_000);
 });
