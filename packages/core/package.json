@@ -1,6 +1,6 @@
 {
   "name": "@formtrieb/tokens-core",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Core library for Tokens-Studio-shaped design token systems — build a system from its files, compose themes, resolve references to typed values, colour functions and analysis. Pure functions, no I/O.",
   "license": "Apache-2.0",
   "type": "module",

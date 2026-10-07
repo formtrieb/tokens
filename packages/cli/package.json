@@ -1,6 +1,6 @@
 {
   "name": "@formtrieb/tokens-cli",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Tokens-Studio JSON → CSS variables, utility classes, SCSS mixins and a Figma↔CSS lookup map, driven by a project-local config. The command line around @formtrieb/tokens-render.",
   "type": "module",
   "license": "Apache-2.0",

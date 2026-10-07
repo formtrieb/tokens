@@ -34,10 +34,10 @@ One tag publishes one package through `.github/workflows/release.yml`
 (npm Trusted Publishing, with provenance):
 
 ```bash
-git tag core-v2.0.0 && git push origin core-v2.0.0        # first: the others depend on it
+git tag core-v2.1.0 && git push origin core-v2.1.0        # first: the others depend on it
 git tag render-v1.0.0 && git push origin render-v1.0.0    # before mcp and cli, which depend on it
-git tag mcp-v3.0.0 && git push origin mcp-v3.0.0
-git tag cli-v1.0.0 && git push origin cli-v1.0.0
+git tag mcp-v3.1.0 && git push origin mcp-v3.1.0
+git tag cli-v1.1.0 && git push origin cli-v1.1.0
 ```
 
 The tag version must equal the package's `package.json`. `pnpm pack`
