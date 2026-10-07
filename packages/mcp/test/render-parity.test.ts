@@ -13,7 +13,7 @@ import { _clearCacheForTesting, getTokenContext } from "../src/token-context.js"
 import { display } from "../src/tools/present.js";
 import { setupTools } from "./mock-server.js";
 
-const FIXTURE = fileURLToPath(new URL("../../resolver/tests/fixtures/tokens/", import.meta.url));
+const FIXTURE = fileURLToPath(new URL("../../../fixtures/tokens-studio/", import.meta.url));
 
 beforeEach(() => _clearCacheForTesting());
 

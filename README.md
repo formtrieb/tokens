@@ -6,10 +6,10 @@ model and a single resolution.
 
 | Package | npm | Purpose |
 |---|---|---|
-| `packages/core` | `@formtrieb/tokens-core` | Model and resolution: token tree, theme axes, references, colour. Pure functions, no I/O, browser-capable. |
-| `packages/mcp` | `@formtrieb/tokens-mcp` | MCP server exposing a token system to LLM clients. Depends only on core. |
+| `packages/core` | `@formtrieb/tokens-core` | Model and resolution: token system, theme composition, references to typed values, colour, design rules as data. Pure functions, no I/O, browser-capable. |
 | `packages/render` | `@formtrieb/tokens-render` | Token system + render table → CSS variables, utilities, `main.css`, bundle, token map. Pure functions on core, no file system. |
-| `packages/resolver` | `@formtrieb/token-resolver` | CLI `formtrieb-tokens`: config, files, watch — writes what render produces. |
+| `packages/mcp` | `@formtrieb/tokens-mcp` | MCP server exposing a token system to LLM clients. Shows values as render writes them. |
+| `packages/cli` | `@formtrieb/tokens-cli` | CLI `formtrieb-tokens`: config, files, watch — writes what render produces. Published up to 0.7 as `@formtrieb/token-resolver`. |
 
 ## Development
 
@@ -19,17 +19,13 @@ pnpm build
 pnpm test
 ```
 
-`packages/resolver/tests/e2e` pins the whole output of the synthetic
-fixture in a snapshot; a change there is a change for every consumer.
-
-Up to `@formtrieb/token-resolver` 0.5 the CSS came from Style Dictionary.
-Since 0.6 it comes from `packages/render`, byte-compatible except for two
-fixes: `calc()` for mixed-unit math and a refused build for values that are
-no CSS.
+`fixtures/tokens-studio` is the synthetic token system every package tests
+against. `packages/cli/tests/e2e` pins the CLI's whole output for it in a
+snapshot; a change there is a change for every consumer.
 
 ## Provenance
 
-- `packages/resolver` carries the full history of the former `formtrieb/token-resolver` repository (imported via `git subtree`).
+- `packages/cli` carries the full history of the former `formtrieb/token-resolver` repository (imported via `git subtree`), published as `@formtrieb/token-resolver` up to 0.7. Up to 0.5 its CSS came from Style Dictionary.
 - `packages/core` and `packages/mcp` were moved from the `cdf-workstation` monorepo at commit `c250aaf` (2026-08-23). Their published snapshots lived at `formtrieb/tokens-core` and `formtrieb/tokens-mcp`.
 
 ## Releasing
@@ -38,9 +34,10 @@ One tag publishes one package through `.github/workflows/release.yml`
 (npm Trusted Publishing, with provenance):
 
 ```bash
-git tag core-v1.5.0 && git push origin core-v1.5.0          # first: the others depend on it
-git tag render-v0.1.0 && git push origin render-v0.1.0      # before the resolver, which depends on it
-git tag resolver-v0.6.0 && git push origin resolver-v0.6.0
+git tag core-v2.0.0 && git push origin core-v2.0.0        # first: the others depend on it
+git tag render-v1.0.0 && git push origin render-v1.0.0    # before mcp and cli, which depend on it
+git tag mcp-v3.0.0 && git push origin mcp-v3.0.0
+git tag cli-v1.0.0 && git push origin cli-v1.0.0
 ```
 
 The tag version must equal the package's `package.json`. `pnpm pack`
@@ -48,4 +45,4 @@ replaces `workspace:^` with the released range.
 
 ## License
 
-[Apache-2.0](./LICENSE) for the whole repository. `@formtrieb/token-resolver` up to 0.4.0 was published under MIT.
+[Apache-2.0](./LICENSE) for the whole repository. `@formtrieb/token-resolver` (now `@formtrieb/tokens-cli`) up to 0.4.0 was published under MIT.

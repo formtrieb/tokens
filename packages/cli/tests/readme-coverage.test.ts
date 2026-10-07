@@ -11,7 +11,8 @@ const repoRoot = fileURLToPath(new URL('..', import.meta.url));
  * interface — that addition is a deliberate "this is a documented surface"
  * signal, not auto-discovery.
  */
-const INTERFACES_TO_CHECK = ['Config', 'TypographyConfig', 'ConfigOutput'] as const;
+// TypographyOptions comes from @formtrieb/tokens-render; its one field is documented under `typography`.
+const INTERFACES_TO_CHECK = ['Config', 'ConfigOutput'] as const;
 
 function extractInterfaceBody(source: string, name: string): string {
   const declRe = new RegExp(`export interface ${name}\\s*\\{`);

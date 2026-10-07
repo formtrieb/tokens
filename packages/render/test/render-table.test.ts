@@ -3,7 +3,7 @@ import { parseThemes, type ThemeDefinition } from "@formtrieb/tokens-core";
 import { describe, expect, it } from "vitest";
 import { deriveRenderTable } from "../src/render-table.js";
 
-const FIXTURE = new URL("../../resolver/tests/fixtures/tokens/$themes.json", import.meta.url);
+const FIXTURE = new URL("../../../fixtures/tokens-studio/$themes.json", import.meta.url);
 
 function theme(group: string, name: string): ThemeDefinition {
   return { id: `${group}-${name}`, group, name, selectedTokenSets: {} };

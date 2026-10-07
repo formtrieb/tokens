@@ -18,7 +18,7 @@ import {
   type TokenSystem,
 } from "../src/index.js";
 
-const FIXTURE = new URL("../../resolver/tests/fixtures/tokens/", import.meta.url);
+const FIXTURE = new URL("../../../fixtures/tokens-studio/", import.meta.url);
 const json = (file: string) => JSON.parse(readFileSync(new URL(file, FIXTURE), "utf8"));
 
 function loadFixture(): TokenSystem {

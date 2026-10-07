@@ -1,8 +1,17 @@
-import type { ColorForm, RenderRule, UnitPolicy, UnitPreset } from '@formtrieb/tokens-render';
+import type {
+  BuilderContext as RenderBuilderContext,
+  BuilderFn as RenderBuilderFn,
+  BuilderOutput,
+  BuilderToken,
+  ColorForm,
+  GroupBehavior,
+  RenderRule,
+  TypographyOptions,
+  UnitPolicy,
+  UnitPreset,
+} from '@formtrieb/tokens-render';
 
-export interface ThemeGroupBehavior {
-  useReferences: boolean;
-}
+export type { BuilderOutput, BuilderToken, GroupBehavior, TypographyOptions };
 
 export interface ConfigPaths {
   tokens: string;
@@ -14,35 +23,26 @@ export interface ConfigOutput {
   bundle?: boolean;
 }
 
-export interface BuilderContext {
-  tokens: Token[];
-  config: Config;
-}
+/** A utility builder as the CLI calls it: render's builder, handed the whole config. */
+export type BuilderFn = RenderBuilderFn<Config>;
+export type BuilderContext = RenderBuilderContext<Config>;
 
-export interface BuilderOutput {
-  filename: string;
-  content: string;
-}
-
-export type BuilderFn = ((ctx: BuilderContext) => BuilderOutput | Promise<BuilderOutput>) & {
-  builderName?: string;
-};
-
-export interface TypographyConfig {
-  fontVariantNumeric?: {
-    tabular?: string[][];
-  };
-}
+/** @deprecated The same as `BuilderToken`. */
+export type Token = BuilderToken;
+/** @deprecated The same as `TypographyOptions`. */
+export type TypographyConfig = TypographyOptions;
+/** @deprecated The same as `GroupBehavior`. */
+export type ThemeGroupBehavior = GroupBehavior;
 
 export interface Config {
   prefix: string;
   paths: ConfigPaths;
   output?: ConfigOutput;
   privateTokenPrefixes?: string[];
-  themeGroups?: Record<string, ThemeGroupBehavior>;
-  defaultGroupBehavior?: ThemeGroupBehavior;
+  themeGroups?: Record<string, GroupBehavior>;
+  defaultGroupBehavior?: GroupBehavior;
   utilities?: BuilderFn[];
-  typography?: TypographyConfig;
+  typography?: TypographyOptions;
   /** Root font size px are divided by for rem. Overrides the render file. Default 16. */
   basePxFontSize?: number;
   /**
@@ -62,12 +62,4 @@ export interface Config {
    * `defaultGroupBehavior`.
    */
   render?: RenderRule[] | string;
-}
-
-export interface Token {
-  path: string[];
-  value: unknown;
-  $type?: string;
-  /** Original token-tree node ($value, $type, $extensions) */
-  raw: Record<string, unknown>;
 }
