@@ -1,15 +1,34 @@
 import { readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { TokenTree } from "@formtrieb/tokens-core";
-import { TokenLoader } from "./loader/token-loader.js";
-import { ThemeLoader } from "./loader/theme-loader.js";
+import {
+  buildAxisMap,
+  buildTokenSystem,
+  type Dictionary,
+  type DictionaryEntry,
+  type Resolution,
+  type ThemeDefinition,
+  type TokenProblem,
+  type TokenSystem,
+} from "@formtrieb/tokens-core";
+import { readTokenFiles } from "./loader/token-loader.js";
 import { resolveTokensPath } from "./path-resolver.js";
 
+/** One composed and resolved set selection. */
+export interface Composition {
+  dict: Dictionary;
+  values: ReadonlyMap<string, Resolution>;
+}
+
 export interface TokenContext {
-  tokenLoader: TokenLoader;
-  themeLoader: ThemeLoader;
-  tokenTree: TokenTree;
+  system: TokenSystem;
+  /** Problems found while loading (a set named but without a file). */
+  loadProblems: TokenProblem[];
+  axisMap: Map<string, ThemeDefinition[]>;
   lastMtime: number;
+  /** Compositions by set selection (JSON of the ordered selection), least recently used first. */
+  compositions: Map<string, Composition>;
+  /** Each set's tokens read on their own, unresolved (browse, validation). */
+  setEntries: Map<string, DictionaryEntry[]>;
 }
 
 interface CacheEntry {
@@ -53,18 +72,14 @@ export function getTokenContext(absolutePath: string): TokenContext {
   }
   if (cached) cache.delete(absolutePath);
 
-  const tokenLoader = new TokenLoader(absolutePath);
-  tokenLoader.load();
-  const themeLoader = new ThemeLoader(absolutePath);
-  const tokenTree = new TokenTree(
-    tokenLoader.getAllSets(),
-    tokenLoader.getTokenSetOrder()
-  );
+  const { system, problems } = buildTokenSystem(readTokenFiles(absolutePath));
   const ctx: TokenContext = {
-    tokenLoader,
-    themeLoader,
-    tokenTree,
+    system,
+    loadProblems: problems,
+    axisMap: buildAxisMap(system.themes),
     lastMtime: fp.maxMtime,
+    compositions: new Map(),
+    setEntries: new Map(),
   };
   cache.set(absolutePath, { ctx, fileCount: fp.fileCount });
   if (cache.size > MAX_CACHE_SIZE) {

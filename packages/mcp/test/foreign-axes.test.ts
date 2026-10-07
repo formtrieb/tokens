@@ -44,7 +44,10 @@ describe("foreign axes pass the declared inputSchema", () => {
       tokens_path: FIXTURE,
       axes: { Brand: "Globex" },
     });
-    expect(out.enabled).toEqual(["brand/globex"]);
+    // the axes not given fall back to their defaults
+    expect(out.axes).toEqual({ Brand: "Globex", Density: "Cozy", Ungrouped: "Light" });
+    expect(out.defaulted).toEqual(["Density", "Ungrouped"]);
+    expect(out.enabled).toEqual(["brand/globex", "density/cozy", "mode/light"]);
     expect(out.source).toEqual(["core"]);
   });
 

@@ -42,6 +42,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.28.0",
     "@formtrieb/tokens-core": "workspace:^",
+    "@formtrieb/tokens-render": "workspace:^",
     "zod": "^4.0.0"
   },
   "devDependencies": {

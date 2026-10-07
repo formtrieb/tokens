@@ -31,4 +31,5 @@ export {
 } from "./render.js";
 export { kebab } from "./kebab.js";
 export { TOKENS_STUDIO_UNITS } from "./css/units.js";
+export { formatTokenValue } from "./css/format.js";
 export { typography, typographyMixin, directional, single, container, type Side } from "./builders/index.js";

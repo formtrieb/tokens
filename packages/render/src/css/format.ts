@@ -4,8 +4,8 @@
  * digits here and nowhere else.
  */
 import { alignType, cssColor, type Expr, type TokenValue } from "@formtrieb/tokens-core";
-import type { ColorForm, UnitPolicy } from "../types.js";
-import { unitTarget } from "./units.js";
+import type { ColorForm, UnitPolicy, UnitPreset } from "../types.js";
+import { unitPolicy, unitTarget } from "./units.js";
 
 export interface Format {
   units: UnitPolicy;
@@ -56,6 +56,16 @@ const PROPERTY_TYPES: Record<string, Record<string, string>> = {
   transition: { duration: "duration", delay: "duration", timingFunction: "cubicBezier" },
 };
 
+/**
+ * Whether a term carries a unit: a length leaf does; a sum or difference if
+ * either side does; a product if a side does; a quotient if its dividend does.
+ */
+function unitOf(e: Expr): boolean {
+  if (!("op" in e)) return e.kind === "length";
+  if (e.op === "/") return unitOf(e.left);
+  return unitOf(e.left) || unitOf(e.right);
+}
+
 function quoteFont(input: string): string {
   let name = input.trim();
   const quoted = (name.startsWith("'") && name.endsWith("'")) || (name.startsWith('"') && name.endsWith('"'));
@@ -90,9 +100,8 @@ class Formatter {
 
   expr(e: Expr, where: Where, parent?: { op: string; right: boolean }): string {
     if (!("op" in e)) return this.value(e, where);
-    const [l, r] = [e.left, e.right].map((side) => ("op" in side ? undefined : side));
-    const unitOf = (v: TokenValue | undefined) => (v?.kind === "length" ? v.unit : "");
-    if ((e.op === "*" && unitOf(l) && unitOf(r)) || (e.op === "/" && unitOf(r))) this.report("arithmetic CSS cannot compute");
+    const [l, r] = [unitOf(e.left), unitOf(e.right)];
+    if ((e.op === "*" && l && r) || (e.op === "/" && r)) this.report("arithmetic CSS cannot compute");
     const text = `${this.expr(e.left, where, { op: e.op, right: false })} ${e.op} ${this.expr(e.right, where, { op: e.op, right: true })}`;
     if (!parent) return text;
     const prec = (op: string) => (op === "+" || op === "-" ? 1 : 2);
@@ -185,4 +194,24 @@ class Formatter {
  */
 export function formatValue(value: TokenValue, where: Where, f: Format, report: Report, at: AtPosition = () => undefined): string {
   return new Formatter(f, report, at).value(value, where);
+}
+
+/**
+ * A resolved value as render writes it, for callers that show values (the
+ * MCP server). Units and colours follow the options as in `renderVariables`;
+ * `problems` says why the value would be no valid CSS.
+ */
+export function formatTokenValue(
+  value: TokenValue,
+  where: Where,
+  options: { units?: UnitPolicy | UnitPreset; basePxFontSize?: number; color?: ColorForm } = {}
+): { text: string; problems: string[] } {
+  const problems: string[] = [];
+  const text = formatValue(
+    value,
+    where,
+    { units: unitPolicy(options.units), basePxFontSize: options.basePxFontSize ?? 16, color: options.color ?? "source" },
+    (reason) => problems.push(reason)
+  );
+  return { text, problems };
 }

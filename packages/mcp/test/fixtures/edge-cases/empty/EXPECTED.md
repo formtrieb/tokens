@@ -1,6 +1,6 @@
 # `empty/` fixture — expected behavior
 
-**Purpose:** verify `TokenLoader` and `ThemeLoader` handle a fully empty token workspace without crashing.
+**Purpose:** verify loading handles a fully empty token workspace without crashing.
 
 ## Shape
 
@@ -8,17 +8,10 @@
 - `$themes.json` → `[]`
 - No set files
 
-## Loader expectations
+## Loading expectations
 
-`TokenLoader.load()` succeeds.
-- `getTokenSetOrder()` → `[]`
-- `getAllSets()` → empty Map (size 0)
-
-`ThemeLoader` constructor succeeds.
-- `getAllThemes()` → `[]`
-- `getAxes()` → empty Map
-- `getAxisGroups()` → `[]`
-- `getDefaultAxes()` → `{}` (no groups to default-from)
+`buildTokenSystem(readTokenFiles(dir))` succeeds: `order` `[]`, no sets, no themes, no
+problems; no axes, defaults `{}`.
 
 ## Why this fixture exists
 

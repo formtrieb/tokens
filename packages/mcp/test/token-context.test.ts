@@ -10,6 +10,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
+import { compositionFor, selectionFor } from "../src/composition.js";
 import {
   getTokenContext,
   _clearCacheForTesting,
@@ -33,15 +34,19 @@ describe("getTokenContext", () => {
     for (const d of tempDirs.splice(0)) rmSync(d, { recursive: true, force: true });
   });
 
-  it("T-load: first call to a path returns context with all three loaders working", () => {
+  it("T-load: first call to a path returns context with the system and its axes", () => {
     const ctx = getTokenContext(tokensStudio);
-    expect(ctx.tokenLoader.getTokenSetOrder()).toEqual([
-      "Foundation",
-      "Light",
-      "Dark",
-    ]);
-    expect(ctx.themeLoader.getAxisGroups()).toEqual(["Theme"]);
-    expect(ctx.tokenTree.countTokensInSet("Foundation")).toBeGreaterThan(0);
+    expect(ctx.system.order).toEqual(["Foundation", "Light", "Dark"]);
+    expect([...ctx.axisMap.keys()]).toEqual(["Theme"]);
+    expect(ctx.system.sets.get("Foundation")).toBeDefined();
+  });
+
+  it("T-compose-once: a set selection is composed and resolved once per context", () => {
+    const ctx = getTokenContext(tokensStudio);
+    const selection = selectionFor(ctx.system, { Theme: "Dark" });
+    const first = compositionFor(ctx, selection);
+    expect(compositionFor(ctx, selection)).toBe(first);
+    expect(compositionFor(getTokenContext(tokensStudio), selectionFor(ctx.system, { Theme: "Dark" }))).toBe(first);
   });
 
   it("T-hit: second call to the same path returns the cached context (instance identity)", () => {

@@ -35,6 +35,9 @@ importers:
       '@formtrieb/tokens-core':
         specifier: workspace:^
         version: link:../core
+      '@formtrieb/tokens-render':
+        specifier: workspace:^
+        version: link:../render
       '@modelcontextprotocol/sdk':
         specifier: ^1.28.0
         version: 1.32.0(zod@4.6.5)

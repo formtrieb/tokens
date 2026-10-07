@@ -1,6 +1,6 @@
 # `tokens-studio/` fixture — expected behavior
 
-**Purpose:** smallest viable Tokens-Studio-shape fixture. Used as the primary regression-boundary for `TokenLoader` + `ThemeLoader` and as the data-source for Phase 4 tool-integration tests.
+**Purpose:** smallest viable Tokens-Studio-shape fixture. Used as the primary regression-boundary for loading and as the data-source for the tool-integration tests.
 
 ## Shape
 
@@ -9,26 +9,14 @@
 - Foundation has **6 tokens**: 4 colors (`color.gray.100/500/900`, `color.blue.500`) + 2 spacings (`spacing.sm/md`)
 - Light and Dark each have **5 tokens**: `color.background`, `color.foreground`, `color.accent`, `color.border`, `color.muted`
 
-## `TokenLoader` expectations
+## Loading expectations
 
-`getTokenSetOrder()` → `["Foundation", "Light", "Dark"]`
+`buildTokenSystem(readTokenFiles(dir))` → `order` `["Foundation", "Light", "Dark"]`, 3 sets, no problems.
 
-`getAllSets()` returns Map with 3 entries; all sets parse without error.
+Axes: `Theme` → `Light`, `Dark` (file order); default `{ Theme: "Light" }`.
 
-`getLayerForSet("Foundation")` → `"Foundation"` (no `/`, single segment)
-`getLayerForSet("Light")` → `"Light"`
-`getLayerForSet("Dark")` → `"Dark"`
-
-## `ThemeLoader` expectations
-
-`getAllThemes()` → 2 themes
-`getAxes()` → Map with key `"Theme"` → array of 2 ThemeDefinitions (Light, Dark)
-`getAxisGroups()` → `["Theme"]`
-`getThemesForGroup("Theme")` → 2 themes (order: Light, Dark — file order preserved)
-`getDefaultAxes()` → `{ Theme: "Light" }` (first theme in group is the default)
-
-`getActiveSets({ Theme: "Light" })` → `{ enabled: ["Light"], source: ["Foundation"] }`
-`getActiveSets({ Theme: "Dark" })` → `{ enabled: ["Dark"], source: ["Foundation"] }`
+`selectionFor(system, { Theme: "Light" })` → `[{ Foundation: source }, { Light: enabled }]`
+`selectionFor(system, { Theme: "Dark" })` → `[{ Foundation: source }, { Dark: enabled }]`
 
 ## Expected resolved values per theme
 
@@ -63,10 +51,11 @@ Differences from Light only:
 
 ## Phase 3+ integration hooks
 
-- `getTokenContext(absolutePath)` should produce a `TokenContext` whose `tokenLoader.getTokenSetOrder()` matches the order above.
+- `getTokenContext(absolutePath)` should produce a `TokenContext` whose `system.order` matches the order above.
+- `compositionFor(ctx, selection)` composes and resolves a selection once per context.
 - mtime invalidation: editing any of `$metadata.json`, `$themes.json`, `Foundation.json`, `Light.json`, `Dark.json` advances `lastMtime` and evicts the cache.
 
 ## Notes
 
-- Token-leaf shape is `{ "$value": ..., "$type": ... }` — matches real Tokens-Studio (Figma plugin v2+) output, which is **TS multi-file structure with DTCG-style leaves**. `TokenTree.isTokenNode` requires both `$value` and `$type` keys. DTCG-FLAT (single `tokens.json`, no `$metadata.json`) is what's out-of-scope for 2.0.0 — DTCG-leaves themselves are how every TS workspace looks today.
+- Token-leaf shape is `{ "$value": ..., "$type": ... }` — matches real Tokens-Studio (Figma plugin v2+) output, which is **TS multi-file structure with DTCG-style leaves**. A token node needs `$value`; its `$type` may come from a group. DTCG-FLAT (single `tokens.json`, no `$metadata.json`) is out of scope.
 - `selectedTokenSets` uses only `"source"` and `"enabled"` (matches real Formtrieb-DS export shape; `"disabled"` entries are simply omitted).

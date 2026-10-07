@@ -1,7 +1,5 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import type { TokenLoader } from "../loader/token-loader.js";
-import type { TokenTree } from "@formtrieb/tokens-core";
 import {
   findPlaceholders,
   findBrokenReferences,
@@ -10,6 +8,7 @@ import {
   checkComponentReferences,
   checkNamingConventions,
 } from "@formtrieb/tokens-core";
+import { asRawToken, tokensOf } from "../composition.js";
 import { resolveAndLoad, TOKENS_PATH_DESCRIPTION } from "../token-context.js";
 
 export function registerValidateTools(server: McpServer) {
@@ -23,15 +22,15 @@ export function registerValidateTools(server: McpServer) {
           .string()
           .optional()
           .describe(
-            "Limit to a specific set (e.g. 'Semantic/Light'). Omit to scan all sets."
+            "Limit to a specific set (e.g. 'Semantic/Light') or layer (e.g. 'Semantic'). Omit to scan all sets."
           ),
         tokens_path: z.string().optional().describe(TOKENS_PATH_DESCRIPTION),
       },
       annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async ({ set, tokens_path }) => {
-      const { tokenLoader, tokenTree } = resolveAndLoad({ tokens_path });
-      const tokens = getAllTokens(tokenLoader, tokenTree, set);
+      const ctx = resolveAndLoad({ tokens_path });
+      const tokens = tokensOf(ctx, set).map(asRawToken);
       const placeholders = findPlaceholders(tokens, set);
 
       const byContext: Record<string, string[]> = {};
@@ -69,7 +68,7 @@ export function registerValidateTools(server: McpServer) {
         set: z
           .string()
           .optional()
-          .describe("Limit to a specific set. Omit for system-wide check."),
+          .describe("Limit to a specific set or layer. Omit for system-wide check."),
         severity: z
           .enum(["error", "warning", "info"])
           .default("warning")
@@ -81,8 +80,8 @@ export function registerValidateTools(server: McpServer) {
       annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async ({ set, severity, tokens_path }) => {
-      const { tokenLoader, tokenTree } = resolveAndLoad({ tokens_path });
-      const tokens = getAllTokens(tokenLoader, tokenTree, set);
+      const ctx = resolveAndLoad({ tokens_path });
+      const tokens = tokensOf(ctx, set).map(asRawToken);
       const allPaths = new Set(tokens.map((t) => t.dotPath));
 
       const controlsViolations = checkControlsInteractionMapping(tokens);
@@ -92,8 +91,8 @@ export function registerValidateTools(server: McpServer) {
 
       let structuralDiff = null;
       if (!set) {
-        const lightTokens = tokenTree.flattenSet("Semantic/Light");
-        const darkTokens = tokenTree.flattenSet("Semantic/Dark");
+        const lightTokens = ctx.system.sets.has("Semantic/Light") ? tokensOf(ctx, "Semantic/Light").map(asRawToken) : [];
+        const darkTokens = ctx.system.sets.has("Semantic/Dark") ? tokensOf(ctx, "Semantic/Dark").map(asRawToken) : [];
         if (lightTokens.length > 0 && darkTokens.length > 0) {
           structuralDiff = compareStructure(
             lightTokens,
@@ -172,20 +171,4 @@ export function registerValidateTools(server: McpServer) {
       };
     }
   );
-}
-
-function getAllTokens(
-  tokenLoader: TokenLoader,
-  tokenTree: TokenTree,
-  set?: string
-) {
-  if (set) {
-    return tokenTree.flattenSet(set);
-  }
-
-  const allTokens: ReturnType<typeof tokenTree.flattenSet> = [];
-  for (const name of tokenLoader.getTokenSetOrder()) {
-    allTokens.push(...tokenTree.flattenSet(name));
-  }
-  return allTokens;
 }

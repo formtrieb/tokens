@@ -1,13 +1,10 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { ReferenceResolver } from "@formtrieb/tokens-core";
-import type { ThemeAxes } from "@formtrieb/tokens-core";
+import { getDefaultAxes } from "@formtrieb/tokens-core";
+import { compositionFor, selectionFor } from "../composition.js";
 import { resolveAndLoad, TOKENS_PATH_DESCRIPTION } from "../token-context.js";
-import {
-  themeAxesArg,
-  THEME_AXES_DESCRIPTION,
-  assertAxes,
-} from "./theme-arg.js";
+import { assertType, colorForm, display, formatArg, TYPE_DESCRIPTION } from "./present.js";
+import { themeAxesArg, THEME_AXES_DESCRIPTION, resolveAxes } from "./theme-arg.js";
 
 export function registerThemeTools(server: McpServer) {
   server.registerTool(
@@ -21,40 +18,18 @@ export function registerThemeTools(server: McpServer) {
       annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async (args) => {
-      const { themeLoader } = resolveAndLoad(args);
-      const axes: Record<
-        string,
-        Array<{
-          name: string;
-          id: string;
-          enabledSets: string[];
-          sourceSets: string[];
-        }>
-      > = {};
-
-      for (const [group, themes] of themeLoader.getAxes()) {
+      const { axisMap } = resolveAndLoad(args);
+      const axes: Record<string, Array<{ name: string; id: string; enabledSets: string[]; sourceSets: string[] }>> = {};
+      for (const [group, themes] of axisMap) {
         axes[group] = themes.map((t) => ({
           name: t.name,
           id: t.id,
-          enabledSets: Object.entries(t.selectedTokenSets)
-            .filter(([, v]) => v === "enabled")
-            .map(([k]) => k),
-          sourceSets: Object.entries(t.selectedTokenSets)
-            .filter(([, v]) => v === "source")
-            .map(([k]) => k),
+          enabledSets: Object.entries(t.selectedTokenSets).filter(([, v]) => v === "enabled").map(([k]) => k),
+          sourceSets: Object.entries(t.selectedTokenSets).filter(([, v]) => v === "source").map(([k]) => k),
         }));
       }
-
-      const defaults = themeLoader.getDefaultAxes();
-
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({ axes, defaults }, null, 2),
-          },
-        ],
-      };
+      const defaults = getDefaultAxes(axisMap);
+      return { content: [{ type: "text" as const, text: JSON.stringify({ axes, defaults }, null, 2) }] };
     }
   );
 
@@ -62,7 +37,7 @@ export function registerThemeTools(server: McpServer) {
     "compose_theme",
     {
       description:
-        "Show which token sets are active for a given theme combination. Returns enabled sets, source sets, and any unspecified axes falling back to defaults.",
+        "Show which token sets are active for a given theme combination. Axes left out fall back to their defaults and are listed in `defaulted`. A set is enabled when a chosen theme enables it, else source when one names it as source; within each, $metadata.json order.",
       inputSchema: {
         axes: themeAxesArg.describe(THEME_AXES_DESCRIPTION),
         tokens_path: z.string().optional().describe(TOKENS_PATH_DESCRIPTION),
@@ -70,33 +45,16 @@ export function registerThemeTools(server: McpServer) {
       annotations: { readOnlyHint: true, idempotentHint: true },
     },
     async ({ axes, tokens_path }) => {
-      const { themeLoader } = resolveAndLoad({ tokens_path });
-      assertAxes(axes, themeLoader);
-      const typedAxes = axes as ThemeAxes;
-      const { enabled, source } = themeLoader.getActiveSets(typedAxes);
-      const allGroups = themeLoader.getAxisGroups();
-      const specifiedGroups = Object.keys(typedAxes);
-      const missingAxes = allGroups.filter(
-        (g) => !specifiedGroups.includes(g)
-      );
-
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify(
-              {
-                axes: typedAxes,
-                enabled,
-                source,
-                missingAxes: missingAxes.length > 0 ? missingAxes : undefined,
-              },
-              null,
-              2
-            ),
-          },
-        ],
+      const ctx = resolveAndLoad({ tokens_path });
+      const resolved = resolveAxes(axes, ctx.axisMap);
+      const selection = selectionFor(ctx.system, resolved.axes);
+      const out = {
+        axes: resolved.axes,
+        defaulted: resolved.defaulted.length > 0 ? resolved.defaulted : undefined,
+        enabled: selection.filter((s) => s.state === "enabled").map((s) => s.set),
+        source: selection.filter((s) => s.state === "source").map((s) => s.set),
       };
+      return { content: [{ type: "text" as const, text: JSON.stringify(out, null, 2) }] };
     }
   );
 
@@ -104,126 +62,67 @@ export function registerThemeTools(server: McpServer) {
     "compare_themes",
     {
       description:
-        "Compare resolved token values between two theme configurations. Returns which paths differ and their values. Hard cap: 200 changed paths, 50 per only-in-A/B list.",
+        "Compare resolved token values between two theme configurations; axes left out fall back to their defaults. Values are compared as @formtrieb/tokens-render writes them. Returns which paths differ and their values. Hard cap: 200 changed paths, 50 per only-in-A/B list.",
       inputSchema: {
         theme_a: themeAxesArg.describe(`First theme. ${THEME_AXES_DESCRIPTION}`),
         theme_b: themeAxesArg.describe(`Second theme. ${THEME_AXES_DESCRIPTION}`),
-        path_prefix: z
-          .string()
-          .optional()
-          .describe("Narrow comparison to a dot-path subtree (e.g. 'color.text')"),
-        type: z
-          .string()
-          .optional()
-          .describe("Filter by DTCG $type (e.g. 'color')"),
+        path_prefix: z.string().optional().describe("Narrow comparison to a dot-path subtree (e.g. 'color.text')"),
+        type: z.string().optional().describe(TYPE_DESCRIPTION),
+        format: formatArg,
         tokens_path: z.string().optional().describe(TOKENS_PATH_DESCRIPTION),
       },
       annotations: { readOnlyHint: true, idempotentHint: true },
     },
-    async ({ theme_a, theme_b, path_prefix, type, tokens_path }) => {
-      const { tokenTree, themeLoader } = resolveAndLoad({ tokens_path });
-      assertAxes(theme_a, themeLoader);
-      assertAxes(theme_b, themeLoader);
-      const axesA = theme_a as ThemeAxes;
-      const axesB = theme_b as ThemeAxes;
-      const { enabled: enabledA, source: sourceA } = themeLoader.getActiveSets(axesA);
-      const { enabled: enabledB, source: sourceB } = themeLoader.getActiveSets(axesB);
-      const mergedA = tokenTree.buildMergedTree(enabledA, sourceA);
-      const mergedB = tokenTree.buildMergedTree(enabledB, sourceB);
+    async ({ theme_a, theme_b, path_prefix, type, format, tokens_path }) => {
+      const ctx = resolveAndLoad({ tokens_path });
+      const axesA = resolveAxes(theme_a, ctx.axisMap).axes;
+      const axesB = resolveAxes(theme_b, ctx.axisMap).axes;
+      const a = compositionFor(ctx, selectionFor(ctx.system, axesA));
+      const b = compositionFor(ctx, selectionFor(ctx.system, axesB));
+      if (type) assertType(type, [...a.dict.entries, ...b.dict.entries]);
+      const color = colorForm(format);
 
-      const resolverA = new ReferenceResolver(mergedA);
-      const resolverB = new ReferenceResolver(mergedB);
-
-      const allPaths = new Set([...mergedA.keys(), ...mergedB.keys()]);
-      const changed: Array<{
-        path: string;
-        valueA: unknown;
-        valueB: unknown;
-      }> = [];
+      const changed: Array<{ path: string; valueA: string; valueB: string }> = [];
       const onlyInA: string[] = [];
       const onlyInB: string[] = [];
-
-      for (const path of allPaths) {
+      const paths = new Set([...a.dict.byKey.keys(), ...b.dict.byKey.keys()]);
+      for (const path of paths) {
         if (path_prefix && !path.startsWith(path_prefix)) continue;
-
-        const tokenA = mergedA.get(path);
-        const tokenB = mergedB.get(path);
-
-        if (type) {
-          if (tokenA && tokenA.$type !== type) continue;
-          if (tokenB && tokenB.$type !== type) continue;
-        }
-
-        if (tokenA && tokenA.isSource && tokenB && tokenB.isSource) continue;
-
-        if (!tokenA || tokenA.isSource) {
-          if (tokenB && !tokenB.isSource) onlyInB.push(path);
+        const ea = a.dict.byKey.get(path);
+        const eb = b.dict.byKey.get(path);
+        if (type && ((ea && ea.type !== type) || (eb && eb.type !== type))) continue;
+        const inA = ea?.emitted === true;
+        const inB = eb?.emitted === true;
+        if (!inA && !inB) continue;
+        if (!inB) {
+          onlyInA.push(path);
           continue;
         }
-        if (!tokenB || tokenB.isSource) {
-          if (tokenA && !tokenA.isSource) onlyInA.push(path);
+        if (!inA) {
+          onlyInB.push(path);
           continue;
         }
-
-        const chainA = resolverA.resolve(path);
-        const chainB = resolverB.resolve(path);
-
-        const valA = JSON.stringify(chainA.finalValue);
-        const valB = JSON.stringify(chainB.finalValue);
-
-        if (valA !== valB) {
-          changed.push({
-            path,
-            valueA: chainA.finalValue,
-            valueB: chainB.finalValue,
-          });
-        }
+        const valueA = display(a.values.get(path)!, ea!, color);
+        const valueB = display(b.values.get(path)!, eb!, color);
+        if (valueA !== valueB) changed.push({ path, valueA, valueB });
       }
 
       const CHANGED_LIMIT = 200;
       const ONLY_LIMIT = 50;
-      const changedTruncated = changed.length > CHANGED_LIMIT;
-      const onlyATruncated = onlyInA.length > ONLY_LIMIT;
-      const onlyBTruncated = onlyInB.length > ONLY_LIMIT;
-
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify(
-              {
-                theme_a: axesA,
-                theme_b: axesB,
-                summary: {
-                  changed: changed.length,
-                  onlyInA: onlyInA.length,
-                  onlyInB: onlyInB.length,
-                },
-                ...(changedTruncated && {
-                  note: `Showing ${CHANGED_LIMIT} of ${changed.length} changed paths. Refine path_prefix to narrow down.`,
-                }),
-                changed: changed.slice(0, CHANGED_LIMIT),
-                onlyInA: onlyATruncated
-                  ? {
-                      showing: ONLY_LIMIT,
-                      total: onlyInA.length,
-                      paths: onlyInA.slice(0, ONLY_LIMIT),
-                    }
-                  : onlyInA,
-                onlyInB: onlyBTruncated
-                  ? {
-                      showing: ONLY_LIMIT,
-                      total: onlyInB.length,
-                      paths: onlyInB.slice(0, ONLY_LIMIT),
-                    }
-                  : onlyInB,
-              },
-              null,
-              2
-            ),
-          },
-        ],
+      const limited = (list: string[]) =>
+        list.length > ONLY_LIMIT ? { showing: ONLY_LIMIT, total: list.length, paths: list.slice(0, ONLY_LIMIT) } : list;
+      const out = {
+        theme_a: axesA,
+        theme_b: axesB,
+        summary: { changed: changed.length, onlyInA: onlyInA.length, onlyInB: onlyInB.length },
+        ...(changed.length > CHANGED_LIMIT && {
+          note: `Showing ${CHANGED_LIMIT} of ${changed.length} changed paths. Refine path_prefix to narrow down.`,
+        }),
+        changed: changed.slice(0, CHANGED_LIMIT),
+        onlyInA: limited(onlyInA),
+        onlyInB: limited(onlyInB),
       };
+      return { content: [{ type: "text" as const, text: JSON.stringify(out, null, 2) }] };
     }
   );
 }
