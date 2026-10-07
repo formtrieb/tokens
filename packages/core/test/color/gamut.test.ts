@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { converter, parse, formatHex } from "culori";
-import { mapToSrgbGamut } from "../src/parser/gamut.js";
+import { mapToSrgbGamut } from "../../src/color/gamut.js";
 
 describe("mapToSrgbGamut", () => {
   // Values cross-checked against colorjs.io's toGamut() default, which is what

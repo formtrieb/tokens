@@ -3,12 +3,11 @@ import { dirname, join, resolve } from "node:path";
 
 export interface ResolveContext {
   cwd: string;
-  env: Record<string, string | undefined>;
 }
 
 export interface ResolveResult {
   path: string;
-  source: "argument" | "walkup" | "env";
+  source: "argument" | "walkup";
 }
 
 function walkUpForTokens(startDir: string): string | null {
@@ -41,14 +40,7 @@ export function resolveTokensPath(
   if (walkup) {
     return { path: walkup, source: "walkup" };
   }
-  const envPath = ctx.env.TOKENS_PATH;
-  if (envPath) {
-    console.warn(
-      "DEPRECATED: TOKENS_PATH env var will be removed in 3.0.0. Pass tokens_path argument or invoke from a directory with tokens/$metadata.json reachable upward."
-    );
-    return { path: envPath, source: "env" };
-  }
   throw new Error(
-    "Could not resolve a tokens path. Tried (1) tokens_path argument — none given; (2) walk-up from cwd looking for tokens/$metadata.json — none found; (3) TOKENS_PATH env var — not set."
+    "Could not resolve a tokens path. Tried (1) tokens_path argument — none given; (2) walk-up from cwd looking for tokens/$metadata.json — none found. Pass tokens_path, or run from a directory with tokens/$metadata.json above it."
   );
 }

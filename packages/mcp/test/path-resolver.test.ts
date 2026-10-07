@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -18,7 +18,7 @@ describe("resolveTokensPath", () => {
   it("returns the explicit tokens_path argument when provided", () => {
     const result = resolveTokensPath(
       { tokens_path: "/explicit/path/tokens" },
-      { cwd: "/somewhere/else", env: {} }
+      { cwd: "/somewhere/else" }
     );
     expect(result.path).toBe("/explicit/path/tokens");
     expect(result.source).toBe("argument");
@@ -37,28 +37,21 @@ describe("resolveTokensPath", () => {
     const cwd = join(root, "project", "src", "deep");
     mkdirSync(cwd, { recursive: true });
 
-    const result = resolveTokensPath({}, { cwd, env: {} });
+    const result = resolveTokensPath({}, { cwd });
 
     expect(result.path).toBe(tokensDir);
     expect(result.source).toBe("walkup");
   });
 
-  it("falls back to TOKENS_PATH env var when no arg and walk-up finds nothing", () => {
-    // No tokens/ anywhere up from cwd. ENV-VAR set.
+  it("ignores a TOKENS_PATH env var: the variable is gone in 3.0", () => {
     const cwd = join(root, "isolated");
     mkdirSync(cwd, { recursive: true });
-    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
-
-    const result = resolveTokensPath(
-      {},
-      { cwd, env: { TOKENS_PATH: "/some/legacy/tokens" } }
-    );
-
-    expect(result.path).toBe("/some/legacy/tokens");
-    expect(result.source).toBe("env");
-    expect(warnSpy).toHaveBeenCalledOnce();
-    expect(warnSpy.mock.calls[0]?.[0]).toContain("DEPRECATED: TOKENS_PATH");
-    warnSpy.mockRestore();
+    process.env.TOKENS_PATH = "/some/legacy/tokens";
+    try {
+      expect(() => resolveTokensPath({}, { cwd })).toThrow(/tokens_path/);
+    } finally {
+      delete process.env.TOKENS_PATH;
+    }
   });
 
   it("walk-up returns the closest tokens/ when multiple ancestors have one", () => {
@@ -77,7 +70,7 @@ describe("resolveTokensPath", () => {
     const cwd = join(root, "inner", "src");
     mkdirSync(cwd, { recursive: true });
 
-    const result = resolveTokensPath({}, { cwd, env: {} });
+    const result = resolveTokensPath({}, { cwd });
 
     expect(result.path).toBe(inner);
   });
@@ -95,7 +88,7 @@ describe("resolveTokensPath", () => {
     const cwd = join(root, "project", "src");
     mkdirSync(cwd, { recursive: true });
 
-    const result = resolveTokensPath({}, { cwd, env: {} });
+    const result = resolveTokensPath({}, { cwd });
 
     expect(result.path).toBe(nested);
     expect(result.source).toBe("walkup");
@@ -116,23 +109,20 @@ describe("resolveTokensPath", () => {
     const cwd = join(root, "src");
     mkdirSync(cwd, { recursive: true });
 
-    const result = resolveTokensPath({}, { cwd, env: {} });
+    const result = resolveTokensPath({}, { cwd });
 
     expect(result.path).toBe(direct);
   });
 
-  it("throws a helpful error when no arg, walk-up empty, and no env var", () => {
+  it("throws a helpful error when no arg is given and walk-up finds nothing", () => {
     const cwd = join(root, "isolated");
     mkdirSync(cwd, { recursive: true });
 
-    expect(() => resolveTokensPath({}, { cwd, env: {} })).toThrow(
+    expect(() => resolveTokensPath({}, { cwd })).toThrow(
       /tokens_path/
     );
-    expect(() => resolveTokensPath({}, { cwd, env: {} })).toThrow(
+    expect(() => resolveTokensPath({}, { cwd })).toThrow(
       /walk-up/
-    );
-    expect(() => resolveTokensPath({}, { cwd, env: {} })).toThrow(
-      /TOKENS_PATH/
     );
   });
 });

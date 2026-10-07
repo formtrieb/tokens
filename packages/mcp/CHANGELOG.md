@@ -33,10 +33,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   read. A set name that leaves the folder (`../x`, or through a symbolic
   link) is not read and is reported as a missing set.
 
+- The `TOKENS_PATH` environment variable is no longer read; pass
+  `tokens_path` or run from a folder with `tokens/$metadata.json` above it.
+- A value render would refuse is reported in `problems` as
+  `{ kind: "invalid-css", path, reason }`.
+- `path_prefix` in `browse_tokens` and `compare_themes` matches at a `.`
+  boundary: `color.text` holds `color.text.primary`, not `color.textual`.
+- `find_placeholders` names what it checks: `#f305b7`.
+
 ### Performance
 
 - Each axis selection is composed and resolved once per loaded token
   system and cached; `resolve_batch` costs one resolution.
+
+### Migrating from 2.x
+
+| 2.x | 3.0 |
+|---|---|
+| `TOKENS_PATH` in the server's `env` | `tokens_path` per call, or walk-up from the working directory |
+| `finalValue` raw (`#…`, `rgba(…)`, unreduced math) | `finalValue` as render writes it; the typed `value` beside it |
+| `errors: string[]` | `problems: [{ kind, … }]` |
+| `format: "hex8"` | `format: "hex"` (8 digits when translucent) |
+| `compose_theme` → `missingAxes` | `defaulted`; the missing axes are filled |
+| `type` limited to a fixed list | any `$type` the loaded system uses |
+| `path_prefix: "color.t"` matched `color.text…` | give whole segments: `color.text` |
 
 ## [2.6.0] — 2026-10-03
 

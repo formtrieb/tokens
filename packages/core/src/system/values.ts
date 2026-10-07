@@ -4,11 +4,11 @@
  * `fontSizes` token holding `20`, `20px` or a reference to a `20px` dimension
  * means 20px each time.
  */
-import { converter, formatHex, formatHex8, parse } from "culori";
-import { alignType, fontWeightFor } from "../canonicalize/index.js";
-import { mapToSrgbGamut } from "../parser/gamut.js";
-import { formatSrgb } from "../parser/color-resolver.js";
+import { cssColor } from "../color/css.js";
+import { isOutOfGamut } from "../color/gamut.js";
+import { parseColor } from "../color/parse.js";
 import { evaluate } from "./arithmetic.js";
+import { alignType, fontWeight } from "./tokens-studio.js";
 import type { Color, Expr, TokenProblem, TokenValue } from "./types.js";
 
 const NUMBER = String.raw`[-+]?(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?`;
@@ -16,7 +16,6 @@ const PERCENT = new RegExp(`^(${NUMBER})%$`);
 const DURATION = new RegExp(`^(${NUMBER})(ms|s)?$`);
 const BEZIER = new RegExp(`^(?:cubic-bezier\\()?\\s*(${NUMBER})\\s*,\\s*(${NUMBER})\\s*,\\s*(${NUMBER})\\s*,\\s*(${NUMBER})\\s*\\)?$`);
 const EASING_KEYWORDS = /^(linear|ease|ease-in|ease-out|ease-in-out|step-start|step-end|steps\([^)]*\))$/;
-const FONT_WEIGHT = /^(\d+)(?:\s+(italic|oblique))?$/;
 
 /** The composite types and the type each of their properties is read with. */
 export const COMPOSITE_PROPERTIES: Record<string, Record<string, string>> = {
@@ -41,71 +40,20 @@ export const SHADOW_ALIASES: Record<string, string> = { x: "offsetX", y: "offset
 
 export type Report = (problem: TokenProblem) => void;
 
-const asColor = (c: unknown): Color => c as Color;
-
-const toRgb = converter("rgb");
-const GAMUT_EPSILON = 1e-5;
-
-/**
- * Whether a colour lies outside sRGB. Conversions leave noise of up to about
- * 2e-6 per channel (white at r 1.0000001, a mapped colour round-tripped
- * through LCH at r -0.0000013); that is not a colour outside.
- */
-export function isOutOfGamut(color: Color): boolean {
-  const { r, g, b } = toRgb(color);
-  return [r, g, b].some((v: number) => v < -GAMUT_EPSILON || v > 1 + GAMUT_EPSILON);
-}
-
-/**
- * A colour as written. Anything culori reads, and Tokens Studio's
- * `rgba(<colour>, <alpha>)`, which sets the alpha of any colour.
- */
+/** A colour as written: its literal, and the colour when `parseColor` reads it. */
 export function readColor(text: string): TokenValue {
   const literal = text.trim();
-  let color = parse(literal);
-  if (!color) {
-    const m = literal.match(/^rgba?\(\s*(.+?)\s*,\s*([^,()]+?)\s*\)$/);
-    const base = m && Number.isNaN(Number(m[1])) ? parse(m[1]) : undefined;
-    if (base) {
-      const pct = m![2].match(PERCENT);
-      const alpha = pct ? Number(pct[1]) / 100 : Number(m![2]);
-      if (!Number.isNaN(alpha)) color = { ...base, alpha: Math.max(0, Math.min(1, alpha)) };
-    }
-  }
+  const color = parseColor(literal);
   if (!color) return { kind: "color", literal };
-  return { kind: "color", literal, color: asColor(color), outOfGamut: isOutOfGamut(asColor(color)) };
+  return { kind: "color", literal, color, outOfGamut: isOutOfGamut(color) };
 }
 
 /** The colour as text: as written when it was written, else 8-bit hex (with alpha when translucent). */
 export function colorText(value: Extract<TokenValue, { kind: "color" }>): string {
   if (value.literal !== undefined) return value.literal;
-  if (!value.color) return "";
-  const mapped = mapToSrgbGamut(value.color);
-  return (mapped.alpha ?? 1) < 1 ? formatHex8(mapped) : formatHex(mapped);
+  return value.color ? cssColor(value.color, "hex") : "";
 }
 
-/**
- * A colour in one CSS form, gamut-mapped into sRGB:
- * - `rgb`: `rgb(r, g, b)` / `rgba(r, g, b, a)`, 8-bit channels, alpha to two digits
- * - `hex`: `#rrggbb` / `#rrggbbaa`
- * - `percent`: `rgb(r% g% b% / a)`, five significant digits
- */
-export function cssColor(color: Color, form: "rgb" | "hex" | "percent"): string {
-  // Inside sRGB up to float noise: a channel within the noise of an edge is
-  // the edge. Mapping such a colour again would move it inward (`0%` →
-  // `0.0002%`); only a colour really outside is mapped.
-  const rgb = toRgb(color);
-  const clamp = (v: number | undefined) => {
-    const c = v ?? 0;
-    return c < GAMUT_EPSILON ? 0 : c > 1 - GAMUT_EPSILON ? 1 : c;
-  };
-  const mapped = isOutOfGamut(color) ? mapToSrgbGamut(rgb) : { ...rgb, r: clamp(rgb.r), g: clamp(rgb.g), b: clamp(rgb.b) };
-  if (form === "percent") return formatSrgb(mapped);
-  const alpha = mapped.alpha ?? 1;
-  if (form === "hex") return alpha < 1 ? formatHex8(mapped) : formatHex(mapped);
-  const [r, g, b] = [mapped.r, mapped.g, mapped.b].map((v: number) => Math.round(Math.max(0, Math.min(1, v ?? 0)) * 255));
-  return alpha < 1 ? `rgba(${r}, ${g}, ${b}, ${Math.round(alpha * 100) / 100})` : `rgb(${r}, ${g}, ${b})`;
-}
 
 function exprText(e: Expr): string {
   if ("op" in e) return `(${exprText(e.left)} ${e.op} ${exprText(e.right)})`;
@@ -214,10 +162,9 @@ export function readScalar(raw: unknown, type: string | undefined, path: string,
       return v?.kind === "number" ? v : { kind: "string", value: t };
     }
     case "fontWeight": {
-      const mapped = `${fontWeightFor(t, "fontWeight")}`;
-      const m = mapped.match(FONT_WEIGHT);
-      if (!m) return invalid("unknown font weight");
-      return { kind: "fontWeight", value: Number(m[1]), ...(m[2] && { style: m[2] as "italic" | "oblique" }) };
+      const w = fontWeight(t);
+      if (!w) return invalid("unknown font weight");
+      return { kind: "fontWeight", ...w };
     }
     case "duration": {
       const m = t.match(DURATION);

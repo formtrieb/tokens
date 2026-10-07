@@ -3,7 +3,7 @@ import { z } from "zod";
 import { getDefaultAxes } from "@formtrieb/tokens-core";
 import { compositionFor, selectionFor } from "../composition.js";
 import { resolveAndLoad, TOKENS_PATH_DESCRIPTION } from "../token-context.js";
-import { assertType, colorForm, display, formatArg, TYPE_DESCRIPTION } from "./present.js";
+import { assertType, colorForm, display, formatArg, TYPE_DESCRIPTION, underPrefix } from "./present.js";
 import { themeAxesArg, THEME_AXES_DESCRIPTION, resolveAxes } from "./theme-arg.js";
 
 export function registerThemeTools(server: McpServer) {
@@ -66,7 +66,7 @@ export function registerThemeTools(server: McpServer) {
       inputSchema: {
         theme_a: themeAxesArg.describe(`First theme. ${THEME_AXES_DESCRIPTION}`),
         theme_b: themeAxesArg.describe(`Second theme. ${THEME_AXES_DESCRIPTION}`),
-        path_prefix: z.string().optional().describe("Narrow comparison to a dot-path subtree (e.g. 'color.text')"),
+        path_prefix: z.string().optional().describe("Narrow comparison to a dot-path subtree (e.g. 'color.text' holds 'color.text.primary', not 'color.textual')"),
         type: z.string().optional().describe(TYPE_DESCRIPTION),
         format: formatArg,
         tokens_path: z.string().optional().describe(TOKENS_PATH_DESCRIPTION),
@@ -87,7 +87,7 @@ export function registerThemeTools(server: McpServer) {
       const onlyInB: string[] = [];
       const paths = new Set([...a.dict.byKey.keys(), ...b.dict.byKey.keys()]);
       for (const path of paths) {
-        if (path_prefix && !path.startsWith(path_prefix)) continue;
+        if (!underPrefix(path, path_prefix)) continue;
         const ea = a.dict.byKey.get(path);
         const eb = b.dict.byKey.get(path);
         if (type && ((ea && ea.type !== type) || (eb && eb.type !== type))) continue;
@@ -102,8 +102,8 @@ export function registerThemeTools(server: McpServer) {
           onlyInB.push(path);
           continue;
         }
-        const valueA = display(a.values.get(path)!, ea!, color);
-        const valueB = display(b.values.get(path)!, eb!, color);
+        const valueA = display(a.values.get(path)!, ea!, color).text;
+        const valueB = display(b.values.get(path)!, eb!, color).text;
         if (valueA !== valueB) changed.push({ path, valueA, valueB });
       }
 

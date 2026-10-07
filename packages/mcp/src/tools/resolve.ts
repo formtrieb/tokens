@@ -25,16 +25,18 @@ export function registerResolveTools(server: McpServer) {
       const { dict, values } = compositionFor(ctx, selectionFor(ctx.system, axes));
       const entry = dict.byKey.get(path);
       const resolution = values.get(path);
+      const shown = entry && resolution ? display(resolution, entry, colorForm(format)) : undefined;
+      const problems = shown ? [...resolution!.problems, ...shown.invalid] : [];
       const out =
-        entry && resolution
+        entry && resolution && shown
           ? {
               token: path,
               theme: axes,
               type: entry.type,
-              finalValue: display(resolution, entry, colorForm(format)),
+              finalValue: shown.text,
               value: resolution.value,
               chain: resolution.chain.map(chainStep),
-              problems: resolution.problems.length > 0 ? resolution.problems : undefined,
+              problems: problems.length > 0 ? problems : undefined,
             }
           : {
               token: path,
@@ -81,12 +83,14 @@ export function registerResolveTools(server: McpServer) {
           };
           continue;
         }
+        const shown = display(resolution, entry, color);
+        const problems = [...resolution.problems, ...shown.invalid];
         results[path] = {
-          finalValue: display(resolution, entry, color),
+          finalValue: shown.text,
           type: entry.type,
           steps: resolution.chain.length,
           ...(verbose && { value: resolution.value, chain: resolution.chain.map(chainStep) }),
-          problems: resolution.problems.length > 0 ? resolution.problems : undefined,
+          problems: problems.length > 0 ? problems : undefined,
         };
       }
       return { content: [{ type: "text" as const, text: JSON.stringify({ theme: axes, results }, null, 2) }] };

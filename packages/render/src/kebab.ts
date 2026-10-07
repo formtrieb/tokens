@@ -1,8 +1,10 @@
 /**
- * kebab-case exactly as `change-case` 5 writes it, which is what Style
- * Dictionary's `name/kebab` uses. Variable names, file names and data
- * attributes must stay byte-identical to today's output, so this is a port,
- * not an approximation; `test/kebab.test.ts` checks it against change-case.
+ * kebab-case by the rule of `change-case` 5: split between a lower-case
+ * letter or digit and an upper-case one, and before the last capital of a
+ * run of capitals followed by a lower-case letter; drop everything that is
+ * neither letter nor digit; lower-case and join with `-`. Variable names,
+ * file names and data attributes depend on it byte for byte;
+ * `test/kebab.test.ts` checks it against change-case.
  *
  *   "Display 1"          → "display-1"
  *   "textCase"           → "text-case"

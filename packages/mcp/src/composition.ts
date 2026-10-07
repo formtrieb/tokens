@@ -76,16 +76,3 @@ export function tokensOf(ctx: TokenContext, setOrLayer?: string): DictionaryEntr
     return entries;
   });
 }
-
-/** A dictionary entry in the shape core's analyzers read (`RawToken`). */
-export function asRawToken(entry: DictionaryEntry) {
-  return {
-    path: entry.path,
-    dotPath: entry.key,
-    $type: entry.type ?? "",
-    $value: entry.value,
-    ...(entry.extensions && { $extensions: entry.extensions }),
-    sourceSet: entry.set,
-    isSource: !entry.emitted,
-  };
-}

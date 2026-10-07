@@ -1,41 +1,10 @@
-export interface RawToken {
-  path: string[];
-  dotPath: string;
-  $type: string;
-  $value: unknown;
-  $extensions?: TokenExtensions;
-  sourceSet: string;
-  isSource: boolean;
-}
-
-export interface TokenExtensions {
-  "studio.tokens"?: {
-    modify?: ColorModifier;
-  };
-  "com.figma.scopes"?: string[];
-}
-
+/** A Tokens Studio colour modifier as written in `$extensions["studio.tokens"].modify`. */
 export interface ColorModifier {
   type: "lighten" | "darken" | "alpha" | "mix";
   value: string;
   space: string;
   /** The colour to mix towards; only read by `mix`. */
   color?: string;
-}
-
-export interface ResolutionStep {
-  tokenPath: string;
-  rawValue: unknown;
-  sourceSet: string;
-  modifier?: ColorModifier;
-}
-
-export interface ResolutionChain {
-  steps: ResolutionStep[];
-  finalValue: unknown;
-  errors: string[];
-  gamutClipped?: boolean;
-  lchValue?: string;
 }
 
 export interface ThemeDefinition {
@@ -47,12 +16,6 @@ export interface ThemeDefinition {
 
 export interface ThemeAxes {
   [group: string]: string;
-}
-
-export interface TokenSetInfo {
-  name: string;
-  layer: string;
-  tokenCount: number;
 }
 
 export interface DesignRuleViolation {

@@ -1,4 +1,4 @@
-import { alignType } from "../canonicalize/index.js";
+import { alignType } from "./tokens-studio.js";
 import type { ThemeDefinition } from "../types.js";
 import type { Dictionary, DictionaryEntry, SetSelection, TokenProblem, TokenSystem } from "./types.js";
 

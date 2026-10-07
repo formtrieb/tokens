@@ -99,7 +99,6 @@ export const TOKENS_PATH_DESCRIPTION =
 export function resolveAndLoad(args: { tokens_path?: string }): TokenContext {
   const { path } = resolveTokensPath(args, {
     cwd: process.cwd(),
-    env: process.env,
   });
   return getTokenContext(path);
 }

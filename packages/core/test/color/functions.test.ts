@@ -15,10 +15,10 @@ import {
   contrastWcag,
   deltaE2000,
   deltaEOK,
-  composite,
+  over,
   withAlpha,
   alphaOf,
-} from "../src/index.js";
+} from "../../src/index.js";
 
 // Reference values come straight from culori, so every function is pinned to
 // the library value for value, not to a recorded number.
@@ -96,9 +96,9 @@ describe("deltaEOK", () => {
   });
 });
 
-describe("composite", () => {
+describe("over", () => {
   // Source-over on an opaque base, written out per channel.
-  const over = (layer: string, base: string) => {
+  const sourceOver = (layer: string, base: string) => {
     const rgb = converter("rgb");
     const l = rgb(parse(layer));
     const b = rgb(parse(base));
@@ -111,37 +111,37 @@ describe("composite", () => {
     for (const [a, b] of pairs)
       for (const alpha of [0, 0.04, 0.1, 0.33, 0.5, 0.9, 1]) {
         const layer = formatHex8({ ...parse(a), alpha });
-        expect(composite(layer, b)).toBe(over(layer, b));
+        expect(over(layer, b)).toBe(sourceOver(layer, b));
       }
   });
 
   it("returns the base for a transparent layer and the layer for an opaque one", () => {
-    expect(composite("#ff000000", "#2072b6")).toBe("#2072b6");
-    expect(composite("#ff0000", "#2072b6")).toBe("#ff0000");
+    expect(over("#ff000000", "#2072b6")).toBe("#2072b6");
+    expect(over("#ff0000", "#2072b6")).toBe("#ff0000");
   });
 
   it("keeps translucency when the base is translucent", () => {
     // half red over half blue: alpha ≈ 0.75, red weighted about 2:1
     const a = 128 / 255;
     const alpha = a + a * (1 - a);
-    expect(composite("#ff000080", "#0000ff80")).toBe(
+    expect(over("#ff000080", "#0000ff80")).toBe(
       formatHex8({ mode: "rgb", r: a / alpha, g: 0, b: (a * (1 - a)) / alpha, alpha }),
     );
   });
 });
 
 describe("withAlpha", () => {
-  it("matches culori's hex8 with the alpha replaced", () => {
+  it("matches culori's hex with the alpha replaced, 8 digits when translucent", () => {
     for (const color of COLORS)
       for (const alpha of [0, 0.06, 0.5, 1])
-        expect(withAlpha(color, alpha)).toBe(formatHex8({ ...parse(color), alpha }));
+        expect(withAlpha(color, alpha)).toBe((alpha < 1 ? formatHex8 : formatHex)({ ...parse(color), alpha }));
   });
 });
 
 describe('format "srgb"', () => {
   const rgb = converter("rgb");
   // source-over in floats, the reference a chain of steps must not drift from
-  const over = (l: any, b: any) => {
+  const sourceOver = (l: any, b: any) => {
     const a = l.alpha ?? 1;
     const ch = (k: "r" | "g" | "b") => l[k] * a + b[k] * (1 - a);
     return { mode: "rgb", r: ch("r"), g: ch("g"), b: ch("b") };
@@ -149,23 +149,23 @@ describe('format "srgb"', () => {
 
   it("composites a chain of translucent layers without rounding", () => {
     const layers = ["rgba(32, 114, 182, 0.72)", "rgba(229, 72, 77, 0.33)", "rgba(18, 165, 148, 0.5)"];
-    const exact = layers.reduceRight((below: any, c) => over(rgb(parse(c)), below), { mode: "rgb", r: 1, g: 1, b: 1 });
-    const chained = layers.reduceRight((below, c) => composite(c, below, { format: "srgb" }), "#ffffff");
+    const exact = layers.reduceRight((below: any, c) => sourceOver(rgb(parse(c)), below), { mode: "rgb", r: 1, g: 1, b: 1 });
+    const chained = layers.reduceRight((below, c) => over(c, below, { format: "srgb" }), "#ffffff");
     const got = rgb(parse(chained))!;
     for (const k of ["r", "g", "b"] as const) expect(got[k]).toBeCloseTo(exact[k], 12);
     // the hex chain rounds at every step
-    expect(layers.reduceRight((below, c) => composite(c, below), "#ffffff")).not.toBe(chained);
+    expect(layers.reduceRight((below, c) => over(c, below), "#ffffff")).not.toBe(chained);
   });
 
   it("writes color(srgb …), with alpha only when translucent", () => {
-    expect(composite("#ff0000", "#0000ff", { format: "srgb" })).toBe("color(srgb 1 0 0)");
-    expect(composite("#ff000080", "#0000ff00", { format: "srgb" })).toBe(`color(srgb 1 0 0 / ${128 / 255})`);
+    expect(over("#ff0000", "#0000ff", { format: "srgb" })).toBe("color(srgb 1 0 0)");
+    expect(over("#ff000080", "#0000ff00", { format: "srgb" })).toBe(`color(srgb 1 0 0 / ${128 / 255})`);
     expect(withAlpha("#2072b6", 0.72, { format: "srgb" })).toBe(`color(srgb ${32 / 255} ${114 / 255} ${182 / 255} / 0.72)`);
     expect(contrastWcag(withAlpha("#000", 1, { format: "srgb" }), "#fff")).toBe(21);
   });
 
   it("leaves the hex output as it was", () => {
-    expect(composite("#ff000080", "#ffffff", { format: "hex" })).toBe(composite("#ff000080", "#ffffff"));
+    expect(over("#ff000080", "#ffffff", { format: "hex" })).toBe(over("#ff000080", "#ffffff"));
     expect(withAlpha("#2072b6", 0.5, {})).toBe(withAlpha("#2072b6", 0.5));
   });
 });

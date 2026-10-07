@@ -18,7 +18,7 @@ import { applyModifier } from "./modify.js";
 import { COMPOSITE_PROPERTIES, SHADOW_ALIASES, readScalar, textOf } from "./values.js";
 import type { ColorModifier } from "../types.js";
 import type { ChainStep, Dictionary, DictionaryEntry, Resolution, ShadowLayer, TokenProblem, TokenValue } from "./types.js";
-import { alignType } from "../canonicalize/index.js";
+import { alignType } from "./tokens-studio.js";
 
 const REFERENCE = /\{([^{}]+)\}/g;
 const PURE_REFERENCE = /^\{([^{}]+)\}$/;

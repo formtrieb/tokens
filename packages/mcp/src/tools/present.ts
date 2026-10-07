@@ -14,9 +14,25 @@ export function colorForm(format: "source" | "rgb" | "hex" | "rgba" | undefined)
   return format === "rgba" ? "rgb" : (format ?? "source");
 }
 
-/** The value as render writes it with units as written and the given colour form. */
-export function display(resolution: Resolution, entry: DictionaryEntry, color: ColorForm): string {
-  return formatTokenValue(resolution.value, { path: entry.path, type: entry.type }, { color }).text;
+/** Why a shown value would be no valid CSS (render's formatter refuses it). */
+export interface InvalidCss {
+  kind: "invalid-css";
+  path: string;
+  reason: string;
+}
+
+/**
+ * The value as render writes it, with units as written and the given colour
+ * form, and the reasons it would be no valid CSS.
+ */
+export function display(resolution: Resolution, entry: DictionaryEntry, color: ColorForm): { text: string; invalid: InvalidCss[] } {
+  const { text, problems } = formatTokenValue(resolution.value, { path: entry.path, type: entry.type }, { color });
+  return { text, invalid: problems.map((reason) => ({ kind: "invalid-css", path: entry.key, reason })) };
+}
+
+/** Whether a path lies at or below a prefix, at a `.` boundary: `color.text` holds `color.text.primary`, not `color.textual`. */
+export function underPrefix(path: string, prefix: string | undefined): boolean {
+  return !prefix || path === prefix || path.startsWith(`${prefix}.`);
 }
 
 /** A chain step in the shape tools have always returned. */

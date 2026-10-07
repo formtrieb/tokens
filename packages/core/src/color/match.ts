@@ -1,5 +1,5 @@
 import { parse, formatHex8 } from "culori";
-import { deltaE2000 } from "./color-functions.js";
+import { deltaE2000 } from "./functions.js";
 
 export interface ColorCandidate {
   path: string;

@@ -19,8 +19,7 @@ surface:
 
 1. **Per-call `tokens_path`** — every tool accepts an optional
    `tokens_path` parameter; walk-up from `process.cwd()` resolves it
-   when omitted. The old startup-load via `TOKENS_PATH` env var is
-   deprecated (still works, emits `console.warn`).
+   when omitted.
 2. **Stateless tools** — no global `set_tokens_path` initialization;
    each call resolves its context independently. One MCP process can
    serve multiple token directories.
@@ -51,17 +50,14 @@ workspace (i.e. a `tokens/` directory with `$metadata.json` at its root).
 
 ### Path resolution order
 
-Every tool resolves `tokens_path` through three layers, first match wins:
+Every tool resolves `tokens_path` in two steps, first match wins:
 
 1. **Explicit argument** — `{ tokens_path: "/abs/path/to/tokens" }`.
    Always wins. Use when working with multiple DSes in one session.
 2. **Walk-up from cwd** — climbs from `process.cwd()` looking for
    `tokens/$metadata.json`. First match wins (closest to cwd).
-3. **`TOKENS_PATH` env var** — deprecated bridge from v1.0.0. Emits
-   `console.warn("DEPRECATED: TOKENS_PATH …")`. Will be removed in 3.0.0.
-
-If all three are empty, the tool throws an `Error` listing the three
-paths it tried.
+If neither finds a folder, the tool throws an `Error` naming both. The
+`TOKENS_PATH` environment variable of 1.x and 2.x is no longer read.
 
 ### Standalone install
 
@@ -84,7 +80,7 @@ tokens-mcp  # launches the stdio server
 | `resolve_batch` | Resolve multiple dot-paths in one call. Useful for a variant's full state matrix. |
 | `compose_theme` | Show which token sets are active (enabled vs. source) for a given axis selection; missing axes take their default and are listed in `defaulted`. |
 | `compare_themes` | Diff values (as render writes them) between two theme configurations; missing axes take their default. Caps: 200 changed paths, 50 per only-in-A/B list. |
-| `find_placeholders` | List all `#f305b7`/`#ff00ff` placeholder tokens. Audit token completeness. |
+| `find_placeholders` | List all `#f305b7` placeholder tokens. Audit token completeness. |
 | `check_design_rules` | Run controls/component-reference + naming + broken-reference + Light/Dark parity checks. Reports violations grouped by rule. |
 
 Every tool accepts an optional `tokens_path: string` parameter (omit for walk-up).
@@ -134,7 +130,7 @@ No restart. No path argument needed. Cost of the per-call mtime walk is
 
 | Before (v1.0.0) | After (v2.0.0) |
 |---|---|
-| `TOKENS_PATH=/abs/path` env var, loaded once at startup | Walk-up auto-detect from cwd; or pass `tokens_path` per call. ENV var still works with a deprecation warning. |
+| `TOKENS_PATH=/abs/path` env var, loaded once at startup | Walk-up auto-detect from cwd; or pass `tokens_path` per call. The env var is no longer read since 3.0. |
 | Server restart needed after token-file edits | mtime-aware cache reloads on next call. |
 | One MCP process = one DS | One process can serve any number of DSes (LRU cap 8). |
 | Package: `formtrieb-tokens-mcp` (private) | Package: `@formtrieb/tokens-mcp` (public, npm). |

@@ -1,18 +1,11 @@
-import { modifyColor } from "../parser/color-resolver.js";
-import { mapToSrgbGamut } from "../parser/gamut.js";
-import { isOutOfGamut, textOf } from "./values.js";
-import type { Color, TokenValue } from "./types.js";
+import { modifyColor } from "../color/modifiers.js";
+import { isOutOfGamut } from "../color/gamut.js";
+import type { TokenValue } from "./types.js";
 
 /**
- * A Tokens Studio colour modifier on a resolved colour, with the colour
- * functions every other colour path of this package uses. The result is
- * computed, so it has no literal; it stays unrounded. A value that is no
- * readable colour, or an amount that is no number, is left as it is.
- *
- * Rule: a modifier works on the colour the base shows, so a base outside
- * sRGB is gamut-mapped first. This makes the result independent of how the
- * base was reached (written as `lch()` or computed by a modifier of its own).
- * Only the base is mapped; a colour without modifier keeps its unmapped value.
+ * A resolved modifier on a resolved value (see `modifyColor` for the rule).
+ * The result is computed, so it has no literal. A value that is no readable
+ * colour, or an amount that is no number, is left as it is.
  */
 export function applyModifier(
   value: TokenValue,
@@ -21,13 +14,7 @@ export function applyModifier(
   if (value.kind !== "color" || !value.color) return value;
   const amount = modify.value.kind === "number" ? modify.value.value : Number.NaN;
   if (Number.isNaN(amount)) return value;
-  const base = isOutOfGamut(value.color) ? mapToSrgbGamut(value.color) : value.color;
-  let color: Color;
-  if (modify.type === "alpha") {
-    color = { ...base, alpha: Math.max(0, Math.min(1, amount)) };
-  } else {
-    const target = modify.color ? textOf(modify.color) : undefined;
-    color = modifyColor(base, { type: modify.type, space: modify.space, color: target }, amount);
-  }
+  const target = modify.color?.kind === "color" ? modify.color.color : undefined;
+  const color = modifyColor(value.color, { type: modify.type, space: modify.space, amount, ...(target && { color: target }) });
   return { kind: "color", color, outOfGamut: isOutOfGamut(color) };
 }
