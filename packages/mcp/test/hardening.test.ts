@@ -52,6 +52,14 @@ describe("reading a token folder — set names from $metadata.json", () => {
     expect(buildTokenSystem(files).problems).toEqual([{ kind: "missing-set", set: "linked/secret" }]);
   });
 
+  it("does not read index files or absolute set names that lie outside", () => {
+    write("outside/$themes.json", [{ id: "x", name: "X", selectedTokenSets: {} }]);
+    write("outside/abs.json", { secret: { $type: "color", $value: "#000" } });
+    write("tokens/$metadata.json", { tokenSetOrder: [join(root, "outside", "abs")] });
+    symlinkSync(join(root, "outside", "$themes.json"), join(root, "tokens", "$themes.json"));
+    expect([...readTokenFiles(join(root, "tokens")).keys()]).toEqual(["$metadata.json"]);
+  });
+
   it("reads no JSON that neither $metadata.json nor $themes.json names", () => {
     write("tokens/$metadata.json", { tokenSetOrder: ["Base"] });
     write("tokens/Base.json", { a: { $type: "color", $value: "#fff" } });
