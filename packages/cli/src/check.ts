@@ -119,7 +119,10 @@ export function formatCheck(result: CheckResult): string {
 
   lines.push(`Resolution — ${plural(result.resolution.themes.filter((t) => t !== '(loading)').length, 'theme')}`);
   if (result.resolution.problems.length === 0) lines.push('  none');
-  for (const p of result.resolution.problems) lines.push(`  ${MARK[p.severity]} ${p.kind.padEnd(18)} ${p.theme}   ${describe(p)}`);
+  const total = result.resolution.themes.length;
+  const where = (themes: string[]) =>
+    themes.length > 1 && themes.length === total ? `all ${total} themes` : themes.length > 3 ? `${themes.slice(0, 3).join(', ')} +${themes.length - 3}` : themes.join(', ');
+  for (const p of result.resolution.problems) lines.push(`  ${MARK[p.severity]} ${p.kind.padEnd(18)} ${describe(p)}   (${where(p.themes)})`);
 
   lines.push('', 'Design rules');
   const rules = Object.entries(result.byRule);

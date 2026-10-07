@@ -77,7 +77,15 @@ async function main() {
     console.error('No formtrieb-tokens.config.{ts,mjs,js} found in cwd or any parent directory.');
     process.exit(args.command === 'check' ? 2 : 1);
   }
-  const config = await loadConfig(configPath);
+  let config;
+  try {
+    config = await loadConfig(configPath);
+  } catch (e) {
+    if (args.command !== 'check') throw e;
+    // a config that does not load is a usage error of the check, not a finding
+    console.error(`Could not load ${configPath}: ${(e as Error).message}`);
+    process.exit(2);
+  }
   say(`✓ Config loaded: ${configPath}`);
 
   if (args.command === 'check') {

@@ -36,7 +36,8 @@ export interface ReportInput {
   resolution?: { scope: string; problems: readonly TokenProblem[] }[];
 }
 
-export type ResolutionFinding = TokenProblem & { theme: string; severity: Severity };
+/** A problem of resolving, once, with every scope (theme or axis selection) it appears in. */
+export type ResolutionFinding = TokenProblem & { themes: string[]; severity: Severity };
 
 export interface DesignReport {
   /**
@@ -75,18 +76,21 @@ export function designReport(input: ReportInput): DesignReport {
     if (!entry.affected.includes(group)) entry.affected.push(group);
   }
 
+  // A problem in a source set shows in every theme that reads the set: one finding, its themes listed.
   const resolution: DesignReport["resolution"] = { themes: [], problems: [] };
+  const findings = new Map<string, ResolutionFinding>();
   for (const { scope, problems } of input.resolution ?? []) {
     resolution.themes.push(scope);
-    const seen = new Set<string>();
     for (const p of problems) {
       const severity = RESOLUTION_SEVERITY[p.kind];
+      if (!atLeast(severity, threshold)) continue;
       const key = JSON.stringify(p);
-      if (!atLeast(severity, threshold) || seen.has(key)) continue;
-      seen.add(key);
-      resolution.problems.push({ theme: scope, severity, ...p });
+      const found = findings.get(key);
+      if (!found) findings.set(key, { themes: [scope], severity, ...p });
+      else if (!found.themes.includes(scope)) found.themes.push(scope);
     }
   }
+  resolution.problems = [...findings.values()];
 
   let parity: DesignReport["parity"] = "not checked";
   const themes = input.parity?.themes ?? [];
