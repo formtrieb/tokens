@@ -87,9 +87,9 @@ describe('runPipeline render file options', () => {
   const rules = [{ theme: 'Base/Base', selector: ':root', references: false, file: 'variables/base.css' }];
   const renderFile = join(dir, 'render.json');
   writeFileSync(join(dir, 'missing-options.json'), JSON.stringify({ rules }));
-  const canonicalFile = join(dir, 'render-canonical.json');
+  const dialectFile = join(dir, 'render-dialect.json');
   writeFileSync(renderFile, JSON.stringify({ options: { units: 'source', color: 'source' }, rules }));
-  writeFileSync(canonicalFile, JSON.stringify({ options: { dialect: 'canonical' }, rules }));
+  writeFileSync(dialectFile, JSON.stringify({ options: { dialect: 'canonical' }, rules }));
 
   async function run(name: string, extra: Partial<typeof config> = {}, render = renderFile) {
     const output = join(dir, name);
@@ -132,11 +132,8 @@ describe('runPipeline render file options', () => {
     expect(warnings).toEqual([]);
   });
 
-  it('keeps an old canonical render file as written, with one warning that dialect has no effect', async () => {
-    const { css, warnings } = await run('canonical', {}, canonicalFile);
-    expect(css).toContain('--x-space-s: 8px;');
-    expect(css).toContain('--x-brand: #336699;');
-    expect(warnings).toHaveLength(1);
-    expect(warnings[0]).toContain('"dialect" has no effect');
+  it('refuses a render file that still names a dialect, saying what to write instead', async () => {
+    await expect(run('dialect', {}, dialectFile)).rejects.toThrow(/options\.dialect is not an output option .*"units", "color" and "typographyCompanions"/);
   });
+
 });

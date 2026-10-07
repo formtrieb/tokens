@@ -66,8 +66,9 @@ const OPTIONS: Record<keyof RenderFileOptions, (value: unknown, fail: Fail) => v
  * or `"source"`; each of `paths` is `{ match, unit }`, where `match` is a dot
  * path in source casing (`zIndex.base`), `*` one segment, `**` zero or more.
  *
- * An older file's `dialect: "canonical"` is accepted and has no effect (it
- * is what the defaults write); `"style-dictionary"` is refused.
+ * `dialect` is no option any more (render 1.0 replaced it with `units`,
+ * `color` and `typographyCompanions`); a file that still names it is refused
+ * with that hint, and has to be written anew.
  */
 export function parseRenderFile(
   data: unknown,
@@ -84,18 +85,16 @@ export function parseRenderFile(
 
   const out: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(options as Record<string, unknown>)) {
-    if (key === "dialect") {
-      if (value === "canonical") continue;
-      if (value === "style-dictionary") {
-        fail(
-          'options.dialect "style-dictionary" no longer exists. Write what it wrote with ' +
-            '"units": "tokens-studio", "color": "rgb", "typographyCompanions": true.'
-        );
-      }
-      fail(`options.dialect has an invalid value: ${JSON.stringify(value)}.`);
-    }
     const check = OPTIONS[key as keyof RenderFileOptions];
-    if (!check) fail(`options.${key} is not an output option (allowed: ${Object.keys(OPTIONS).join(", ")}).`);
+    if (!check) {
+      const hint =
+        key === "dialect"
+          ? ' A dialect no longer exists: write "units", "color" and "typographyCompanions" instead ' +
+            '(what "canonical" meant: "source", "source", false; "style-dictionary": "tokens-studio", "rgb", true), ' +
+            "or generate the file anew."
+          : "";
+      fail(`options.${key} is not an output option (allowed: ${Object.keys(OPTIONS).join(", ")}).${hint}`);
+    }
     check(value, fail);
     out[key] = value;
   }

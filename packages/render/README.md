@@ -97,9 +97,8 @@ options (`prefix`, `units`, `basePxFontSize`, `color`,
 caller. `parseRenderFile(data)` reads either form, checks every option
 (including the unit policy: preset name, target units, path patterns) and
 returns `{ options, rules }`; which side wins when the caller sets an option
-too is the caller's decision. An older file's `"dialect": "canonical"` is
-accepted and has no effect; `"style-dictionary"` is refused with what to
-write instead.
+too is the caller's decision. A file that still names a `dialect` (render
+before 1.0) is refused with what to write instead; generate it anew.
 
 ## How values are written
 

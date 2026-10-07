@@ -22,12 +22,12 @@ describe("parseRenderFile", () => {
     expect(parseRenderFile({ rules: [rule] })).toEqual({ options: {}, rules: [rule] });
   });
 
-  it("accepts an older file's dialect 'canonical' without effect and refuses 'style-dictionary'", () => {
-    expect(parseRenderFile({ options: { prefix: "x-", dialect: "canonical" }, rules: [rule] }).options).toEqual({ prefix: "x-" });
-    expect(() => parseRenderFile({ options: { dialect: "style-dictionary" }, rules: [] })).toThrow(
-      /"units": "tokens-studio", "color": "rgb", "typographyCompanions": true/
-    );
-    expect(() => parseRenderFile({ options: { dialect: "swift" }, rules: [] })).toThrow(/options\.dialect has an invalid value/);
+  it("refuses a dialect like any unknown option, naming what to write instead", () => {
+    for (const dialect of ["canonical", "style-dictionary"]) {
+      expect(() => parseRenderFile({ options: { prefix: "x-", dialect }, rules: [rule] })).toThrow(
+        /options\.dialect is not an output option .*"units", "color" and "typographyCompanions"/
+      );
+    }
   });
 
   it("refuses options that are no output options, naming them", () => {
