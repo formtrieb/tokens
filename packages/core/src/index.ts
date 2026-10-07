@@ -59,6 +59,31 @@ export {
   letterSpacingFor,
 } from "./canonicalize/index.js";
 
+// System — one resolution: load, compose a theme, resolve to typed values
+export {
+  buildTokenSystem,
+  compose,
+  composeTheme,
+  themeSelection,
+  resolveToken,
+  resolveDictionary,
+  referencesIn,
+  textOf,
+} from "./system/index.js";
+export type {
+  TokenSystem,
+  SetSelection,
+  Dictionary,
+  DictionaryEntry,
+  TokenValue,
+  ShadowLayer,
+  Expr,
+  Color,
+  TokenProblem,
+  ChainStep,
+  Resolution,
+} from "./system/index.js";
+
 // Theme
 export {
   parseThemes,

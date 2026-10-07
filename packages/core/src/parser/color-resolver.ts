@@ -128,7 +128,7 @@ export function applyColorModifier(
  * sd-transforms has them (see color-modifiers.ts). A space sd-transforms does
  * not know falls back to lch, which is what this package always did.
  */
-function modifyColor(
+export function modifyColor(
   color: any,
   modifier: Pick<ColorModifier, "space" | "color"> & { type: string },
   amount: number

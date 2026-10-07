@@ -5,6 +5,25 @@ All notable changes to `@formtrieb/tokens-core` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- One resolution for a Tokens-Studio export, next to the existing API:
+  - `buildTokenSystem(files)` builds a `TokenSystem` from the export's files
+    (path → parsed JSON) and reports sets that are named but missing.
+  - `compose(system, selection)` / `composeTheme(system, theme)` merge a
+    theme's sets into a `Dictionary`: groups merge, a token replaces a token
+    whole, a group's `$type` reaches the tokens below it, untyped tokens are
+    kept and reported. Each entry carries the Tokens Studio type and the
+    aligned type.
+  - `resolveToken` / `resolveDictionary` resolve every reference and read
+    each value under its type into a `TokenValue` (`length`, `number`,
+    `color`, `fontWeight`, `typography`, `shadow`, …) at full precision,
+    with the chain of visited tokens and the problems found (unknown
+    reference, reference to a group, cycle, invalid value).
+  - `referencesIn(value)` and `textOf(value)`.
+
 ## [1.7.1] — 2026-10-06
 
 ### Fixed
