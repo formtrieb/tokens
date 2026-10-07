@@ -7,21 +7,18 @@
 - 1 token set: `circular`
 - 0 themes (`$themes.json` is `[]`)
 
-## Loader expectations (no crash)
+## Loading expectations (no crash)
 
-`TokenLoader.load()` succeeds. `getTokenSetOrder()` → `["circular"]`. `getSet("circular")` → object with `color.a` and `color.b` token leaves.
-
-`ThemeLoader` constructor succeeds. `getAllThemes()` → `[]`. `getAxisGroups()` → `[]`.
+`buildTokenSystem(readTokenFiles(dir))` succeeds: `order` `["circular"]`, the set holds
+`color.a` and `color.b`; no themes, no axes.
 
 The loader layer is purely structural — it does NOT chase references. The cycle is discovered later, by `tokens-core`'s value-resolution.
 
 ## Expected value-resolution behavior
 
-When `tokens-core`'s resolver attempts to resolve `color.a` or `color.b`, it must detect the cycle and either:
-- return a `ResolutionChain` with a non-empty `errors` array citing the cycle, OR
-- throw a recognizable error mentioning circular reference
-
-(Phase 4 integration tests pin down which behavior is current.)
+When `tokens-core` resolves `color.a` or `color.b`, it detects the cycle: the value stays
+`{ kind: "unresolved" }` with its own text and the resolution carries the problem
+`{ kind: "cycle", cycle: [...] }`. Nothing throws.
 
 ## Why this fixture exists
 

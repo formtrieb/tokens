@@ -78,12 +78,12 @@ tokens-mcp  # launches the stdio server
 |------|---------|
 | `list_token_sets` | List all sets in order with layer + token count. Read-only overview. |
 | `list_themes` | List all themes grouped by axis, plus the default value per axis. Axis names come from the loaded `$themes.json` and differ per design system — call this to discover valid `theme:` values. |
-| `browse_tokens` | Browse tokens as a nested tree, filterable by set, path-prefix, DTCG `$type`. Configurable depth. |
+| `browse_tokens` | Browse tokens as a nested tree, filterable by set or layer, path-prefix, `$type`. Configurable depth. |
 | `search_tokens` | Case-insensitive substring search across token dot-paths. Up to 100 results. |
-| `resolve_token` | Resolve a single dot-path to its computed value for a given theme, returning the full reference chain. |
+| `resolve_token` | Resolve a single dot-path for a given theme: `finalValue` as `@formtrieb/tokens-render` writes it, the typed `value`, the token's `type`, the full reference chain and any `problems`. |
 | `resolve_batch` | Resolve multiple dot-paths in one call. Useful for a variant's full state matrix. |
-| `compose_theme` | Show which token sets are active (enabled vs. source) for a given axis selection. |
-| `compare_themes` | Diff resolved values between two theme configurations. Caps: 200 changed paths, 50 per only-in-A/B list. |
+| `compose_theme` | Show which token sets are active (enabled vs. source) for a given axis selection; missing axes take their default and are listed in `defaulted`. |
+| `compare_themes` | Diff values (as render writes them) between two theme configurations; missing axes take their default. Caps: 200 changed paths, 50 per only-in-A/B list. |
 | `find_placeholders` | List all `#f305b7`/`#ff00ff` placeholder tokens. Audit token completeness. |
 | `check_design_rules` | Run controls/component-reference + naming + broken-reference + Light/Dark parity checks. Reports violations grouped by rule. |
 
@@ -95,6 +95,24 @@ themes are the axes, the theme names are the values. `{ Semantic: "Light" }` and
 token system defines. Omitted axes fall back to their default (the first theme in the
 group), and an axis or value the system does not define is rejected with a list of the
 ones that exist. Themes with no `group` collect under the `Ungrouped` axis.
+
+The unit of this server is the **axis selection**: one theme per axis, the sets of all
+chosen themes read together (a set is enabled when a chosen theme enables it, else
+source; enabled sets win). The unit of `@formtrieb/tokens-render` is the **single
+theme**, written as its own block. Both use the same resolution in
+`@formtrieb/tokens-core` and the same formatter, so a value is the same wherever the
+sets agree; where a theme names two alternatives as source (say a component theme
+sourcing both Light and Dark), the server follows the chosen axis and render the
+theme's own order.
+
+Token types are those of the loaded system: the `type` filter of `browse_tokens`,
+`search_tokens` and `compare_themes` accepts any `$type` the system uses (also one
+inherited from a group) and rejects others with the list of types in use.
+
+`finalValue` shows lengths as written and colours by `format`: `source` (default,
+literals as written), `rgb` or `hex`; a colour a modifier computed is
+`rgb(r% g% b% / a)` unless `hex`. The typed `value` carries the full precision, the
+literal as written and, for colours, `outOfGamut`.
 
 ## Brand-iteration loop
 
@@ -148,10 +166,10 @@ the `env` block is the only required change:
 
 ## Format support
 
-Currently TS-shape only — Tokens Studio JSON workspaces with
-`$metadata.json` + `$themes.json` + per-set `*.json` files. DTCG-flat
-(single `tokens.json` with `$value`/`$type` leaves) is a 2.1.0
-candidate.
+Tokens Studio JSON workspaces with `$metadata.json` + `$themes.json` +
+per-set `*.json` files. A token is an object with `$value`; its `$type` is
+its own or its group's. DTCG `{ value, unit }` dimensions are read.
+DTCG-flat (a single `tokens.json`) is not supported.
 
 ## Development
 

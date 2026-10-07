@@ -18,7 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     `"tokens-studio"`); only lengths in px are converted, other units stay.
   - `color`: `"source"`, `"rgb"` or `"hex"`; computed colours are
     `rgb(r% g% b% / a)` under `"source"` and `"rgb"`. Applies inside
-    shadows and borders too.
+    shadows and borders too. Arithmetic CSS cannot compute is refused also
+    inside nested terms.
   - `typographyCompanions`: companion variables and their token-map
     entries, default off. The `typography` builders throw without them.
 - Defaults without options: lengths and colours as written, no companions.
@@ -34,6 +35,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `formatTokenValue(value, { path, type }, options?)`: a resolved value as
+  `renderVariables` writes it, for tools that show values.
+- The token map reads what each theme writes from the composed theme, so a
+  token whose `$type` comes from a group is listed too.
 - `TOKENS_STUDIO_UNITS`, and the types `UnitPolicy`, `UnitPreset`,
   `UnitTarget`, `ColorForm`.
 

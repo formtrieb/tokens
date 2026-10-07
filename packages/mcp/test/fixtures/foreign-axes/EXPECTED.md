@@ -15,13 +15,15 @@ before the loader ever saw them, and themes without a `group` surfaced as the ax
   - `Ungrouped` → `Light`, `Dark` — these two themes carry **no `group` key** in
     `$themes.json` and must collect under `UNGROUPED_AXIS`, never `"undefined"`
 
-## `ThemeLoader` expectations
+## Axis expectations
 
-`getAxisGroups()` → `["Brand", "Density", "Ungrouped"]`
-`getDefaultAxes()` → `{ Brand: "Acme", Density: "Cozy", Ungrouped: "Light" }`
-(first theme per axis, file order)
+Axes `["Brand", "Density", "Ungrouped"]`; defaults
+`{ Brand: "Acme", Density: "Cozy", Ungrouped: "Light" }` (first theme per axis, file order).
 
-`getActiveSets({ Brand: "Globex" })` → `{ enabled: ["brand/globex"], source: ["core"] }`
+`compose_theme({ Brand: "Globex" })` fills the other axes with their defaults:
+`axes` `{ Brand: "Globex", Density: "Cozy", Ungrouped: "Light" }`,
+`defaulted` `["Density", "Ungrouped"]`,
+`enabled` `["brand/globex", "density/cozy", "mode/light"]`, `source` `["core"]`.
 
 ## Expected resolved values
 

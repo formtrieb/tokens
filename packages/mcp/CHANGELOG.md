@@ -5,6 +5,38 @@ All notable changes to `@formtrieb/tokens-mcp` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed (breaking)
+
+- Values come from the one resolution in `@formtrieb/tokens-core` and are
+  shown with the formatter of `@formtrieb/tokens-render` (new dependency):
+  what the server shows is what the CSS says.
+- `resolve_token` / `resolve_batch`: `finalValue` is the formatted value;
+  new `value` (typed) and `type`. `errors: string[]` is replaced by
+  `problems` (structured: unknown reference, cycle, …). The chain keeps its
+  fields.
+- `format` takes `source` (default), `rgb` (alias `rgba`) and `hex`; `hex8`
+  is gone. A computed colour shows as `rgb(r% g% b% / a)` unless `hex`.
+- `compose_theme` and `compare_themes` fill missing axes with their
+  defaults; `compose_theme` lists them in `defaulted` instead of
+  `missingAxes`. `compare_themes` compares formatted values and takes
+  `format`.
+- The `type` filter of `browse_tokens` and `search_tokens` is checked
+  against the types of the loaded system instead of a fixed list.
+- Tokens whose `$type` comes from a group are visible to every tool; math
+  is reduced (`{space} * 2` → `16px`); a reference may end in `.$value`.
+- `set` takes a set or a layer in `find_placeholders` and
+  `check_design_rules` too.
+- `list_token_sets` reports a set that is named but has no file.
+- The token folder is walked instead of opening files by set name; symbolic
+  links are not followed.
+
+### Performance
+
+- Each axis selection is composed and resolved once per loaded token
+  system and cached; `resolve_batch` costs one resolution.
+
 ## [2.6.0] — 2026-10-03
 
 ### Changed

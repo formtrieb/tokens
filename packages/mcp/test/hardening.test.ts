@@ -1,8 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { TokenLoader } from "../src/loader/token-loader.js";
+import { buildTokenSystem } from "@formtrieb/tokens-core";
+import { readTokenFiles } from "../src/loader/token-loader.js";
 import { _clearCacheForTesting } from "../src/token-context.js";
 import { setupTools } from "./mock-server.js";
 
@@ -29,23 +30,32 @@ afterEach(() => {
   rmSync(root, { recursive: true, force: true });
 });
 
-describe("TokenLoader — set names from $metadata.json", () => {
-  it("does not read a set whose name climbs out of the token folder", () => {
+describe("reading a token folder — set names from $metadata.json", () => {
+  it("never reads a set whose name climbs out of the token folder", () => {
     write("outside.json", { secret: { $type: "color", $value: "#000" } });
     write("tokens/$metadata.json", { tokenSetOrder: ["Base", "../outside"] });
     write("tokens/Base.json", { a: { $type: "color", $value: "#fff" } });
 
-    const loader = new TokenLoader(join(root, "tokens"));
-    expect(() => loader.load()).toThrow(/outside the token folder/);
+    const files = readTokenFiles(join(root, "tokens"));
+    expect([...files.keys()].sort()).toEqual(["$metadata.json", "Base.json"]);
+    const { system, problems } = buildTokenSystem(files);
+    expect(system.sets.has("../outside")).toBe(false);
+    expect(problems).toEqual([{ kind: "missing-set", set: "../outside" }]);
+  });
+
+  it("does not follow a symbolic link out of the folder", () => {
+    write("outside/secret.json", { secret: { $type: "color", $value: "#000" } });
+    write("tokens/$metadata.json", { tokenSetOrder: [] });
+    symlinkSync(join(root, "outside"), join(root, "tokens", "linked"));
+    expect([...readTokenFiles(join(root, "tokens")).keys()]).toEqual(["$metadata.json"]);
   });
 
   it("still reads nested set names", () => {
     write("tokens/$metadata.json", { tokenSetOrder: ["Theme/Light"] });
     write("tokens/Theme/Light.json", { a: { $type: "color", $value: "#fff" } });
 
-    const loader = new TokenLoader(join(root, "tokens"));
-    loader.load();
-    expect(loader.getSet("Theme/Light")).toBeDefined();
+    const { system } = buildTokenSystem(readTokenFiles(join(root, "tokens")));
+    expect(system.sets.get("Theme/Light")).toBeDefined();
   });
 });
 

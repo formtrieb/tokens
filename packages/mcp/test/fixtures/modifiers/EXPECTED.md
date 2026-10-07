@@ -18,3 +18,6 @@ LLM edits source tokens and inspects their meaning.
 - `resolve_token` for `color.brandHalf` MUST include the modifier in the chain step
   belonging to `color.brandHalf` (the rawValue is the reference, the modifier captures
   what is applied during resolution).
+- `resolve_token` for `color.brandHalf` shows `finalValue` as `@formtrieb/tokens-render`
+  writes a computed colour: `rgb(r% g% b% / 0.5)` by default, `#rrggbb80` with
+  `format: "hex"`. The typed `value` is a colour without `literal` (it was computed).

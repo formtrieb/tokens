@@ -90,14 +90,15 @@ describe("tools-integration: routing via tokens_path against tokens-studio fixtu
     expect(out.finalValue).toBe("rgb(245, 245, 245)");
   });
 
-  it("resolve_token renders finalValue in the requested format (hex8)", async () => {
+  it("resolve_token renders finalValue in the requested format (hex), and refuses the dropped hex8", async () => {
     const m = setupTools();
     const out = await m.callTool("resolve_token", {
       tokens_path: FIXTURE,
       path: "color.background",
-      format: "hex8",
+      format: "hex",
     });
-    expect(out.finalValue).toBe("#f5f5f5ff");
+    expect(out.finalValue).toBe("#f5f5f5");
+    await expect(m.callTool("resolve_token", { tokens_path: FIXTURE, path: "color.background", format: "hex8" })).rejects.toThrow();
   });
 
   it("resolve_batch renders finalValue in the requested format", async () => {

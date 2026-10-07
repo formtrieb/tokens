@@ -336,6 +336,10 @@ describe("output validation", () => {
 
   it("refuses arithmetic CSS cannot compute", () => {
     expect(() => render({ a: { $value: "2px * 3rem", $type: "dimension" } })).toThrow(/arithmetic CSS cannot compute/);
+    // nested terms that stay expressions: the unit sits below the operator
+    expect(() => render({ a: { $value: "(80rem - 2px) * 4px", $type: "dimension" } })).toThrow(/arithmetic CSS cannot compute/);
+    expect(() => render({ a: { $value: "10rem / (2px - 1rem)", $type: "dimension" } })).toThrow(/arithmetic CSS cannot compute/);
+    expect(() => render({ a: { $value: "(80rem - 2px) / 2", $type: "dimension" } })).not.toThrow();
   });
 
   it("collects every problem before it throws", () => {

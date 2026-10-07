@@ -1,7 +1,8 @@
 import { z } from "zod";
-import { describeAxes, validateAxes } from "@formtrieb/tokens-core";
-import type { AxisProblem, ThemeAxes } from "@formtrieb/tokens-core";
-import type { ThemeLoader } from "../loader/theme-loader.js";
+import { describeAxes, getDefaultAxes, validateAxes } from "@formtrieb/tokens-core";
+import type { AxisProblem, ThemeAxes, ThemeDefinition } from "@formtrieb/tokens-core";
+
+type AxisMap = Map<string, ThemeDefinition[]>;
 
 /**
  * Theme axes are a property of the loaded $themes.json, not of this server —
@@ -30,14 +31,11 @@ function describeProblem(problem: AxisProblem): string {
  * Without this an unknown axis is silently dropped and the caller gets values
  * for the default theme instead of the one it asked for.
  */
-export function assertAxes(
-  selection: Record<string, string>,
-  themeLoader: ThemeLoader
-): void {
-  const problems = validateAxes(themeLoader.getAxes(), selection);
+export function assertAxes(selection: Record<string, string>, axisMap: AxisMap): void {
+  const problems = validateAxes(axisMap, selection);
   if (problems.length === 0) return;
 
-  const catalogue = describeAxes(themeLoader.getAxes()).map(
+  const catalogue = describeAxes(axisMap).map(
     (axis) =>
       `  ${axis.axis}: ${axis.values
         .map((v) => (v === axis.default ? `${v} (default)` : v))
@@ -54,12 +52,19 @@ export function assertAxes(
   );
 }
 
-/** Validate a partial axis selection, then fill the rest with defaults. */
+/**
+ * Validate a partial axis selection, then fill the rest with defaults.
+ * `defaulted` names the axes the defaults filled.
+ */
 export function resolveAxes(
   selection: Record<string, string> | undefined,
-  themeLoader: ThemeLoader
-): ThemeAxes {
-  const axes = selection ?? {};
-  assertAxes(axes, themeLoader);
-  return { ...themeLoader.getDefaultAxes(), ...axes };
+  axisMap: AxisMap
+): { axes: ThemeAxes; defaulted: string[] } {
+  const given = selection ?? {};
+  assertAxes(given, axisMap);
+  const defaults = getDefaultAxes(axisMap);
+  return {
+    axes: { ...defaults, ...given },
+    defaulted: Object.keys(defaults).filter((axis) => !(axis in given)),
+  };
 }
