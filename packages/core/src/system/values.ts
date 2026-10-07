@@ -131,8 +131,15 @@ function px(value: TokenValue): TokenValue {
 
 const text = (raw: string | number) => `${raw}`.trim();
 
+/** Aligned types whose value is a length. */
+const LENGTH_TYPES = new Set(["dimension", "fontSize", "lineHeight"]);
+
+const isDtcgQuantity = (v: unknown): v is { value: number; unit: string } =>
+  typeof v === "object" && v !== null && !Array.isArray(v) &&
+  typeof (v as { value?: unknown }).value === "number" && typeof (v as { unit?: unknown }).unit === "string";
+
 function fontFamilies(raw: unknown): TokenValue {
-  const list = Array.isArray(raw) ? raw.map(String) : `${raw}`.split(",");
+  const list = (Array.isArray(raw) ? raw.map(String) : [`${raw}`]).flatMap((f) => f.split(","));
   const families = list.map((f) => f.trim().replace(/^(['"])(.*)\1$/, "$2")).filter((f) => f !== "");
   return { kind: "fontFamily", families };
 }
@@ -155,6 +162,11 @@ export function readScalar(raw: unknown, type: string | undefined, path: string,
       return { kind: "cubicBezier", points: raw.map(Number) as [number, number, number, number] };
     }
     return invalid("cubic-bezier needs four numbers");
+  }
+  if (isDtcgQuantity(raw)) {
+    // DTCG writes a dimension or a duration as `{ value, unit }`.
+    if (aligned === "duration" && (raw.unit === "ms" || raw.unit === "s")) return { kind: "duration", value: raw.value, unit: raw.unit };
+    if (aligned !== undefined && LENGTH_TYPES.has(aligned)) return { kind: "length", value: raw.value, unit: raw.unit };
   }
   if (typeof raw !== "string" && typeof raw !== "number") return { kind: "raw", value: raw };
   if (type === undefined) return typeof raw === "number" ? { kind: "number", value: raw } : { kind: "string", value: raw };

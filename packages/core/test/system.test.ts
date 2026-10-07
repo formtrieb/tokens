@@ -199,6 +199,28 @@ describe("values mean what their type says, not how they were reached", () => {
   });
 });
 
+describe("arrays and DTCG objects outside composites", () => {
+  it("resolves references in a font family list and a bezier array", () => {
+    const tokens = {
+      font: { primary: tok("fontFamilies", "Inter, Helvetica") },
+      stack: tok("fontFamilies", ["{font.primary}", "sans-serif"]),
+      p: tok("number", "0.2"),
+      ease: tok("cubicBezier", ["{p}", 0, 0, 1]),
+      broken: tok("cubicBezier", ["{nope}", 0, 0, 1]),
+    };
+    expect(valueOf(tokens, "stack")).toEqual({ kind: "fontFamily", families: ["Inter", "Helvetica", "sans-serif"] });
+    expect(valueOf(tokens, "ease")).toEqual({ kind: "cubicBezier", points: [0.2, 0, 0, 1] });
+    expect(valueOf(tokens, "broken")).toEqual({ kind: "unresolved", text: "{nope}, 0, 0, 1" });
+  });
+
+  it("reads DTCG `{ value, unit }` as length and duration", () => {
+    expect(valueOf({ a: tok("dimension", { value: 8, unit: "px" }) }, "a")).toEqual(length(8, "px"));
+    expect(valueOf({ a: tok("fontSizes", { value: 1.5, unit: "rem" }) }, "a")).toEqual(length(1.5, "rem"));
+    expect(valueOf({ a: tok("duration", { value: 200, unit: "ms" }) }, "a")).toEqual({ kind: "duration", value: 200, unit: "ms" });
+    expect(valueOf({ a: tok("other", { value: 8, unit: "px" }) }, "a")).toEqual({ kind: "raw", value: { value: 8, unit: "px" } });
+  });
+});
+
 describe("arithmetic", () => {
   it("reduces with units and without rounding", () => {
     const tokens = { base: tok("dimension", "8px"), twice: tok("dimension", "{base} * 2"), third: tok("number", "10 / 3"), sum: tok("dimension", "16px + 4"), ratio: tok("number", "{base} / 4px") };
