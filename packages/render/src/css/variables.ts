@@ -24,7 +24,6 @@ export interface Block {
 
 const PURE_REFERENCE = /^\{([^{}]+)\}$/;
 const REFERENCE = /\{([^{}]+)\}/g;
-const ARITHMETIC_KINDS = new Set<TokenValue["kind"]>(["length", "number", "expression", "list"]);
 
 function isPrivate(path: string[], prefixes: string[]): boolean {
   return path.some((segment) => prefixes.some((p) => segment.startsWith(p)));
@@ -128,7 +127,9 @@ function declaration(entry: DictionaryEntry, ctx: Context, invalid: Block["inval
         const asHex = (v: TokenValue) => formatValue(v, where, { ...format, color: "hex" }, () => {});
         if (asHex(resolved) !== asHex(target)) out = formatted();
       }
-    } else if (ARITHMETIC_KINDS.has(resolved.kind)) {
+    } else if (resolved.kind !== "color") {
+      // `{a} - 1px`, `calc(-1 * {a})`: each reference as its variable, bare arithmetic wrapped in calc().
+      // A colour is written resolved: `rgba(var(--c), 0.5)` would be no CSS.
       out = asCalc(raw.replace(REFERENCE, (match, inner: string) => varOf(inner) ?? match));
     } else {
       out = formatted();

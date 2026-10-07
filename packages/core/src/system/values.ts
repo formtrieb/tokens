@@ -95,9 +95,13 @@ export function textOf(value: TokenValue): string {
   }
 }
 
-/** A bare number in a length type is px, in a list and as a whole. */
+/**
+ * A bare number in a length type is px, in a list and as a whole — except a
+ * bare zero, which needs no unit and keeps none (`unit: ""`), so `0` and
+ * `0px` stay as they were written.
+ */
 function px(value: TokenValue): TokenValue {
-  if (value.kind === "number") return { kind: "length", value: value.value, unit: "px" };
+  if (value.kind === "number") return { kind: "length", value: value.value, unit: value.value === 0 ? "" : "px" };
   if (value.kind === "list") return { kind: "list", items: value.items.map(px) };
   return value;
 }

@@ -72,7 +72,7 @@ export type Expr = { op: "+" | "-" | "*" | "/"; left: Expr; right: Expr } | Toke
 
 /** What a token means, independent of any output format. */
 export type TokenValue =
-  /** `8px`, `0.5rem`, `60ch`, `-0.03em`, `50%`; a bare number in a length type is px. */
+  /** `8px`, `0.5rem`, `60ch`, `-0.03em`, `50%`; a bare number in a length type is px, a bare `0` has unit `""`. */
   | { kind: "length"; value: number; unit: string }
   | { kind: "number"; value: number }
   /**

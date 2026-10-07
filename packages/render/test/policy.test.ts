@@ -71,7 +71,7 @@ describe("render-API defaults", () => {
     expect(all).not.toMatch(/\d+(\.\d+)?rem\b/);
     expect(all).not.toMatch(/rgba?\(\d+, \d+, \d+/);
     expect(all).toMatch(/: -?\d+(\.\d+)?px;/);
-    expect(all).toContain("0px rgba(0,0,0,0.08);");
+    expect(all).toContain("0 rgba(0,0,0,0.08);");
   });
 });
 
