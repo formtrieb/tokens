@@ -46,7 +46,8 @@ export function compositionFor(ctx: TokenContext, selection: SetSelection): Comp
     return cached;
   }
   const dict = compose(ctx.system, selection);
-  const composition: Composition = { dict, values: resolveDictionary(dict).values };
+  const { values, problems } = resolveDictionary(dict);
+  const composition: Composition = { dict, values, problems };
   ctx.compositions.set(key, composition);
   if (ctx.compositions.size > MAX_COMPOSITIONS) ctx.compositions.delete(ctx.compositions.keys().next().value!);
   return composition;

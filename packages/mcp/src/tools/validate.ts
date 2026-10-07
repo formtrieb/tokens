@@ -1,8 +1,9 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { checkRules, compareStructure, findBrokenReferences, findPlaceholders } from "@formtrieb/tokens-core";
+import { designReport, findPlaceholders } from "@formtrieb/tokens-core";
 import { loadRules, RULES_FILE } from "../rules.js";
-import { tokensOf } from "../composition.js";
+import { compositionFor, selectionFor, tokensOf } from "../composition.js";
+import { themeAxesArg, THEME_AXES_DESCRIPTION, resolveAxes } from "./theme-arg.js";
 import { resolveAndLoad, TOKENS_PATH_DESCRIPTION } from "../token-context.js";
 
 export function registerValidateTools(server: McpServer) {
@@ -57,7 +58,7 @@ export function registerValidateTools(server: McpServer) {
     "check_design_rules",
     {
       description:
-        `Check tokens against design rules given as data, plus structural checks: references to nothing, and parity of the themes of one axis (which tokens each theme's enabled sets define). Rules come from the \`rules\` argument, a \`rules_path\`, or ${RULES_FILE} next to the token folder; without rules only the structural checks run. Reports violations grouped by rule and names where the rules came from.`,
+        `Check tokens against design rules given as data, plus structural checks: problems of resolving an axis selection (unknown references, cycles, …), references to nothing, and parity of the themes of one axis (which tokens each theme's enabled sets define). Rules come from the \`rules\` argument, a \`rules_path\`, or ${RULES_FILE} next to the token folder; without rules only the structural checks run. Reports violations grouped by rule and names where the rules came from.`,
       inputSchema: {
         set: z.string().optional().describe("Limit to a specific set or layer. Omit for system-wide check."),
         severity: z
@@ -75,77 +76,48 @@ export function registerValidateTools(server: McpServer) {
           .string()
           .optional()
           .describe("Theme axis whose themes are compared for parity. Default: the first axis with more than one theme."),
+        theme: themeAxesArg.optional().describe(`Axis selection whose resolution problems are reported. ${THEME_AXES_DESCRIPTION}`),
         tokens_path: z.string().optional().describe(TOKENS_PATH_DESCRIPTION),
       },
       annotations: { readOnlyHint: true, idempotentHint: true },
     },
-    async ({ set, severity, rules, rules_path, axis, tokens_path }) => {
+    async ({ set, severity, rules, rules_path, axis, theme, tokens_path }) => {
       const ctx = resolveAndLoad({ tokens_path });
       const loaded = loadRules({ rules, rules_path }, ctx.path);
-      const tokens = tokensOf(ctx, set);
-      const allPaths = new Set(tokens.map((t) => t.key));
-      const brokenRefs = findBrokenReferences(tokens, allPaths);
 
-      const severityOrder = { error: 0, warning: 1, info: 2 };
-      const minLevel = severityOrder[severity];
-      const allViolations = (loaded.rules ? checkRules(tokens, loaded.rules) : []).filter(
-        (v) => severityOrder[v.severity] <= minLevel
-      );
-
-      // Group violations by rule for compact output; `affected` lists the groups the tokens sit in.
-      const byRule: Record<string, { count: number; severity: string; affected: string[]; example: { path: string; expected: string; actual: string } }> = {};
-      for (const v of allViolations) {
-        const entry = (byRule[v.rule] ??= {
-          count: 0,
-          severity: v.severity,
-          affected: [],
-          example: { path: v.path, expected: v.expected, actual: v.actual },
-        });
-        entry.count++;
-        const group = v.path.split(".").slice(0, -1).join(".") || v.path;
-        if (!entry.affected.includes(group)) entry.affected.push(group);
-      }
-
-      // Parity: the tokens each theme of one axis enables, the first theme against each other.
-      let parity: unknown = "not checked";
+      // Parity: the tokens each theme of one axis enables (not with a set filter).
+      let parity: { axis: string; themes: { name: string; entries: ReturnType<typeof tokensOf> }[] } | undefined;
       if (!set) {
         if (axis !== undefined && !ctx.axisMap.has(axis)) {
           throw new Error(`Unknown theme axis "${axis}". Axes in this token system: ${[...ctx.axisMap.keys()].join(", ")}`);
         }
         const name = axis ?? [...ctx.axisMap].find(([, themes]) => themes.length > 1)?.[0];
-        const themes = name !== undefined ? ctx.axisMap.get(name)! : [];
-        if (themes.length > 1) {
-          const tokensOfTheme = (t: (typeof themes)[number]) =>
-            Object.entries(t.selectedTokenSets)
-              .filter(([s, state]) => state === "enabled" && ctx.system.sets.has(s))
-              .flatMap(([s]) => tokensOf(ctx, s));
-          const base = themes[0]!;
-          const against: Record<string, unknown> = {};
-          for (const other of themes.slice(1)) {
-            const diff = compareStructure(tokensOfTheme(base), tokensOfTheme(other), base.name, other.name);
-            against[other.name] = {
-              identical: diff.identical,
-              ...(diff.missingInA.length > 0 && { missingInBase: diff.missingInA }),
-              ...(diff.missingInB.length > 0 && { missingInTheme: diff.missingInB }),
-              ...(diff.typeMismatches.length > 0 && { typeMismatches: diff.typeMismatches }),
-            };
-          }
-          parity = { axis: name, base: base.name, against };
+        if (name !== undefined) {
+          parity = {
+            axis: name,
+            themes: ctx.axisMap.get(name)!.map((t) => ({
+              name: t.name,
+              entries: Object.entries(t.selectedTokenSets)
+                .filter(([s, state]) => state === "enabled" && ctx.system.sets.has(s))
+                .flatMap(([s]) => tokensOf(ctx, s)),
+            })),
+          };
         }
       }
 
-      const out = {
-        rules: loaded.source,
-        summary: {
-          errors: allViolations.filter((v) => v.severity === "error").length,
-          warnings: allViolations.filter((v) => v.severity === "warning").length,
-          info: allViolations.filter((v) => v.severity === "info").length,
-          brokenReferences: brokenRefs.length,
-        },
-        byRule,
-        brokenReferences: brokenRefs.length > 0 ? brokenRefs.slice(0, 20) : [],
+      // Resolution of one axis selection: the server's unit.
+      const { axes } = resolveAxes(theme, ctx.axisMap);
+      const scope = Object.entries(axes).map(([a, v]) => `${a}=${v}`).join(", ") || "(no themes)";
+      const problems = [...ctx.loadProblems, ...compositionFor(ctx, selectionFor(ctx.system, axes)).problems];
+
+      const report = designReport({
+        entries: tokensOf(ctx, set),
+        rules: loaded.rules,
+        severity,
         parity,
-      };
+        resolution: [{ scope, problems }],
+      });
+      const out = { rules: loaded.source, ...report };
       return { content: [{ type: "text" as const, text: JSON.stringify(out, null, 2) }] };
     }
   );

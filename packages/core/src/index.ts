@@ -60,5 +60,7 @@ export type { AxisProblem } from "./theme/themes.js";
 // Analysis
 export { findPlaceholders, findBrokenReferences, compareStructure } from "./analyze/validation.js";
 export { parseRules, checkRules } from "./analyze/rules.js";
-export type { DesignRules, DesignRule } from "./analyze/rules.js";
+export type { DesignRules, DesignRule, Severity } from "./analyze/rules.js";
+export { designReport, RESOLUTION_SEVERITY, atLeast } from "./analyze/report.js";
+export type { DesignReport, ReportInput, ResolutionFinding } from "./analyze/report.js";
 export type { PlaceholderToken, StructuralDiff, DesignRuleViolation } from "./types.js";

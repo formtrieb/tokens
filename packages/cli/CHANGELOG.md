@@ -7,6 +7,17 @@ are below under their versions.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `formtrieb-tokens check`: checks the token system without writing —
+  resolution problems per theme of the render table, design rules from
+  `--rules` or `tokens.rules.json` next to the token folder, broken
+  references, parity over an axis. Exit 0 / 1 (a finding at or above
+  `--severity`, default `error`) / 2 (usage error); `--json` prints the
+  report in the form of the MCP server's `check_design_rules`.
+
 ## [1.0.0] — 2026-10-07
 
 ### Changed (breaking)

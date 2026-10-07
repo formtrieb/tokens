@@ -5,6 +5,16 @@ All notable changes to `@formtrieb/tokens-core` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `designReport(input)`: one report of the checks — rules grouped by rule,
+  references to nothing, parity of the themes of an axis, resolution
+  problems with their severity (`RESOLUTION_SEVERITY`). The summary counts
+  rule and resolution findings; `brokenReferences` is counted apart.
+- `atLeast(severity, threshold)`, and the type `Severity`.
+
 ## [2.0.0] — 2026-10-07
 
 One resolution for MCP and CSS, and a smaller surface. Breaking.
