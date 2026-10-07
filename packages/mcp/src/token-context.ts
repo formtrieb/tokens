@@ -20,6 +20,8 @@ export interface Composition {
 }
 
 export interface TokenContext {
+  /** The token folder, as resolved for this context. */
+  path: string;
   system: TokenSystem;
   /** Problems found while loading (a set named but without a file). */
   loadProblems: TokenProblem[];
@@ -74,6 +76,7 @@ export function getTokenContext(absolutePath: string): TokenContext {
 
   const { system, problems } = buildTokenSystem(readTokenFiles(absolutePath));
   const ctx: TokenContext = {
+    path: absolutePath,
     system,
     loadProblems: problems,
     axisMap: buildAxisMap(system.themes),

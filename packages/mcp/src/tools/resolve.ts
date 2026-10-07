@@ -12,7 +12,7 @@ export function registerResolveTools(server: McpServer) {
       description:
         "Resolve a single token dot-path for a given theme: finalValue as @formtrieb/tokens-render writes it, the typed value, the token's type, the full reference chain and any problems (unknown reference, cycle, …). For resolving many paths at once (e.g. all states of a variant), use resolve_batch.",
       inputSchema: {
-        path: z.string().min(1).describe("Token dot-path (e.g. 'color.controls.brand.background.enabled')"),
+        path: z.string().min(1).describe("Token dot-path (e.g. 'color.background')"),
         theme: themeAxesArg.optional().describe(THEME_AXES_DESCRIPTION),
         format: formatArg,
         tokens_path: z.string().optional().describe(TOKENS_PATH_DESCRIPTION),

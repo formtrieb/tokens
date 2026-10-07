@@ -81,7 +81,7 @@ tokens-mcp  # launches the stdio server
 | `compose_theme` | Show which token sets are active (enabled vs. source) for a given axis selection; missing axes take their default and are listed in `defaulted`. |
 | `compare_themes` | Diff values (as render writes them) between two theme configurations; missing axes take their default. Caps: 200 changed paths, 50 per only-in-A/B list. |
 | `find_placeholders` | List all `#f305b7` placeholder tokens. Audit token completeness. |
-| `check_design_rules` | Run controls/component-reference + naming + broken-reference + Light/Dark parity checks. Reports violations grouped by rule. |
+| `check_design_rules` | References to nothing, parity of the themes of one axis, and the design rules of the system when it has some (see [Design rules](#design-rules)). Reports violations grouped by rule. |
 
 Every tool accepts an optional `tokens_path: string` parameter (omit for walk-up).
 
@@ -109,6 +109,28 @@ inherited from a group) and rejects others with the list of types in use.
 literals as written), `rgb` or `hex`; a colour a modifier computed is
 `rgb(r% g% b% / a)` unless `hex`. The typed `value` carries the full precision, the
 literal as written and, for colours, `outOfGamut`.
+
+## Design rules
+
+`check_design_rules` checks rules that come as data, never from this server: a
+`rules` argument, a file at `rules_path`, or `tokens.rules.json` in the folder
+that holds the token folder. Not inside the token folder: Tokens Studio takes
+every JSON file there for a token set. A rules file looks like this (see
+`parseRules` in `@formtrieb/tokens-core` for every field):
+
+```json
+{
+  "rules": [
+    { "rule": "icons-use-icon-colours", "kind": "references", "tokens": ["color.controls.*.icon.*"], "within": ["color.interaction.**"], "allow": ["color.interaction.icon.**"], "severity": "error" },
+    { "rule": "deep-nesting", "kind": "depth", "max": 6, "severity": "info" }
+  ]
+}
+```
+
+The output names where the rules came from (`rules`: `"argument"`, the file,
+or `"none"`). Without rules only the structural checks run. Parity compares
+the tokens each theme of an axis enables, the first theme against the others;
+`axis` picks the axis, by default the first one with more than one theme.
 
 ## Brand-iteration loop
 

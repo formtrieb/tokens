@@ -10,6 +10,7 @@ export {
   referencesIn,
   textOf,
   alignType,
+  matchPath,
 } from "./system/index.js";
 export type {
   TokenSystem,
@@ -58,9 +59,6 @@ export type { AxisProblem } from "./theme/themes.js";
 
 // Analysis
 export { findPlaceholders, findBrokenReferences, compareStructure } from "./analyze/validation.js";
-export {
-  checkControlsInteractionMapping,
-  checkComponentReferences,
-  checkNamingConventions,
-} from "./analyze/design-rules.js";
+export { parseRules, checkRules } from "./analyze/rules.js";
+export type { DesignRules, DesignRule } from "./analyze/rules.js";
 export type { PlaceholderToken, StructuralDiff, DesignRuleViolation } from "./types.js";

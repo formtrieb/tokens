@@ -1,0 +1,24 @@
+{
+  "rules": [
+    { "rule": "controls-interaction-category-mismatch", "kind": "references", "tokens": ["color.controls.*.icon.*.**"], "within": ["color.interaction.**", "color.text.**"], "allow": ["color.interaction.icon.**"], "severity": "error" },
+    { "rule": "controls-interaction-category-mismatch", "kind": "references", "tokens": ["color.controls.*.icon-on-color.*.**"], "within": ["color.interaction.**", "color.text.**"], "allow": ["color.interaction.icon-on-color.**"], "severity": "error" },
+    { "rule": "controls-interaction-category-mismatch", "kind": "references", "tokens": ["color.controls.*.text.*.**"], "within": ["color.interaction.**", "color.text.**"], "allow": ["color.text.**", "color.interaction.text.**"], "severity": "error" },
+    { "rule": "controls-interaction-category-mismatch", "kind": "references", "tokens": ["color.controls.*.text-on-color.*.**"], "within": ["color.interaction.**", "color.text.**"], "allow": ["color.text.**", "color.interaction.text-on-color.**"], "severity": "error" },
+    { "rule": "controls-interaction-category-mismatch", "kind": "references", "tokens": ["color.controls.*.background.*.**"], "within": ["color.interaction.**", "color.text.**"], "allow": ["color.interaction.background.**"], "severity": "error" },
+    { "rule": "controls-interaction-category-mismatch", "kind": "references", "tokens": ["color.controls.*.stroke.*.**"], "within": ["color.interaction.**", "color.text.**"], "allow": ["color.interaction.stroke.**", "color.interaction.background.**"], "severity": "error" },
+    { "rule": "component-uses-interaction-directly", "kind": "references", "sets": ["Components/**"], "deny": ["color.interaction.**"], "severity": "info", "expected": "Reference to color.controls.* or other semantic token" },
+    {
+      "rule": "non-standard-segment",
+      "kind": "segments",
+      "tokens": ["color.controls.*.*.*.**"],
+      "segments": [
+        { "index": 2, "name": "hierarchy", "values": ["primary", "secondary", "tertiary", "brand"] },
+        { "index": 3, "name": "element", "values": ["background", "stroke", "text", "text-on-color", "icon", "icon-on-color"] },
+        { "index": 4, "name": "interaction", "values": ["default", "hover", "active", "disabled", "inactive"] }
+      ],
+      "severity": "info"
+    },
+    { "rule": "deep-nesting", "kind": "depth", "max": 6, "severity": "info" },
+    { "rule": "sibling-reference", "kind": "sibling-reference", "severity": "info" }
+  ]
+}
