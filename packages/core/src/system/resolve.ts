@@ -22,6 +22,7 @@ import { alignType } from "../canonicalize/index.js";
 
 const REFERENCE = /\{([^{}]+)\}/g;
 const PURE_REFERENCE = /^\{([^{}]+)\}$/;
+const HAS_REFERENCE = /\{[^{}]+\}/;
 
 /** `{ a.b.$value }` → `a.b`. */
 export function referenceKey(inner: string): string {
@@ -157,22 +158,33 @@ class Walk {
         if (target === undefined || target.kind === "unresolved") return { kind: "unresolved", text: raw };
         return this.coerce(target, type);
       }
-      if (REFERENCE.test(raw)) {
-        REFERENCE.lastIndex = 0;
-        let resolved = true;
-        const text = raw.replace(REFERENCE, (match, inner: string) => {
-          const target = this.follow(inner);
-          if (target === undefined || target.kind === "unresolved") {
-            resolved = false;
-            return match;
-          }
-          return textOf(target);
-        });
+      if (HAS_REFERENCE.test(raw)) {
+        const { text, resolved } = this.substitute(raw);
         if (!resolved) return { kind: "unresolved", text };
         return readScalar(text, type, this.entry.key, this.report);
       }
     }
+    if (Array.isArray(raw) && raw.some((v) => typeof v === "string" && HAS_REFERENCE.test(v))) {
+      // `["{font.primary}", "sans-serif"]`, a bezier with a referenced point: each item as text.
+      const items = raw.map((v) => (typeof v === "string" ? this.substitute(v) : { text: v, resolved: true }));
+      if (items.some((i) => !i.resolved)) return { kind: "unresolved", text: items.map((i) => `${i.text}`).join(", ") };
+      return readScalar(items.map((i) => i.text), type, this.entry.key, this.report);
+    }
     return readScalar(raw, type, this.entry.key, this.report);
+  }
+
+  /** Every reference in a text replaced by its target as text (`textOf`); `resolved` false when one has no value. */
+  private substitute(raw: string): { text: string; resolved: boolean } {
+    let resolved = true;
+    const text = raw.replace(REFERENCE, (match, inner: string) => {
+      const target = this.follow(inner);
+      if (target === undefined || target.kind === "unresolved") {
+        resolved = false;
+        return match;
+      }
+      return textOf(target);
+    });
+    return { text, resolved };
   }
 
   /** A referenced value read again under this token's type, where the target's kind carries no meaning of its own. */

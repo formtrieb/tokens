@@ -9,9 +9,10 @@ import type { Color, TokenValue } from "./types.js";
  * computed, so it has no literal; it stays unrounded. A value that is no
  * readable colour, or an amount that is no number, is left as it is.
  *
- * The modifier works on the colour the base shows: a base outside sRGB is
- * gamut-mapped first, as Tokens Studio does. Only the base; a colour without
- * modifier keeps its unmapped value.
+ * Rule: a modifier works on the colour the base shows, so a base outside
+ * sRGB is gamut-mapped first. This makes the result independent of how the
+ * base was reached (written as `lch()` or computed by a modifier of its own).
+ * Only the base is mapped; a colour without modifier keeps its unmapped value.
  */
 export function applyModifier(
   value: TokenValue,
