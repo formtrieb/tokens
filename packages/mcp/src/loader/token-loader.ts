@@ -18,16 +18,25 @@ function readJson(file: string, name: string): unknown {
  * nothing else. A folder may hold other JSON (a package.json, build output);
  * it is never read, so it can neither show up as a set nor break loading.
  *
- * A set name is a path inside the folder. A name that leaves the folder
- * (`../x`, or a symbolic link pointing outside) is not read; core then
- * reports it as a missing set.
+ * Every file read must lie inside the folder after resolving symbolic
+ * links — the two index files too. A set name that leaves the folder
+ * (`../x`, an absolute path, a link pointing outside) is not read; core
+ * then reports it as a missing set.
  */
 export function readTokenFiles(tokensPath: string): Map<string, unknown> {
   const root = realpathSync(resolve(tokensPath));
+  /** The real path of a file inside the folder, or undefined when there is none or it lies outside. */
+  const inside = (name: string): string | undefined => {
+    const file = resolve(root, ...name.split("/"));
+    if (!existsSync(file)) return undefined;
+    const real = realpathSync(file);
+    const rel = relative(root, real);
+    return rel === "" || rel === ".." || rel.startsWith(`..${sep}`) || isAbsolute(rel) ? undefined : real;
+  };
   const files = new Map<string, unknown>();
   for (const name of ["$metadata.json", "$themes.json"]) {
-    const file = resolve(root, name);
-    if (existsSync(file)) files.set(name, readJson(file, name));
+    const file = inside(name);
+    if (file) files.set(name, readJson(file, name));
   }
 
   const named = new Set<string>();
@@ -43,12 +52,8 @@ export function readTokenFiles(tokensPath: string): Map<string, unknown> {
   }
 
   for (const set of named) {
-    const file = resolve(root, ...set.split("/")) + ".json";
-    if (!existsSync(file)) continue;
-    const real = realpathSync(file);
-    const rel = relative(root, real);
-    if (rel === "" || rel.startsWith(`..${sep}`) || rel === ".." || isAbsolute(rel)) continue;
-    files.set(`${set}.json`, readJson(real, `${set}.json`));
+    const file = inside(`${set}.json`);
+    if (file) files.set(`${set}.json`, readJson(file, `${set}.json`));
   }
   return files;
 }
