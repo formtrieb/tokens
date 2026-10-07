@@ -206,7 +206,7 @@ render: [
 
 Allowed options are `prefix`, `units`, `basePxFontSize`, `color` and `typographyCompanions` (see [`@formtrieb/tokens-render`](https://github.com/formtrieb/tokens/tree/main/packages/render#units) for the unit policy). Each option is taken from the config first, then from the file, then from the CLI default. The config's `prefix` is required, so it always wins. When the config sets a different value than the file, the build warns once per option and uses the config.
 
-An older render file with `"dialect": "canonical"` still works: its missing options default to what that dialect wrote (lengths and colours as written, no companions), and the build warns once that `dialect` can be removed. `"dialect": "style-dictionary"` is refused; write `"units": "tokens-studio", "color": "rgb", "typographyCompanions": true` instead.
+A render file or config that still names a `dialect` is refused: write the options instead — what `"canonical"` meant is `"units": "source", "color": "source", "typographyCompanions": false`, what `"style-dictionary"` meant is `"units": "tokens-studio", "color": "rgb", "typographyCompanions": true`. A `render.json` written by `@formtrieb/tokens-recipe` before 0.4.0 is generated anew by running the recipe again.
 
 ## Invalid values
 

@@ -37,9 +37,10 @@ describe('validateConfig', () => {
     await expect(validateConfig({ ...minimal, basePxFontSize: 0 })).rejects.toThrow(/basePxFontSize/);
   });
 
-  it('accepts an old dialect "canonical" and refuses "style-dictionary" with what to write instead', async () => {
+  it('refuses a dialect in the config, naming what to write instead', async () => {
     const old = (dialect: string) => ({ ...minimal, dialect }) as unknown as Config;
-    await expect(validateConfig(old('canonical'))).resolves.toBeUndefined();
-    await expect(validateConfig(old('style-dictionary'))).rejects.toThrow(/"units": "tokens-studio"/);
+    for (const dialect of ['canonical', 'style-dictionary']) {
+      await expect(validateConfig(old(dialect))).rejects.toThrow(/^Config error: dialect is not an output option .*"units", "color" and "typographyCompanions"/);
+    }
   });
 });

@@ -10,7 +10,7 @@ export async function validateConfig(config: Config): Promise<void> {
       'Config error: paths.tokens, paths.output, paths.tokenMap are required.'
     );
   }
-  // The output options are checked as a render file checks them; an old `dialect` too.
+  // The output options are checked as a render file checks them; a `dialect` is refused with the same hint.
   const options: Record<string, unknown> = {};
   for (const key of ['units', 'color', 'basePxFontSize', 'typographyCompanions', 'dialect'] as const) {
     const value = (config as unknown as Record<string, unknown>)[key];

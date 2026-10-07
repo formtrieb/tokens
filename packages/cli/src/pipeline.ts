@@ -34,19 +34,16 @@ const ALL_STEPS: PipelineStep[] = ['themes', 'utilities', 'imports', 'token-map'
 /**
  * The render table and the output options that came with it: `config.render`
  * (rules, or a render file that may carry options), else derived from
- * `$themes.json` without options. `canonical`: the file still says
- * `dialect: "canonical"`.
+ * `$themes.json` without options.
  */
 export async function renderSource(
   config: Config,
   system: TokenSystem
-): Promise<{ rules: RenderRule[]; options: RenderFileOptions; canonical?: boolean }> {
+): Promise<{ rules: RenderRule[]; options: RenderFileOptions }> {
   if (Array.isArray(config.render)) return { rules: config.render, options: {} };
   if (typeof config.render === 'string') {
     const path = resolve(config.render);
-    const data = JSON.parse(await readFile(path, 'utf-8'));
-    const canonical = data?.options?.dialect === 'canonical';
-    return { ...parseRenderFile(data, config.render), canonical };
+    return parseRenderFile(JSON.parse(await readFile(path, 'utf-8')), config.render);
   }
   return { rules: deriveRenderTable(system.themes, config), options: {} };
 }
@@ -63,27 +60,12 @@ const CLI_DEFAULTS: Required<Omit<RenderFileOptions, 'prefix'>> = {
   basePxFontSize: 16,
 };
 
-/** What a render file's `dialect: "canonical"` meant: everything as written, no companions. */
-const CANONICAL_DEFAULTS: Required<Omit<RenderFileOptions, 'prefix'>> = {
-  units: 'source',
-  color: 'source',
-  typographyCompanions: false,
-  basePxFontSize: 16,
-};
-
 /** Options where the config overriding the render file changes the output for the tree's producer. */
 const WARN_ON_OVERRIDE = ['units', 'color', 'basePxFontSize', 'typographyCompanions'] as const;
 
 /** Config > render file > defaults, per option; warns where the config overrides the file. */
-function outputOptions(config: Config, table: { options: RenderFileOptions; canonical?: boolean }): RenderOptions {
+function outputOptions(config: Config, table: { options: RenderFileOptions }): RenderOptions {
   const file = table.options;
-  const legacyDialect = (config as unknown as { dialect?: unknown }).dialect;
-  if (table.canonical || legacyDialect !== undefined) {
-    console.warn(
-      `⚠ "dialect" has no effect any more and can be removed; ` +
-        `the output follows "units", "color" and "typographyCompanions".`
-    );
-  }
   for (const key of WARN_ON_OVERRIDE) {
     if (config[key] !== undefined && file[key] !== undefined && JSON.stringify(config[key]) !== JSON.stringify(file[key])) {
       console.warn(
@@ -92,14 +74,12 @@ function outputOptions(config: Config, table: { options: RenderFileOptions; cano
       );
     }
   }
-  // A file written for the canonical dialect keeps its meaning: values as written.
-  const defaults = table.canonical || legacyDialect === 'canonical' ? CANONICAL_DEFAULTS : CLI_DEFAULTS;
   return {
     prefix: config.prefix,
-    units: config.units ?? file.units ?? defaults.units,
-    color: config.color ?? file.color ?? defaults.color,
-    typographyCompanions: config.typographyCompanions ?? file.typographyCompanions ?? defaults.typographyCompanions,
-    basePxFontSize: config.basePxFontSize ?? file.basePxFontSize ?? defaults.basePxFontSize,
+    units: config.units ?? file.units ?? CLI_DEFAULTS.units,
+    color: config.color ?? file.color ?? CLI_DEFAULTS.color,
+    typographyCompanions: config.typographyCompanions ?? file.typographyCompanions ?? CLI_DEFAULTS.typographyCompanions,
+    basePxFontSize: config.basePxFontSize ?? file.basePxFontSize ?? CLI_DEFAULTS.basePxFontSize,
     privateTokenPrefixes: config.privateTokenPrefixes ?? ['*'],
     typography: config.typography ?? {},
   };
